@@ -7,15 +7,13 @@
 Player::Player(Camera* camera):
 	Actor2D( Tag::Player, Rigidbody2D::Type::Dynamic),
 	m_camera(camera),
-	m_velocity(m_camera->GetSpeed(), 0.0f),
 	m_isGround(false)
 {
 
-	m_transform.position = SpawnPos;
+	m_transform.position = SpawnPos - m_camera->GetPosition();
 
 	m_collider = new BoxCollider(Size);
 
-	m_rigidbody2d.velocity = m_velocity;
 	m_rigidbody2d.gravityScale = 1.6f;
 
 }

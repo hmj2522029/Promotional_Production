@@ -41,6 +41,7 @@ private:
 	Situation m_situation;	//ステージの進み具合
 	int m_prevStageIndex;	//前のステージのインデックス(前のステージを出さないようにするため)
 	int m_worldColumn;		//生成した列の数(生成する列の位置を計算するため)
+	int m_stageChange;
 
 	//マップデータ
 	std::vector<StageData::StageMap*> m_mapEarlyStageData;	//序盤のマップデータ

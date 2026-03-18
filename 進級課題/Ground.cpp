@@ -12,7 +12,7 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 	m_size = Vector2(m_tileContext.tileSize, m_tileContext.tileSize * 3);
 	m_transform.position = m_tileContext.pos - m_camera->GetPosition();
 
-	m_collider = new BoxCollider(m_size, Vector2(m_size.x / 2, m_size.y / 2));
+	m_collider = new BoxCollider(m_size, Vector2(m_size) / 2 );
 
 	m_rigidbody2d.bounciness = 0;
 
@@ -21,6 +21,13 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 
 void Ground::Update()
 {
+	m_transform.position = m_tileContext.pos - m_camera->GetPosition();
+
+
+	if (m_transform.position.x + m_tileContext.tileSize <= Screen::Left)
+	{
+		Destroy();
+	}
 
 }
 
@@ -30,8 +37,8 @@ void Ground::Draw()
 	DrawBoxAA(
 		m_transform.position.x ,
 		m_transform.position.y ,
-		m_transform.position.x - m_camera->GetPosition().x + m_size.x,
-		m_transform.position.y - m_camera->GetPosition().y + m_size.y,
+		m_transform.position.x + m_size.x,
+		m_transform.position.y + m_size.y,
 		GetColor(0, 255, 255),
 		true
 	);

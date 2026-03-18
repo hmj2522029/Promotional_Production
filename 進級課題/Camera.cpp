@@ -9,9 +9,14 @@ Camera::Camera() :
 
 	m_rigidbody2d.velocity = m_velocity;
 
+	m_collider = new BoxCollider(Size, Vector2(Size) / 2);
+
 } 
 
 void Camera::Update()
 {
+
+
+
 
 }

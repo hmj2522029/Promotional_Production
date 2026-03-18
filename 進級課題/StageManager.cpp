@@ -13,6 +13,7 @@ StageManager::StageManager(Camera* camera) :
 	m_camera(camera),
 	m_prevStageIndex(-1),
 	m_worldColumn(0),
+	m_stageChange(0),
 	m_situation(Situation::EarlyStage)
 {
 	
@@ -39,25 +40,31 @@ void StageManager::Update()
 
 	while (m_worldColumn < generateLimit)	//生成する列の上限まで生成する
 	{
-		//Debug::Log("Generate Column: %d\n", m_worldColumn);
+		Debug::Log("Generate Column: %d\n", m_worldColumn);
 		GenerateColumn(m_worldColumn);
 		m_worldColumn++;
+		m_stageChange++;
 	}
 
-	if (m_worldColumn >= m_stage->GetWidth())	//現在のステージの最後まで生成したら次のステージを生成する
+	if (m_stageChange >= m_stage->GetWidth())	//現在のステージの最後まで生成したら次のステージを生成する
 	{
+
 		switch (m_situation)
 		{
 		case Situation::EarlyStage:
+
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapEarlyStageData));
+			m_stageChange = 0;
 			break;
 
 		case Situation::MiddleStage:
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapMiddleStageData));
+			m_stageChange = 0;
 			break;
 
 		case Situation::LateStage:
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapLateStageData));
+			m_stageChange = 0;
 			break;
 
 
@@ -103,7 +110,7 @@ void StageManager::GenerateColumn(int column)
 
 
 		Vector2 pos(column * TILE_SIZE, UI_HEIGHT + y * TILE_SIZE);
-		Debug::Log("Tile Position: (%f, %f)\n", pos.x, pos.y);
+		//Debug::Log("Tile Position: (%f, %f)\n", pos.x, pos.y);
 		m_debugBlocks.push_back(pos);	//デバッグ用のブロックの位置を保存する
 
 		auto it = m_tileTable.find(tile);	//マップ記号に対応するタイル生成関数を探す
