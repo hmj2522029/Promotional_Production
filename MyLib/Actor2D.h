@@ -26,6 +26,13 @@ protected:
 
 public:
 
+	struct CollisionInfo
+	{
+		Actor2D* other;
+		Vector2 resolve;
+	};
+
+
 	Actor2D(
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static

@@ -35,6 +35,7 @@ private:
 
 	std::unordered_map<Actor2D*, std::unordered_set<Actor2D*>> m_prevCallbackList;  // 前回のコールバックリスト
 
+
     Physics2D() :
         m_isActive(false)
     {}

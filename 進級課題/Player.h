@@ -8,7 +8,7 @@ class Player : public Actor2D
 private:
 
 	// プレイヤー情報
-	static constexpr Vector2 SpawnPos = Vector2(100, 478);	// 初期位置
+	static constexpr Vector2 SpawnPos = Vector2(250, 478);	// 初期位置
 	static constexpr float InvincibleTime = 1.5f;	// 無敵時間
 	static constexpr float JUMP_SCALE = 7.0f;
 	static constexpr Vector2 Size = Vector2(32, 32);

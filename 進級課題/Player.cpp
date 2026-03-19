@@ -13,6 +13,7 @@ Player::Player(Camera* camera):
 	m_transform.position = SpawnPos - m_camera->GetPosition();
 
 	m_collider = new BoxCollider(Size);
+	m_collider->SetPhysicsBehavior(Tag::Hole, PhysicsBehavior::Trigger);
 
 	m_rigidbody2d.gravityScale = 1.6f;
 
@@ -41,7 +42,7 @@ void Player::Update()
 	//Debug::Log("%d \n", a);
 
 	//‘€ì
-	if (Keyboard::isPress(KEY_INPUT_SPACE) && m_isGround)
+	if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
 	{
 		m_rigidbody2d.AddForce(Vector2(0, -1) * JUMP_SCALE);
 
@@ -71,10 +72,10 @@ void Player::Draw()
 // Õ“ËƒCƒxƒ“ƒg
 void Player::OnCollisionEnter(const Actor2D* other)
 {
-	// °
-	if (other->GetTag() == Tag::Ground)
+	// —Ž‚Æ‚µŒŠ
+	if (other->GetTag() == Tag::Hole)
 	{
-		m_isGround = true;
+		Debug::Log("—Ž‚¿‚½");
 	}
 
 }
@@ -83,7 +84,15 @@ void Player::OnCollision(const Actor2D* other)
 	// °
 	if (other->GetTag() == Tag::Ground)
 	{
-		m_isGround = true;
+		float playerBottom = m_transform.position.y + Size.y / 2;
+		float groundTop = other->GetTransform().position.y;
+
+		// ã‚©‚çæ‚Á‚Ä‚é”»’è
+		if (m_rigidbody2d.velocity.y >= 0 &&
+			playerBottom <= groundTop + 5.0f) 
+		{
+			m_isGround = true;
+		}
 	}
 }
 void Player::OnCollisionExit(const Actor2D* other)
