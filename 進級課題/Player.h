@@ -15,7 +15,8 @@ private:
 
 	Camera* m_camera;	//カメラ
 
-	bool m_isGround;	//地面判定
+	bool m_isGround;		//地面判定
+	float m_invincibleTime;	//残りの無敵時間
 	
 protected:
 
@@ -28,6 +29,9 @@ public:
 	Player(Camera* camera);
 
 	int GetX() const { return static_cast<int>(m_transform.position.x); }
+
+	//ダメージを受ける
+	void Damage(int damage);
 
 
 	// 衝突イベント

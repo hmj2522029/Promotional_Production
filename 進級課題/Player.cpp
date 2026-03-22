@@ -7,13 +7,16 @@
 Player::Player(Camera* camera):
 	Actor2D( Tag::Player, Rigidbody2D::Type::Dynamic),
 	m_camera(camera),
-	m_isGround(false)
+	m_isGround(false),
+	m_invincibleTime(0)
 {
 
 	m_transform.position = SpawnPos - m_camera->GetPosition();
 
 	m_collider = new BoxCollider(Size);
 	m_collider->SetPhysicsBehavior(Tag::Hole, PhysicsBehavior::Trigger);
+	m_collider->SetPhysicsBehavior(Tag::Spike, PhysicsBehavior::Trigger);
+	m_collider->SetPhysicsBehavior(Tag::Enemy, PhysicsBehavior::Trigger);
 
 	m_rigidbody2d.gravityScale = 1.6f;
 
@@ -41,6 +44,13 @@ void Player::Update()
 	int a = static_cast<int>(m_transform.position.y);
 	//Debug::Log("%d \n", a);
 
+		// 無敵時間のカウントダウン
+	if (m_invincibleTime > 0)
+	{
+		m_invincibleTime -= Time::GetInstance()->GetDeltaTime();
+	}
+
+
 	//操作
 	if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
 	{
@@ -54,6 +64,16 @@ void Player::Update()
 
 void Player::Draw()
 {
+	// 無敵時間中は表示/非表示を繰り返して点滅させる
+	if (m_invincibleTime > 0)
+	{
+		// 無敵時間の小数点第一位が奇数なら非表示
+		if (static_cast<int>(m_invincibleTime * 10) % 2)
+		{
+			return;
+		}
+	}
+
 
 	DrawBoxAA(
 		m_transform.position.x - Size.x / 2,
@@ -69,6 +89,23 @@ void Player::Draw()
 
 }
 
+// ダメージを受ける
+void Player::Damage(int damage)
+{
+	//if (IsDeath()) return;
+
+	// 無敵中はダメージを受けない
+	if (m_invincibleTime > 0) return;
+
+	// 無敵時間を設定
+	m_invincibleTime = InvincibleTime;
+
+	//体力減少(まだ書いていない)
+
+
+}
+
+
 // 衝突イベント
 void Player::OnCollisionEnter(const Actor2D* other)
 {
@@ -77,6 +114,23 @@ void Player::OnCollisionEnter(const Actor2D* other)
 	{
 		Debug::Log("落ちた");
 	}
+
+	//トゲ
+	if (other->GetTag() == Tag::Spike)
+	{
+		Debug::Log("トゲに当たった");
+
+		Damage(0);
+
+	}
+
+	if (other->GetTag() == Tag::Enemy)
+	{
+		Debug::Log("敵に当たった");
+
+
+	}
+
 
 }
 void Player::OnCollision(const Actor2D* other)

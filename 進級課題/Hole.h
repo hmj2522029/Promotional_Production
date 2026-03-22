@@ -9,8 +9,9 @@ class Hole : public Actor2D
 {
 private:
 
-	Vector2 m_size;		//サイズ
-	Vector2 m_offset;	//座標をずらすための
+	Vector2 m_size;			//サイズ
+	Vector2 m_offsetPos;	//座標をずらすため(落とし穴)
+	Vector2 m_offsetCol;	//座標をずらすため(当たり判定)
 	Camera* m_camera;
 	TileContext m_tileContext;
 
