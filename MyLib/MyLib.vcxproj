@@ -24,17 +24,23 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Math.hpp" />
     <ClInclude Include="MyLib.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Physics2D.h" />
     <ClInclude Include="PhysicsBehavior.h" />
     <ClInclude Include="Rigidbody2D.h" />
+    <ClInclude Include="SceneBase.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="ScreenFade.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Tween.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
@@ -44,7 +50,10 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Physics2D.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScreenFade.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Tween.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

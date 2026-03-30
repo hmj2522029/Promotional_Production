@@ -7,10 +7,12 @@ class GameMain
 {
 private:
 	int m_screen; //自作スクリーン
-	SceneGame* m_scnenGame;
+
+	SceneGame* m_sceneGame;	//ゲームシーン
 
 public:
 	GameMain();
+
 	virtual ~GameMain();
 
 	// メインループの実行

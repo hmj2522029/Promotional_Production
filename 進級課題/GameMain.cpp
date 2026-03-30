@@ -5,27 +5,20 @@
 #include "DxLib.h"
 
  GameMain::GameMain() :
-	m_screen(0),
-	m_scnenGame(nullptr)
+	 m_screen(0),
+	 m_sceneGame()
 {
 	 Debug::Initialize();
 
-	m_scnenGame = new SceneGame();
+	 m_sceneGame = new SceneGame();
+	 //m_sceneGame->Initialize();
 }
 
 
 GameMain::~GameMain()
 {
 	// 自作スクリーンの破棄
-	DeleteGraph(m_screen);
-
-	if (m_scnenGame)
-	{
-		//m_scnenGame->Finalize();
-		delete m_scnenGame;
-		m_scnenGame = nullptr;
-	}
-
+	DeleteGraph(m_screen);	
 
 	DxLib_End();
 }
@@ -45,11 +38,17 @@ void GameMain::Run()
 		throw -1;
 	}
 
-	//背景を白にする
-	SetBackgroundColor(255, 255, 255);
+	//背景を白にする(スクリーンの設定が白なら)
+	if (Screen::ScreenColor == Screen::White) SetBackgroundColor(255, 255, 255);
+
+	//背景を黒にする(スクリーンの設定が黒なら)
+	if (Screen::ScreenColor == Screen::Black) SetBackgroundColor(0, 0, 0);
 
 	// デバッグコンソール起動
 	Debug::Initialize();
+
+	//シーン起動
+	SceneManager::GetInstance()->Setup(new SceneGame);
 
 
 	// スクリーン作成
@@ -85,8 +84,9 @@ void GameMain::Run()
 		// 時間の更新
 		Time::GetInstance()->Update();
 
-		//シーンゲームの更新
-		m_scnenGame->Update();
+		//シーンの更新
+		SceneManager::GetInstance()->Update();
+		//m_sceneGame->Update();
 
 		// 物理演算
 		Physics2D::GetInstance()->Update();
@@ -95,9 +95,9 @@ void GameMain::Run()
 		SetDrawScreen(m_screen);
 		ClearDrawScreen();
 
-		//シーンゲームの描画
-		m_scnenGame->Draw();
-
+		//シーンの描画
+		SceneManager::GetInstance()->Draw();
+		//m_sceneGame->Draw();
 
 		while(GetNowHiPerformanceCount() - frameStartTime < 1000000 / GameConfig::FPS);
 
@@ -109,6 +109,8 @@ void GameMain::Run()
 		// ローダー
 #endif
 
+		// フェード
+		ScreenFade::GetInstance()->Update(m_screen);
 
 		// 自作スクリーンを裏画面に描画
 		SetDrawScreen(DX_SCREEN_BACK);
@@ -119,7 +121,9 @@ void GameMain::Run()
 		ScreenFlip();
 	}
 
-
+	// シーンの破棄
+	SceneManager::GetInstance()->Dispose();
+	//m_sceneGame->Finalize();
 
 	// デバッグコンソールの破棄
 	Debug::Finalize();

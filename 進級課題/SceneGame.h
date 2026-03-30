@@ -5,7 +5,7 @@ class Player;
 class Camera;
 class StageManager;
 
-class SceneGame
+class SceneGame : public SceneBase
 {
 private:
 	
@@ -15,8 +15,15 @@ private:
 	StageManager* m_stageManager;
 
 public:
-	void Update();
-	void Draw();
+	SceneGame():
+		m_rootNode(nullptr),
+		m_player(nullptr),
+		m_camera(nullptr),
+		m_stageManager(nullptr)
+	{ }
 
-	SceneGame();
+	virtual void Initialize() override;
+	virtual void Finalize() override;
+	virtual void Update() override;
+	virtual void Draw() override;
 };

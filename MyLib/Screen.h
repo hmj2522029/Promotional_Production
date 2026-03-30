@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector2.h"
+#include "DxLib.h"
 namespace Screen
 {
 	static constexpr int Width = 1280;	//•
@@ -23,4 +24,7 @@ namespace Screen
 	static constexpr Vector2 BottomCenter = Vector2(Center.x, Bottom);// ’†‰›‰º
 	static constexpr Vector2 BottomRight = Vector2(Right, Bottom);	// ‰E‰º
 
+	static constexpr int Black = 0;		//•
+	static constexpr int White = 255;	//”’
+	static constexpr int ScreenColor =  White;	//”wŒi‰æ–Ê‚ÌF
 }

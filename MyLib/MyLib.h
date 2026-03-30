@@ -29,7 +29,10 @@
 
 
 //Math
+#include "Easing.h"
+#include "ScreenFade.h"
 #include "Vector2.h"
+#include "Math.hpp"
 
 //Physics
 #include "Collision.h"
@@ -37,9 +40,12 @@
 #include "PhysicsBehavior.h"
 
 //Scene
+#include "SceneBase.h"
+#include "SceneManager.h"
 
 //Utility
 #include "Debug.h"
+#include "Fade.h"
 #include "Time.h"
 
 

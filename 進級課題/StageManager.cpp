@@ -31,7 +31,7 @@ StageManager::StageManager(Camera* camera) :
 void StageManager::Update()
 {
 	//デバッグ用のブロックの描画を切り替える
-	if (Keyboard::isDown(KEY_INPUT_1)) ToggleBlockDraw();
+	//if (Keyboard::isDown(KEY_INPUT_1)) ToggleBlockDraw();
 
 
 	int cameraTileX = static_cast<int>(m_camera->GetPos().x / TILE_SIZE);		//カメラの位置からタイルの列を計算する
@@ -75,7 +75,29 @@ void StageManager::Update()
 void StageManager::Draw()
 {
 
-	BlockDraw();	//ステージ全体のブロックを描画する
+#ifdef _DEBUG
+//ステージ全体の枠を描画
+if (m_isBlockDraw)
+{
+	for (auto& pos : m_debugBlocks)
+	{
+		float screenX = pos.x - m_camera->GetPosition().x;
+		float screenY = pos.y - m_camera->GetPosition().y;
+
+		DrawBoxAA(
+			screenX,
+			screenY,
+			screenX + TILE_SIZE,
+			screenY + TILE_SIZE,
+			GetColor(255, 0, 0),
+			false
+		);
+	}
+
+}
+#endif
+
+
 
 }
 
