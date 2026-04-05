@@ -1,13 +1,16 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Camera.h"
+#include "Enemy.h"
 
 
 
 Player::Player(Camera* camera):
-	Actor2D( Tag::Player, Rigidbody2D::Type::Dynamic),
+	Character(Tag::Player, Rigidbody2D::Type::Dynamic, Level, Hp, Attack, Defense),
 	m_camera(camera),
+	m_targetEnemy(nullptr),
 	m_isGround(false),
+	m_isBattle(false),
 	m_invincibleTime(0)
 {
 
@@ -40,9 +43,12 @@ void Player::Release()
 
 void Player::Update()
 {
+	//死んでいたら更新しない
+	if (m_status.IsDead()) return;
+
+	//レベルアップのチェック
+	m_status.CheckLevelUp(10, 5, 3, 1, 2, 1);
 	
-	int a = static_cast<int>(m_transform.position.y);
-	//Debug::Log("%d \n", a);
 
 		// 無敵時間のカウントダウン
 	if (m_invincibleTime > 0)
@@ -89,22 +95,6 @@ void Player::Draw()
 
 }
 
-// ダメージを受ける
-void Player::Damage(int damage)
-{
-	//if (IsDeath()) return;
-
-	// 無敵中はダメージを受けない
-	if (m_invincibleTime > 0) return;
-
-	// 無敵時間を設定
-	m_invincibleTime = InvincibleTime;
-
-	//体力減少(まだ書いていない)
-
-
-}
-
 
 // 衝突イベント
 void Player::OnCollisionEnter(const Actor2D* other)
@@ -113,6 +103,9 @@ void Player::OnCollisionEnter(const Actor2D* other)
 	if (other->GetTag() == Tag::Hole)
 	{
 		Debug::Log("落ちた");
+
+		//落ちたら即死
+		m_status.InstantDeath();
 	}
 
 	//トゲ
@@ -120,7 +113,14 @@ void Player::OnCollisionEnter(const Actor2D* other)
 	{
 		Debug::Log("トゲに当たった");
 
-		Damage(0);
+		// 無敵中はダメージを受けない
+		if (m_invincibleTime > 0) return;
+
+		// 無敵時間を設定
+		m_invincibleTime = InvincibleTime;
+
+		// ダメージを受ける
+		m_status.TakeDamage(10, true);	// 10のダメージを受ける
 
 	}
 
@@ -128,7 +128,10 @@ void Player::OnCollisionEnter(const Actor2D* other)
 	{
 		Debug::Log("敵に当たった");
 
+		//対象の敵を保存する
+		m_targetEnemy = const_cast<Enemy*>(dynamic_cast<const Enemy*>(other));
 
+		m_isBattle = true;
 	}
 
 

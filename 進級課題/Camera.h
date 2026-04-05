@@ -18,6 +18,10 @@ public:
 
     Camera();               // コンストラクタ
 
+    //カメラを止める・動かす
+	void Stop() { m_velocity = Vector2(0, 0); }
+	void Move() { m_velocity = Vector2(MOVE_SPEED, 0); }
+
     Vector2 GetPos() const { return m_transform.position; }     // カメラ位置取得
     float GetSpeed() const { return MOVE_SPEED; }
 

@@ -21,15 +21,20 @@
   <ItemGroup>
     <ClInclude Include="Actor2D.h" />
     <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Easing.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="LoaderBase.h" />
     <ClInclude Include="Math.hpp" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="MyLib.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="NumberDrawer.h" />
     <ClInclude Include="Physics2D.h" />
     <ClInclude Include="PhysicsBehavior.h" />
     <ClInclude Include="Rigidbody2D.h" />
@@ -37,6 +42,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenFade.h" />
+    <ClInclude Include="SoundLoader.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
@@ -45,13 +51,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor2D.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="LoaderBase.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="NumberDrawer.cpp" />
     <ClCompile Include="Physics2D.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScreenFade.cpp" />
+    <ClCompile Include="SoundLoader.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Tween.cpp" />
   </ItemGroup>

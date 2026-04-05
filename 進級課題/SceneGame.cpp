@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Camera.h"
 #include "StageManager.h"
+#include "SceneGameUI.h"
+#include "BattleScene.h"
 
 
 void SceneGame::Initialize()
@@ -20,9 +22,11 @@ void SceneGame::Initialize()
 	m_stageManager = new StageManager(m_camera);
 	m_rootNode->AddChild(m_stageManager);
 
+	// UIの生成
+	m_sceneGameUI = new SceneGameUI(m_player);
+	m_rootNode->AddChild(m_sceneGameUI);
 
-	//物理起動
-	//Physics2D::GetInstance()->Active();
+
 }
 
 void SceneGame::Finalize()
@@ -41,6 +45,15 @@ void SceneGame::Finalize()
 
 void SceneGame::Update()
 {
+	//戦闘画面に遷移するかどうかの判定
+	if (m_player->GetTargetEnemy() != nullptr && m_player->IsBattle())
+	{
+		SceneManager::GetInstance()->PushScene(new BattleScene(m_player, m_player->GetTargetEnemy(), m_camera));
+		return;
+	}
+
+
+
 #ifdef _DEBUG
 
 	//デバッグ用のブロックの描画を切り替える

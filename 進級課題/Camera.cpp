@@ -7,16 +7,13 @@ Camera::Camera() :
 {
 	m_transform.position = m_position; // カメラの初期位置を設定
 
-	m_rigidbody2d.velocity = m_velocity;
-
 	m_collider = new BoxCollider(Size, Vector2(Size) / 2);
 
 } 
 
 void Camera::Update()
 {
-
-
+	m_transform.position += m_velocity; // カメラの位置を速度に応じて更新
 
 
 }

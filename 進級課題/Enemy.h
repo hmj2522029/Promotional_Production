@@ -1,28 +1,29 @@
 #pragma once
-#include "MyLib.h"
-#include "TileContext.h"
+#include "Character.h"
 
-class Camera;
-
-
-//敵(オブジェクト)
-class Enemy : public Actor2D
+class Enemy : public Character
 {
-private:
-
-	Vector2 m_size;			//サイズ
-	Vector2 m_offsetPos;	//座標をずらすため(落とし穴)
-	Vector2 m_offsetCol;	//座標をずらすため(当たり判定)
-	Camera* m_camera;
-	TileContext m_tileContext;
-
-
 protected:
-	virtual void Update() override;
-	virtual void Draw() override;
+	//敵が共通して持つ情報や機能をここに書く
+	int m_expReward;	//倒したときにプレイヤーが得る経験値
 
 public:
 
-	Enemy(const TileContext& tile, Camera* camera);
+
+	Enemy(
+		Tag tag = Tag::Enemy,
+		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
+		int Lv = 0,
+		int Hp = 0,
+		int attack = 0,
+		int defense = 0,
+		int expReward = 0
+	) :
+		Character(tag, type, Lv, Hp, attack, defense),
+		m_expReward(expReward)
+	{
+	}
+
+	int GetExpReward() const { return m_expReward; }
 
 };

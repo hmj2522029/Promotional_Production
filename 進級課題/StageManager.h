@@ -2,7 +2,6 @@
 #include "MyLib.h"
 #include "StageData.h"
 #include "TileContext.h"
-#include <unordered_map>
 #include <vector>
 #include <memory>	
 //#include <random>エラーになる
@@ -26,8 +25,6 @@ private:
 	};
 
 
-	using TileCreateFunc = void (StageManager::*)(const TileContext&, Camera*);	//タイルを生成する関数の型(引数 Vector2 戻り値 void)
-	std::unordered_map<char, TileCreateFunc> m_tileTable;	//マップ記号とタイル生成関数の対応表(キー = タイル文字 値 = 生成する関数)
 
 	static const int UI_HEIGHT = 158;	//UIを表示するためのyの範囲
 	static const int PLAYER_Y  = 480;	//置きたいプレイヤーの位置
@@ -56,17 +53,10 @@ private:
 	void LoadMiddleMapData();	//中盤のマップデータの読み込み
 	void LoadLateMapData();		//終盤のマップデータの読み込み
 
-	//テーブルの初期化
-	void InitializeTileTable();	//マップ記号とタイル生成関数の対応表を初期化する関数
 
 	//ステージの生成
 	void GenerateColumn(int column);	//マップデータの列を生成する関数
 
-	void CreateGround(const TileContext& tile, Camera* camera);		//地面を生成する関数
-	void CreateAirGround(const TileContext& tile, Camera* camera); 	//空中ブロックを生成する関数
-	void CreateEnemy(const TileContext& tile, Camera* camera);		//敵を生成する関数
-	void CreateSpike(const TileContext& tile, Camera* camera);		//トゲを生成する関数
-	void CreateHole(const TileContext& tile, Camera* camera);		//落とし穴を生成する関数
 		
 protected:
 

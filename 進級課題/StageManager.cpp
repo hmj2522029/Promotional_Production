@@ -1,6 +1,6 @@
 #include "StageData.h"
 #include "StageManager.h"
-
+#include "ObjectFactory.h"
 #include "Ground.h"
 #include "AirGround.h"
 #include "Enemy.h"
@@ -17,8 +17,6 @@ StageManager::StageManager(Camera* camera) :
 	m_situation(Situation::EarlyStage)
 {
 	
-	InitializeTileTable();	//マップ記号とタイル生成関数の対応表を初期化する
-
 	LoadEarlyMapData();		//序盤
 	LoadMiddleMapData();	//中盤
 	LoadLateMapData();		//終盤
@@ -101,27 +99,6 @@ if (m_isBlockDraw)
 
 }
 
-void StageManager::CreateGround(const TileContext& tile, Camera* camera)
-{
-	AddChild(new Ground(tile, camera));
-}
-void StageManager::CreateAirGround(const TileContext& tile, Camera* camera)
-{
-	AddChild(new AirGround(tile, camera));
-}
-void StageManager::CreateEnemy(const TileContext& tile, Camera* camera)
-{
-	AddChild(new Enemy(tile, camera));
-}
-void StageManager::CreateSpike(const TileContext& tile, Camera* camera)
-{
-	AddChild(new Spike(tile, camera));
-}
-void StageManager::CreateHole(const TileContext& tile, Camera* camera)
-{
-	AddChild(new Hole(tile, camera));
-}
-
 
 void StageManager::GenerateColumn(int column)
 {
@@ -135,25 +112,16 @@ void StageManager::GenerateColumn(int column)
 		//Debug::Log("Tile Position: (%f, %f)\n", pos.x, pos.y);
 		m_debugBlocks.push_back(pos);	//デバッグ用のブロックの位置を保存する
 
-		auto it = m_tileTable.find(tile);	//マップ記号に対応するタイル生成関数を探す
+		TileContext tileContext{ pos, TILE_SIZE };	//タイルの情報を作成する
 
-
-		if (it != m_tileTable.end())	//対応するタイル生成関数が見つかった場合
+		//タイルの種類に応じたオブジェクトを生成する
+		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tile, tileContext, m_camera))
 		{
-			TileContext tile{ pos, TILE_SIZE };	//タイルの情報を作成する
-			(this->*it->second)(tile, m_camera);	//タイル生成関数を呼び出す
+			AddChild(obj);	//生成したオブジェクトをステージマネージャーの子として追加する
 		}
 	}
 }
 
-void StageManager::InitializeTileTable()
-{
-	m_tileTable['G'] = &StageManager::CreateGround;
-	m_tileTable['S'] = &StageManager::CreateAirGround;
-	m_tileTable['E'] = &StageManager::CreateEnemy;
-	m_tileTable['^'] = &StageManager::CreateSpike;
-	m_tileTable['P'] = &StageManager::CreateHole;
-}
 
 
 StageData::StageMap* StageManager::GetRandomStage(const std::vector<StageData::StageMap*>& list)

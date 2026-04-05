@@ -136,35 +136,47 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AirGround.h" />
+    <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Character.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyFactory.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="HitBox.h" />
     <ClInclude Include="Hole.h" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneGame.h" />
+    <ClInclude Include="SceneGameUI.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Spike.h" />
     <ClInclude Include="StageData.h" />
     <ClInclude Include="StageManager.h" />
+    <ClInclude Include="Status.h" />
     <ClInclude Include="TileContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AirGround.cpp" />
+    <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyFactory.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Hole.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneGame.cpp" />
+    <ClCompile Include="SceneGameUI.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Spike.cpp" />
     <ClCompile Include="StageData.cpp" />
     <ClCompile Include="StageManager.cpp" />
+    <ClCompile Include="Status.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

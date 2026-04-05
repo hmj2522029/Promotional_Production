@@ -4,6 +4,7 @@
 class Player;
 class Camera;
 class StageManager;
+class SceneGameUI;
 
 class SceneGame : public SceneBase
 {
@@ -13,13 +14,15 @@ private:
 	Camera* m_camera;
 	Player* m_player;
 	StageManager* m_stageManager;
+	SceneGameUI* m_sceneGameUI;
 
 public:
 	SceneGame():
 		m_rootNode(nullptr),
 		m_player(nullptr),
 		m_camera(nullptr),
-		m_stageManager(nullptr)
+		m_stageManager(nullptr),
+		m_sceneGameUI(nullptr)
 	{ }
 
 	virtual void Initialize() override;
