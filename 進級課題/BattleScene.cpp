@@ -21,19 +21,39 @@ void BattleScene::Finalize()
 
 void BattleScene::Update()
 {
-
-	if (m_player->m_status.IsDead()|| m_enemy->m_status.IsDead())
+	switch (m_fadeState)
 	{
-		//カメラを動かす
-		m_camera->Move();
+	case FadeState::Fade:
 
-		SceneManager::GetInstance()->PopScene();
-		Physics2D::GetInstance()->Active();
+		if(ScreenFade::GetInstance()->IsFade())return;	
+
+		ScreenFade::GetInstance()->StartFadeIn(true);
+		m_fadeState = FadeState::Run;
+		break;
+
+	case FadeState::Run:
+
+		if (m_player->m_status.IsDead()|| m_enemy->m_status.IsDead())
+		{
+			//カメラを動かす
+			m_camera->Move();
+
+			ScreenFade::GetInstance()->StartFadeOut(true, 0.2);
+
+			SceneManager::GetInstance()->PopScene();
+			Physics2D::GetInstance()->Active();
+		}
+
+
+
+		break;
 	}
+
+
 }
 
 void BattleScene::Draw()
 {
 	// 戦闘中のログを表示
-	Debug::Log("Battle Update! Player HP: %d, Enemy HP: %d\n", m_player->m_status.GetHp(), m_enemy->m_status.GetHp());
+	//Debug::Log("Battle Update! Player HP: %d, Enemy HP: %d\n", m_player->m_status.GetHp(), m_enemy->m_status.GetHp());
 }

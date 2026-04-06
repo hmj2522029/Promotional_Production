@@ -135,7 +135,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ActionButton.h" />
     <ClInclude Include="AirGround.h" />
+    <ClInclude Include="BattleCommand.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
@@ -159,7 +161,9 @@
     <ClInclude Include="TileContext.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActionButton.cpp" />
     <ClCompile Include="AirGround.cpp" />
+    <ClCompile Include="BattleCommand.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EnemyFactory.cpp" />

@@ -49,7 +49,7 @@
 
 //Utility
 #include "Debug.h"
-#include "Fade.h"
+#include "ScreenFade.h"
 #include "Time.h"
 
 #include "NumberDrawer.h"

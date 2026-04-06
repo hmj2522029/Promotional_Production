@@ -25,6 +25,8 @@ private:
 	int m_exp;            // 経験値
 	int m_expToNextLevel; // 次のレベルまでの経験値
 
+	bool m_isDefending;		//防御しているかどうかのフラグ
+
 
 public:
 
@@ -36,7 +38,8 @@ public:
         m_attack(attack),
         m_defense(defense),
 		m_exp(0),
-		m_expToNextLevel(level * ExpMultiplier) // 次のレベルまでの経験値はレベル×100
+		m_expToNextLevel(level * ExpMultiplier), // 次のレベルまでの経験値はレベル×100
+		m_isDefending(false)
     {}
 
     
@@ -67,6 +70,13 @@ public:
 
 	// レベルアップ判定
 	void CheckLevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense);
+
+	//防御しているかどうか
+	bool IsDefending() const { return m_isDefending; }
+
+	//防御する・やめる
+	void StartDefend() { m_isDefending = true; }
+	void EndDefend() { m_isDefending = false; }
 
 
 };

@@ -12,6 +12,7 @@ private:
 
 	Tween m_brightness;		
 	bool m_isFade;			// フェード中かどうか
+	bool m_executed;		// フェードイン・アウトを一回だけ通すためのフラグ
 
 	ScreenFade();
 
@@ -32,10 +33,10 @@ public:
 	void Update(int screen);
 
 	// フェードイン(見えない → 見える)
-	void StartFadeIn(float duration = 0.5f, Color color = Color::Black);
+	void StartFadeIn(bool once = false, float duration = 0.5f, Color color = Color::Black);
 
 	// フェードアウト(見える → 見えない)
-	void StartFadeOut(float duration = 0.5f, Color color = Color::Black);
+	void StartFadeOut(bool once = false, float duration = 0.5f, Color color = Color::Black);
 
 	// フェード中かどうか
 	bool IsFade() const { return m_isFade; }

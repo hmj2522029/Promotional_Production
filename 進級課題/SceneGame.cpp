@@ -46,10 +46,13 @@ void SceneGame::Finalize()
 void SceneGame::Update()
 {
 	//戦闘画面に遷移するかどうかの判定
-	if (m_player->GetTargetEnemy() != nullptr && m_player->IsBattle())
+	if (m_player->GetTargetEnemy() != nullptr)
 	{
+		//フェードアウト
+		ScreenFade::GetInstance()->StartFadeOut(true);
+
 		SceneManager::GetInstance()->PushScene(new BattleScene(m_player, m_player->GetTargetEnemy(), m_camera));
-		return;
+
 	}
 
 

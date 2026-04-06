@@ -8,7 +8,8 @@
 #include "Debug.h"
 
 ScreenFade::ScreenFade() :
-	m_isFade(false)
+	m_isFade(false),
+	m_executed(false)
 {
 }
 
@@ -20,14 +21,15 @@ void ScreenFade::Update(int screen)
 	// フェード中でなければ何もしない
 	if (!IsFade()) return;
 
+	Debug::Log("Brightness: %f\n", m_brightness.GetValue());
 
 	// Tweenの再生が終わったらフェード終了
 	if (!m_brightness.IsPlaying())
 	{
-		m_isFade = false;
+		m_isFade = false; 
+		m_executed = false;
 	}
 
-	Debug::Log("Brightness: %f\n", m_brightness.GetValue());
 
 	// Tweenで輝度を算出して、スクリーンに反映
 	GraphFilter(
@@ -40,8 +42,16 @@ void ScreenFade::Update(int screen)
 }
 
 // フェードイン
-void ScreenFade::StartFadeIn(float duration, Color color)
+void ScreenFade::StartFadeIn(bool once, float duration, Color color)
 {
+	// フェードインは一回だけ通す(trueなら)
+	if (once)
+	{
+		if (m_executed) return;
+
+		m_executed = true;
+	}
+
 	// フェード開始時の輝度
 	float beginBright = static_cast<float>((color == Color::Black) ? BrightBlack : BrightWhite);
 
@@ -51,11 +61,20 @@ void ScreenFade::StartFadeIn(float duration, Color color)
 	// Tweenの設定
 	m_brightness.Start(duration, beginBright, endBright, Easing::EasingType::InOutCubic);
 	m_isFade = true;
+
 }
 
 // フェードアウト
-void ScreenFade::StartFadeOut(float duration, Color color)
+void ScreenFade::StartFadeOut(bool once, float duration, Color color)
 {
+	// フェードインは一回だけ通す(trueなら)
+	if (once)
+	{
+		if (m_executed) return;
+
+		m_executed = true;
+	}
+
 	// フェード開始時の輝度
 	float beginBright = static_cast<float>(BrightNeutral);
 

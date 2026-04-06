@@ -3,7 +3,17 @@
 int Status::CalculateDamage(const Status& target)
 {
 	// ダメージ計算
-	int damage = m_attack - target.GetDefense();
+	int damage = 0;
+	//防御をしている時は攻撃力が半減する
+	if (target.IsDefending())
+	{
+		damage = (m_attack / 2) - target.m_defense;	// 防御している場合のダメージ計算
+	} 
+	else
+	{
+		damage = m_attack - target.m_defense;		// 通常のダメージ計算
+	}
+
 	if (damage < 1) { damage = 1; } // ダメージは1未満にならない
 	return damage;
 }
