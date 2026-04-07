@@ -1,7 +1,5 @@
 #include "BattleCommand.h"
 #include "Character.h"
-#include "Player.h"
-#include "Enemy.h"
 
 void BattleCommand::AttackCommand(Character* action, Character* target)
 {
@@ -9,6 +7,9 @@ void BattleCommand::AttackCommand(Character* action, Character* target)
 	int damage = action->m_status.CalculateDamage(target->m_status);
 	bool penetration = false;	// 貫通攻撃かどうかのフラグ（例: スキルや特定の武器で貫通攻撃を実装する場合に使用）
 	target->m_status.TakeDamage(damage, penetration);
+
+	//キャラクターは行動した
+	action->Action();
 
 };
 
@@ -20,6 +21,9 @@ void BattleCommand::DefenseCommand(Character* action)
 	
 	//防御した時ちょっとだけHPを回復する
 	action->m_status.Heal(5);
+
+	//キャラクターは行動した
+	action->Action();
 };
 
 
@@ -38,5 +42,9 @@ void BattleCommand::EscapeCommand(Character* action)
 		// 逃走失敗
 		Debug::Log("Escape failed!\n");
 	}
+
+	//キャラクターは行動した
+	action->Action();
+
 };
 

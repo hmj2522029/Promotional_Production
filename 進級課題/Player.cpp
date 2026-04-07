@@ -10,7 +10,6 @@ Player::Player(Camera* camera):
 	m_camera(camera),
 	m_targetEnemy(nullptr),
 	m_isGround(false),
-	m_isBattle(false),
 	m_invincibleTime(0)
 {
 
@@ -131,7 +130,6 @@ void Player::OnCollisionEnter(const Actor2D* other)
 		//‘ÎÛ‚Ì“G‚ğ•Û‘¶‚·‚é
 		m_targetEnemy = const_cast<Enemy*>(dynamic_cast<const Enemy*>(other));
 
-		m_isBattle = true;
 	}
 
 

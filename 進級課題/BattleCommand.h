@@ -1,21 +1,15 @@
 #pragma once
 #include "MyLib.h"
 
-class Player;
-class Enemy;
 class Character;
 
-class BattleCommand 
+class BattleCommand
 {
 private:
 
-	bool m_isDefending;	//–hŒä‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 
 public:
-	BattleCommand() :
-		m_isDefending(false)
-	{
-	};
+	BattleCommand(){};
 
 	//UŒ‚ƒRƒ}ƒ“ƒh
 	void AttackCommand(Character* action, Character* target);

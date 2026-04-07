@@ -159,6 +159,7 @@
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="TileContext.h" />
+    <ClInclude Include="BattleState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionButton.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="StageData.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="Status.cpp" />
+    <ClCompile Include="BattleState.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

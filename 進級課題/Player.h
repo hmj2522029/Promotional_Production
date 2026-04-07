@@ -25,7 +25,6 @@ private:
 	Enemy* m_targetEnemy;	//“–‚½‚Á‚½‚Ì‘ÎÛ‚Ì“G
 
 	bool m_isGround;		//’n–Ê”»’è
-	bool m_isBattle;		//í“¬”»’è
 	float m_invincibleTime;	//c‚è‚Ì–³“GŠÔ
 	
 protected:
@@ -39,12 +38,6 @@ public:
 	Player(Camera* camera);
 
 	int GetX() const { return static_cast<int>(m_transform.position.x); }
-
-	//í“¬’†‚©‚Ç‚¤‚©
-	bool IsBattle() const { return m_isBattle; }
-
-	//í“¬‚ªI—¹‚µ‚½
-	void EndBattle() { m_isBattle = false; }
 
 	//“–‚½‚Á‚½“G‚ğ•Ô‚·
 	Enemy* GetTargetEnemy() const { return m_targetEnemy; }

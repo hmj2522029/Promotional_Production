@@ -4,6 +4,9 @@
 
 class Character : public Actor2D
 {
+
+	bool m_isAction;	//各キャラクターが行動したかどうか
+
 public:
 	Status m_status;	//ステータス
 
@@ -16,9 +19,18 @@ public:
 		int defense = 0
 	) :
 		Actor2D(tag, type),
-		m_status(Lv, Hp, attack, defense)
+		m_status(Lv, Hp, attack, defense),
+		m_isAction(false)
 	{
 	}
 
+	//行動したかどうか
+	bool isAction() const { return m_isAction; }
+
+	//行動した
+	void Action() { m_isAction = true; }
+
+	//行動をリセット
+	void ResetAction() { m_isAction = false; }
 
 };

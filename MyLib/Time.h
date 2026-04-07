@@ -19,6 +19,7 @@ public:
 	void Update();
 
 	//デルタタイムの取得
-	float GetDeltaTime() { return m_deltaTime; }
+	float GetDeltaTime() const { return m_deltaTime; }
+
 
 };

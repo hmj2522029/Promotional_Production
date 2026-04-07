@@ -19,3 +19,4 @@ void Time::Update()
 	//前フレームの時刻を更新
 	m_prevTime = currentTime;
 }
+
