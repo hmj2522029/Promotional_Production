@@ -5,6 +5,7 @@ class Player;
 class Camera;
 class StageManager;
 class SceneGameUI;
+class BattleScene;
 
 class SceneGame : public SceneBase
 {
@@ -15,6 +16,7 @@ private:
 	Player* m_player;
 	StageManager* m_stageManager;
 	SceneGameUI* m_sceneGameUI;
+	BattleScene* m_battleScene;
 
 public:
 	SceneGame():
@@ -22,7 +24,8 @@ public:
 		m_player(nullptr),
 		m_camera(nullptr),
 		m_stageManager(nullptr),
-		m_sceneGameUI(nullptr)
+		m_sceneGameUI(nullptr),
+		m_battleScene(nullptr)
 	{ }
 
 	virtual void Initialize() override;

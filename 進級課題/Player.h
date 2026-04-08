@@ -1,4 +1,5 @@
 #pragma once
+#include "BattleCommand.h"
 #include "Character.h"
 #include "MyLib.h"
 
@@ -23,6 +24,7 @@ private:
 
 	Camera* m_camera;		//カメラ
 	Enemy* m_targetEnemy;	//当たった時の対象の敵
+	BattleCommand m_command;
 
 	bool m_isGround;		//地面判定
 	float m_invincibleTime;	//残りの無敵時間
@@ -35,12 +37,23 @@ protected:
 	void Draw()override;
 
 public:
+	enum class ActionType
+	{
+		Attack,		//攻撃
+		Defense,	//防御
+		Escape		//逃走
+
+	};
+
 	Player(Camera* camera);
 
 	int GetX() const { return static_cast<int>(m_transform.position.x); }
 
 	//当たった敵を返す
 	Enemy* GetTargetEnemy() const { return m_targetEnemy; }
+
+	//プレイヤーの行動
+	void ActionSelection(ActionType actionType, Enemy* enemy);
 
 	// 衝突イベント
 	virtual void OnCollisionEnter(const Actor2D* other) override;

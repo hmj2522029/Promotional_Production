@@ -147,3 +147,4 @@ void SceneManager::Draw()
 		m_loadingScene->Draw();
 	}
 }
+

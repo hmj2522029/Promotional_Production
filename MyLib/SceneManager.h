@@ -53,6 +53,9 @@ public:
 	// 指定したシーンを削除
 	void RemoveScene(SceneBase* scene) { m_sceneList.remove(scene); }
 
+	//指定したシーンが一番上かどうか(実行しているシーン)
+	bool TopScene(SceneBase* scene) { return m_sceneList.back() == scene ? true : false; }
+
 	void Update();
 	void Draw();
 };

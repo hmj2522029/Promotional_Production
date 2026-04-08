@@ -1,9 +1,9 @@
 #pragma once
+#include "BattleState.h"
 #include "MyLib.h"
 
 class Player;
 class Enemy;
-class Camera;
 
 class BattleScene : public SceneBase
 {
@@ -16,18 +16,23 @@ private:
 
 	};
 
+	
+	Node* m_rootNode;
 	FadeState m_fadeState;	//フェード状態
-	Player* m_player;	//プレイヤー
-	Enemy* m_enemy;		//敵
-	Camera* m_camera;	//カメラ
+	Player* m_player;		//プレイヤー
+	Enemy* m_enemy;			//当たった敵
+
+	BattleState* m_state;	//状態
+
 
 public:
 
-	BattleScene(Player* player, Enemy* enemy, Camera* camera) :
+	BattleScene(Player* player) :
+		m_rootNode(nullptr),
 		m_fadeState(FadeState::Fade),
 		m_player(player),
-		m_enemy(enemy),
-		m_camera(camera)
+		m_enemy(nullptr),
+		m_state(nullptr)
 	{
 	}
 	

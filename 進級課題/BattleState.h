@@ -1,9 +1,9 @@
 #pragma once
+#include "BattleCommand.h"
 #include "MyLib.h"
 
 class Player;
 class Enemy;
-class BattleCommand;
 
 
 class BattleState : public Node
@@ -22,7 +22,7 @@ private:
 	Situation m_nextSituation;	//Ÿ‚Ìó‘Ô
 
 	Situation m_situation;	
-	BattleCommand* m_battlecommand;
+	BattleCommand m_battlecommand;
 	Player* m_player;
 	Enemy* m_enemy;
 
@@ -36,6 +36,7 @@ protected:
 public:
 
 	BattleState(Player* player, Enemy* enemy);
+
 
 
 	//í“¬’†‚©‚Ç‚¤‚©

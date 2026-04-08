@@ -75,15 +75,15 @@ void BattleState::Update()
 
 		if (ActionSelection > 70)	//0から70(70%)
 		{
-			m_battlecommand->AttackCommand(m_enemy, m_player);
+			m_battlecommand.AttackCommand(m_enemy, m_player);
 		}
 		else if(ActionSelection > 90)	//70から90(20%) 
 		{
-			m_battlecommand->DefenseCommand(m_enemy);
+			m_battlecommand.DefenseCommand(m_enemy);
 		}
 		else //90から100(10%)
 		{
-			m_battlecommand->EscapeCommand(m_enemy);
+			m_battlecommand.EscapeCommand(m_enemy);
 		}
 
 
@@ -91,18 +91,7 @@ void BattleState::Update()
 
 	case Situation::EndBattle:
 
-		//勝利判定
-		if (m_player->m_status.IsDead())	//プレイヤーが死んでいたら敵の勝ち
-		{
-			
-
-
-		}
-		else if(m_enemy->m_status.IsDead())	//敵が死んだらプレイヤーの勝ち
-		{
-
-		}
-
+		//シーンの切り替えはBattleSceneで行う
 
 		m_isBattle = false;
 

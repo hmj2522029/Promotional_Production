@@ -1,22 +1,31 @@
 #include "BattleScene.h"
+#include "SceneGame.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Camera.h"
-#include "SceneGame.h"
 
 void BattleScene::Initialize()
 {
-	//カメラを止める
-	m_camera->Stop();
 
-	// 戦闘開始のログを表示
-	Debug::Log("Battle Start! Player HP: %d, Enemy HP: %d\n", m_player->m_status.GetHp(), m_enemy->m_status.GetHp());
+	m_rootNode = new Node;
+
+	m_state = new BattleState(m_player, m_enemy);
+	m_rootNode->AddChild(m_state);
+
+
+
 }
 
 void BattleScene::Finalize()
 {
-	// 戦闘終了のログを表示
-	Debug::Log("Battle End! Player HP: %d, Enemy HP: %d\n", m_player->m_status.GetHp(), m_enemy->m_status.GetHp());
+
+	if (m_rootNode)
+	{
+		m_rootNode->TreeRelease();
+		delete m_rootNode;
+		m_rootNode = nullptr;
+	}
+
+
 }
 
 void BattleScene::Update()
@@ -24,8 +33,10 @@ void BattleScene::Update()
 	switch (m_fadeState)
 	{
 	case FadeState::Fade:
-
 		if(ScreenFade::GetInstance()->IsFade())return;	
+
+		//当たった敵の取得
+		m_enemy = m_player->GetTargetEnemy();
 
 		ScreenFade::GetInstance()->StartFadeIn(true);
 		m_fadeState = FadeState::Run;
@@ -35,13 +46,26 @@ void BattleScene::Update()
 
 		if (m_player->m_status.IsDead()|| m_enemy->m_status.IsDead())
 		{
-			//カメラを動かす
-			m_camera->Move();
 
 			ScreenFade::GetInstance()->StartFadeOut(true, 0.2);
 
-			SceneManager::GetInstance()->PopScene();
 			Physics2D::GetInstance()->Active();
+			SceneManager::GetInstance()->PopScene();
+		}
+
+		//勝敗のシーン追加や切り替え
+		if (m_enemy->m_status.IsDead() && !m_state->isBattel())	//敵が死んだらプレイヤーの勝ち
+		{
+
+			//SceneManager::GetInstance()->PushScene()
+
+		}
+		else if(m_player->m_status.IsDead() && !m_state->isBattel()) //プレイヤーが死んだらプレイヤーの負け
+		{
+			//リザルト画面を出す
+
+			//SceneManager::GetInstance()->PushScene()
+
 		}
 
 
@@ -54,6 +78,6 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-	// 戦闘中のログを表示
-	//Debug::Log("Battle Update! Player HP: %d, Enemy HP: %d\n", m_player->m_status.GetHp(), m_enemy->m_status.GetHp());
+
+
 }

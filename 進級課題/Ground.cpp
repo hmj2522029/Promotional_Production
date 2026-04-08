@@ -26,6 +26,7 @@ void Ground::Update()
 
 	if (m_transform.position.x + m_tileContext.tileSize <= Screen::Left)
 	{
+		Debug::Log("aaa");
 		Destroy();
 	}
 

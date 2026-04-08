@@ -94,6 +94,32 @@ void Player::Draw()
 
 }
 
+void Player::ActionSelection(ActionType actionType, Enemy* enemy)
+{
+
+	switch (actionType)
+	{
+		
+	case ActionType::Attack:
+
+		m_command.AttackCommand(this, enemy);
+
+		break;
+	case ActionType::Defense:
+
+		m_command.DefenseCommand(this);
+
+		break;
+	case ActionType::Escape:
+
+		m_command.EscapeCommand(this);
+
+		break;
+	}
+
+
+}
+
 
 // è’ìÀÉCÉxÉìÉg
 void Player::OnCollisionEnter(const Actor2D* other)

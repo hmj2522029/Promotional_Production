@@ -26,6 +26,11 @@ void SceneGame::Initialize()
 	m_sceneGameUI = new SceneGameUI(m_player);
 	m_rootNode->AddChild(m_sceneGameUI);
 
+	//戦闘画面
+	m_battleScene = new BattleScene(m_player);
+	m_battleScene->Initialize();
+
+	//リザルト画面
 
 }
 
@@ -39,19 +44,34 @@ void SceneGame::Finalize()
 		m_rootNode = nullptr;
 	}
 
+	if (m_battleScene)
+	{
+		SceneManager::GetInstance()->RemoveScene(m_battleScene);
+		m_battleScene->Finalize();
+		delete m_battleScene;
+		m_battleScene = nullptr;
+
+	}
+
 
 }
 
 
 void SceneGame::Update()
 {
+	//カメラを動かす
+	m_camera->Move();
+
 	//戦闘画面に遷移するかどうかの判定
 	if (m_player->GetTargetEnemy() != nullptr)
 	{
+		//止める
+		m_camera->Stop();
+
 		//フェードアウト
 		ScreenFade::GetInstance()->StartFadeOut(true);
 
-		SceneManager::GetInstance()->PushScene(new BattleScene(m_player, m_player->GetTargetEnemy(), m_camera));
+		SceneManager::GetInstance()->PushScene(m_battleScene);
 
 	}
 

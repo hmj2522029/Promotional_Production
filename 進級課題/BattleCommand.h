@@ -9,6 +9,7 @@ private:
 
 
 public:
+
 	BattleCommand(){};
 
 	//攻撃コマンド
@@ -19,6 +20,5 @@ public:
 
 	//逃走コマンド
 	void EscapeCommand(Character* action);
-
 
 };
