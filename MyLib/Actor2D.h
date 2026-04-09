@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "Rigidbody2D.h"
 #include "Tag.h"
+#include "Sprite.h"
 
 class Physics2D;
 class Collider;
@@ -12,13 +13,13 @@ class Actor2D : public Node
 {
 	friend Physics2D;	//Physics2DがActor内部にアクセスできるようにするため
 
-
 protected:
 
-	Tag m_tag;				//タグ
-	Transform m_transform;	//姿勢情報
-	Rigidbody2D m_rigidbody2d;//剛体
-	Collider* m_collider;	//衝突形状
+	Tag m_tag;					//タグ
+	Transform m_transform;		//姿勢情報
+	Rigidbody2D m_rigidbody2d;	//剛体
+	Sprite* m_sprite;			//画像2D
+	Collider* m_collider;		//衝突形状
 
 	virtual void Load() override;
 	virtual void Release() override;
@@ -32,14 +33,24 @@ public:
 		Vector2 resolve;
 	};
 
-
-	Actor2D(
+	Actor2D(	//アニメーション用
+		const Animation2D& anime,		//アニメーション
+		const Vector2& gridSize,		//一コマのサイズ
+		const Vector2& pos = Vector2(),			//座標
+		Tag tag = Tag::None,
+		Rigidbody2D::Type type = Rigidbody2D::Type::Static
+	);
+	Actor2D(	//一コマ画像用
+		const char* textureName,
+		const Vector2& pos = Vector2(),
+		Tag tag = Tag::None,
+		Rigidbody2D::Type type = Rigidbody2D::Type::Static
+	);
+	Actor2D(	//アニメーションも画像も使用しない用
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
 	) :
-		m_collider(nullptr),
-		m_rigidbody2d(type),
-		m_tag(tag)
+		Actor2D(nullptr, Vector2(), tag, type)
 	{
 	}
 

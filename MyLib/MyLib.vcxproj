@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor2D.h" />
+    <ClInclude Include="Animation2D.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Collider.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenFade.h" />
     <ClInclude Include="SoundLoader.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />
@@ -64,6 +66,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScreenFade.cpp" />
     <ClCompile Include="SoundLoader.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Tween.cpp" />
   </ItemGroup>
