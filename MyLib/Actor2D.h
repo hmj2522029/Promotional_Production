@@ -9,6 +9,7 @@ class Physics2D;
 class Collider;
 
 
+
 class Actor2D : public Node
 {
 	friend Physics2D;	//Physics2DがActor内部にアクセスできるようにするため
@@ -36,23 +37,21 @@ public:
 	Actor2D(	//アニメーション用
 		const Animation2D& anime,		//アニメーション
 		const Vector2& gridSize,		//一コマのサイズ
-		const Vector2& pos = Vector2(),			//座標
+		const Vector2& pos = Vector2(),	//座標
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
 	);
 	Actor2D(	//一コマ画像用
-		const char* textureName,
+		const SpriteRegion& image,
+		const Vector2& gridSize = Vector2(),
 		const Vector2& pos = Vector2(),
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
 	);
 	Actor2D(	//アニメーションも画像も使用しない用
-		Tag tag = Tag::None,
+		Tag tag,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
-	) :
-		Actor2D(nullptr, Vector2(), tag, type)
-	{
-	}
+	);
 
 	// ツリー更新(Node)
 	virtual void TreeUpdate() override;

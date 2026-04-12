@@ -36,7 +36,7 @@ public:
 
 
 	//生成関数
-	Actor2D* CreateObject(char tile, const TileContext& tileContext, Camera* camera);	//マップ記号に対応するタイル生成関数を呼び出す関数
+	Actor2D* CreateObject(const TileContext& tileContext, Camera* camera);	//マップ記号に対応するタイル生成関数を呼び出す関数
 
 
 };

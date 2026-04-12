@@ -6,9 +6,9 @@
 #include "Hole.h"
 #include "Camera.h"
 
-Actor2D* ObjectFactory::CreateObject(char tile, const TileContext& tileContext, Camera* camera)
+Actor2D* ObjectFactory::CreateObject(const TileContext& tileContext, Camera* camera)
 {
-	auto it = m_tileTable.find(tile);	//マップ記号に対応するタイル生成関数を探す
+	auto it = m_tileTable.find(tileContext.tile);	//マップ記号に対応するタイル生成関数を探す
 
 
 	if (it != m_tileTable.end())	//対応するタイル生成関数が見つかった場合

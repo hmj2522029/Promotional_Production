@@ -26,10 +26,12 @@ private:
 
 
 
-	static const int UI_HEIGHT = 158;	//UIを表示するためのyの範囲
-	static const int PLAYER_Y  = 480;	//置きたいプレイヤーの位置
-	static const int GROUND_Y  = 544;	//置きたいブロックの位置
-	static const int TILE_SIZE = 80;	//タイルのサイズ
+	static constexpr int UI_HEIGHT = 158;	//UIを表示するためのyの範囲
+	static constexpr int PLAYER_Y  = 480;	//置きたいプレイヤーの位置
+	static constexpr int GROUND_Y  = 544;	//置きたいブロックの位置
+	static constexpr int TILE_SIZE = 80;	//タイルのサイズ
+
+	static constexpr int MaxScreenStage = 16;	//画面に表示される最大のステージ数(画面の幅 / タイルのサイズ)
 
 	//std::unique_ptrは自動的に所有者(StageManager)がなくなった場合にメモリを解放してくれる
 	std::unique_ptr<StageData> m_stage;
@@ -38,7 +40,8 @@ private:
 	Situation m_situation;	//ステージの進み具合
 	int m_prevStageIndex;	//前のステージのインデックス(前のステージを出さないようにするため)
 	int m_worldColumn;		//生成した列の数(生成する列の位置を計算するため)
-	int m_localColumn;
+	int m_localColumn;		//現在のステージの列の位置(現在のステージの最後まで生成したかどうかを判断するため)
+	int m_screenStage;		//現在画面に表示されているステージの数
 
 	//マップデータ
 	std::vector<StageData::StageMap*> m_mapEarlyStageData;	//序盤のマップデータ
@@ -55,7 +58,7 @@ private:
 
 
 	//ステージの生成
-	void GenerateColumn(int column);	//マップデータの列を生成する関数
+	void GenerateColumn(int column, int screenStage);	//マップデータの列を生成する関数
 
 		
 protected:

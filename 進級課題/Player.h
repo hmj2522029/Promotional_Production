@@ -22,6 +22,15 @@ private:
 	static constexpr int Attack = 10;	//攻撃力(初期)
 	static constexpr int Defense = 5;	//防御力(初期)
 
+	//レベルアップの時のステータスの上昇値の範囲
+	static constexpr int UpHpMax = 10;		//レベルアップの時のHPの上昇値の最大値
+	static constexpr int UpHpMin = 5;		//レベルアップの時のHPの上昇値の最小値
+	static constexpr int UpAttackMax = 5;	//レベルアップの時の攻撃力の上昇値の最大値
+	static constexpr int UpAttackMin = 2;	//レベルアップの時の攻撃力の上昇値の最小値
+	static constexpr int UpDefenseMax = 3;	//レベルアップの時の防御力の上昇値の最大値
+	static constexpr int UpDefenseMin = 1;	//レベルアップの時の防御力の上昇値の最小値
+
+
 	Camera* m_camera;		//カメラ
 	Enemy* m_targetEnemy;	//当たった時の対象の敵
 	BattleCommand m_command;

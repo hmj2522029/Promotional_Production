@@ -9,6 +9,7 @@ Node::~Node()
 		node = nullptr;
 	}
 	m_children.clear();
+
 }
 
 

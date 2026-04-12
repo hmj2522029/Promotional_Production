@@ -45,6 +45,7 @@
     <ClInclude Include="ScreenFade.h" />
     <ClInclude Include="SoundLoader.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteRegion.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Transform.h" />

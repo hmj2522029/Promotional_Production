@@ -13,6 +13,7 @@ private:
 	Mouse() {};
 
 public:
+
 	// マウスの状態を更新
 	static void Update();
 

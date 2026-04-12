@@ -46,7 +46,7 @@ void Player::Update()
 	if (m_status.IsDead()) return;
 
 	//レベルアップのチェック
-	m_status.CheckLevelUp(10, 5, 3, 1, 2, 1);
+	m_status.CheckLevelUp(UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin);
 	
 
 		// 無敵時間のカウントダウン

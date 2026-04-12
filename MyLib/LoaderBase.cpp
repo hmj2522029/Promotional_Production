@@ -2,6 +2,9 @@
 #include "DxLib.h"
 
 const std::string LoaderBase::RootPath = "Resource/";
+std::unordered_map<std::string, LoaderBase::LoadData> LoaderBase::m_image;
+std::unordered_map<int, std::pair<const std::string, LoaderBase::LoadData>*> LoaderBase::m_reverseLookup;
+
 
 // ƒŠƒ\[ƒX‚Ì“Ç‚İ‚İ
 void LoaderBase::Load(const std::string& path)

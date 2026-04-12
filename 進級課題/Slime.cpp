@@ -10,11 +10,22 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 	m_offsetPos(0, 0)
 {
 
-	m_size = Vector2(32, 32);
+	m_size = Vector2(18, 18);
 	m_offsetPos = Vector2(m_tileContext.tileSize / 2, m_tileContext.tileSize - (m_size.y / 2));
 
 	m_collider = new BoxCollider(m_size, m_offsetCol);
 	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
+
+	// Sprite起動
+	m_sprite = new Sprite();
+	for (const auto& anime : AnimeData)
+	{
+		m_sprite->Register(anime);
+	}
+	m_sprite->gridSize = GridSize;
+
+	m_transform.scale = 2.0f;	//スライムは小さいので、少し大きくする
+
 
 
 }
@@ -22,27 +33,43 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 void Slime::Update()
 {
 
+	if(m_status.IsDead())
+	{
+		//アニメーションを死亡モーションにする
+		Anime anime = Anime::Die;
+
+		//アニメーションを再生する
+		m_sprite->Play(static_cast<int>(anime), 0.0f);
+
+		return;
+	}
+	else
+	{
+		//アニメーションを待機モーションにする
+		Anime anime = Anime::Idle;
+
+		//アニメーションを再生する
+		m_sprite->Play(static_cast<int>(anime), 0.0f);
+	}
+
+
 	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
 
-	//オブジェクト画面外に出たら消す・HPが0以下になったら消す
-	if (m_transform.position.x + m_tileContext.tileSize <= Screen::Left || m_status.GetHp() <= 0)
+	//オブジェクト画面外に出たら消す
+	if (m_transform.position.x + m_tileContext.tileSize <= Screen::Left)
 	{
 		Destroy();
 	}
 
+	//アニメーションの再生
 }
 
 void Slime::Draw()
 {
-
-	DrawBoxAA(
-		m_transform.position.x - m_size.x / 2,
-		m_transform.position.y - m_size.y / 2,
-		m_transform.position.x + m_size.x / 2,
-		m_transform.position.y + m_size.y / 2,
-		GetColor(255, 0, 0),
-		true
-	);
+	if(m_status.IsDead() && m_sprite->isAnimationFinished())
+	{
+		return;
+	}
 
 
 

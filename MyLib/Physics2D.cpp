@@ -140,7 +140,7 @@ void Physics2D::Update()
 			const Vector2 Resolve = hitInfo.resolve.Normalized();	//どの方向に押し出すか
 			const float Dot = Vector2::Dot(		 //物体が壁に向かう速度
 				body1.velocity - body2.velocity, //相対速度(どのぐらいの速さで近づいているか)
-				Resolve							 //衝突方向の速度
+				Resolve							 //衝突方向
 			);	
 			const Vector2 Reflect = (RefRate * Dot / TotalMass) * Resolve;	//反発する力(壁に向かう速度が-10 → +10みたいに速度の変化量を求めている)
 	

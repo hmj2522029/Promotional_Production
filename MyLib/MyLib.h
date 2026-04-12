@@ -14,8 +14,11 @@
 #include "Actor2D.h"
 #include "Node.h"
 #include "Rigidbody2D.h"
+#include "Sprite.h"
 #include "Transform.h"
 #include "Button.h"
+#include "Animation2D.h"
+#include "SpriteRegion.h"
 
 
 //Collider
@@ -34,7 +37,6 @@
 
 //Math
 #include "Easing.h"
-#include "ScreenFade.h"
 #include "Vector2.h"
 #include "Math.hpp"
 

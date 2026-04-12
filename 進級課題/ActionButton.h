@@ -12,10 +12,10 @@ private:
 	Vector2 m_size;		// ボタンのサイズ
 	Player* m_player;
 	BattleCommand* m_command;
-	Button m_button
+	Button m_button;
 
 	//ボタンが押された時に呼ばれる関数
-	void OnClick() {m_command->}
+	//void OnClick() {m_command->}
 
 protected:
 

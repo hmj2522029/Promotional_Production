@@ -57,9 +57,9 @@ void Status::LevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int max
 	m_exp -= m_expToNextLevel; // レベルアップに必要な経験値を減らす
 	m_level++;
 
-	int UpHp = GetRand(maxHp) + minHp;				// レベルアップごとに最大HPがMax～Min増える
-	int UpAttack = GetRand(maxAttack) + minAttack;		// レベルアップごとに攻撃力がMax～Min増える
-	int UpDefense = GetRand(maxDefense) + minDefense;	// レベルアップごとに防御力がMax～Min増える
+	int UpHp = GetRand(maxHp - minHp) + minHp;						// レベルアップごとに最大HPがMax～Min増える
+	int UpAttack = GetRand(maxAttack - minAttack) + minAttack;		// レベルアップごとに攻撃力がMax～Min増える
+	int UpDefense = GetRand(maxDefense - minDefense) + minDefense;	// レベルアップごとに防御力がMax～Min増える
 
 	m_maxHp += UpHp;
 	m_attack += UpAttack;

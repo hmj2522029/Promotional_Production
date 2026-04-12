@@ -14,6 +14,7 @@ StageManager::StageManager(Camera* camera) :
 	m_prevStageIndex(-1),
 	m_worldColumn(0),
 	m_localColumn(0),
+	m_screenStage(1),
 	m_situation(Situation::EarlyStage)
 {
 	
@@ -28,9 +29,6 @@ StageManager::StageManager(Camera* camera) :
 
 void StageManager::Update()
 {
-	//デバッグ用のブロックの描画を切り替える
-	//if (Keyboard::isDown(KEY_INPUT_1)) ToggleBlockDraw();
-
 
 	int cameraTileX = static_cast<int>(m_camera->GetPos().x / TILE_SIZE);		//カメラの位置からタイルの列を計算する
 
@@ -39,9 +37,15 @@ void StageManager::Update()
 	while (m_worldColumn < generateLimit)	//生成する列の上限まで生成する
 	{
 		//Debug::Log("Generate Column: %d\n", m_worldColumn);
-		GenerateColumn(m_localColumn);
+		GenerateColumn(m_localColumn, m_screenStage);
 		m_worldColumn++;
 		m_localColumn++;
+		m_screenStage++;
+	}
+
+	if(m_screenStage > MaxScreenStage)	//
+	{
+		m_screenStage = 1;	
 	}
 
 	if (m_localColumn >= m_stage->GetWidth())	//現在のステージの最後まで生成したら次のステージを生成する
@@ -100,7 +104,7 @@ if (m_isBlockDraw)
 }
 
 
-void StageManager::GenerateColumn(int column)
+void StageManager::GenerateColumn(int column, int screenStage)
 {
 	for (int y = 0; y < m_stage->GetHeight(); y++)
 	{
@@ -110,15 +114,21 @@ void StageManager::GenerateColumn(int column)
 
 		Vector2 pos(m_worldColumn * TILE_SIZE, UI_HEIGHT + y * TILE_SIZE);
 		//Debug::Log("Tile Position: (%f, %f)\n", pos.x, pos.y);
-		m_debugBlocks.push_back(pos);	//デバッグ用のブロックの位置を保存する
 
-		TileContext tileContext{ pos, TILE_SIZE };	//タイルの情報を作成する
+		TileContext tileContext{tile, screenStage, pos, TILE_SIZE };	//タイルの情報を作成する
 
 		//タイルの種類に応じたオブジェクトを生成する
-		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tile, tileContext, m_camera))
+		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tileContext, m_camera))
 		{
 			AddChild(obj);	//生成したオブジェクトをステージマネージャーの子として追加する
 		}
+
+
+#ifdef _DEBUG
+		m_debugBlocks.push_back(pos);	//デバッグ用のブロックの位置を保存する
+#endif
+
+
 	}
 }
 
