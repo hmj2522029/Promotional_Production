@@ -26,6 +26,7 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DrawLayer.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="input.h" />

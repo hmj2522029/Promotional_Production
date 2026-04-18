@@ -62,7 +62,7 @@ public:
 	Enemy* GetTargetEnemy() const { return m_targetEnemy; }
 
 	//プレイヤーの行動
-	void ActionSelection(ActionType actionType, Enemy* enemy);
+	void ActionSelection(ActionType actionType);
 
 	// 衝突イベント
 	virtual void OnCollisionEnter(const Actor2D* other) override;

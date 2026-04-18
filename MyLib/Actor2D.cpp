@@ -7,6 +7,7 @@ Actor2D::Actor2D(
 	const Animation2D& anime,
 	const Vector2& gridSize,
 	const Vector2& pos,
+	const int drawOrder,
 	Tag tag,
 	Rigidbody2D::Type type
 ) :
@@ -19,6 +20,9 @@ Actor2D::Actor2D(
 
 	//Sprite‚Ì‹N“®
 	m_sprite = new Sprite();
+
+	//ƒŒƒCƒ„[Ý’è
+	SetDrawOrder(drawOrder);
 
 	//“o˜^
 	m_sprite->Register(anime);
@@ -28,6 +32,7 @@ Actor2D::Actor2D(
 	const SpriteRegion& image,
 	const Vector2& gridSize,
 	const Vector2& pos,
+ 	const int drawOrder,
 	Tag tag,
 	Rigidbody2D::Type type
 ) :
@@ -41,12 +46,18 @@ Actor2D::Actor2D(
 	//Sprite‚Ì‹N“®
 	m_sprite = new Sprite();
 
+	//ƒŒƒCƒ„[Ý’è
+	SetDrawOrder(drawOrder);
+
 	//“o˜^
 	m_sprite->Register(image);
 	m_sprite->gridSize = gridSize;
 
 }
 Actor2D::Actor2D(
+	const char* textureName,
+	const Vector2& pos,
+	const int drawOrder,
 	Tag tag,
 	Rigidbody2D::Type type
 ) :
@@ -55,6 +66,20 @@ Actor2D::Actor2D(
 	m_sprite(nullptr),
 	m_collider(nullptr)
 {
+	m_transform.position = pos;
+
+	//ƒŒƒCƒ„[Ý’è
+	SetDrawOrder(drawOrder);
+
+	if (textureName)
+	{
+		//Sprite‚Ì‹N“®
+		m_sprite = new Sprite();
+
+		//“o˜^
+		m_sprite->Register(textureName);
+
+	}
 }
 
 void Actor2D::Load()
@@ -63,6 +88,7 @@ void Actor2D::Load()
 	if (m_sprite)
 	{
 		m_sprite->Load();
+		m_sprite->Update();
 	}
 
 	if (m_collider)

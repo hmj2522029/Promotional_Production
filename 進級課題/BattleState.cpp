@@ -29,6 +29,7 @@ void BattleState::Update()
 				//Ÿ‚Ìó‘Ô‚ğ•Û‘¶
 				m_nextSituation = Situation::EndBattle;
 
+				//‘Ò‹@‚³‚¹‚é
 				m_situation = Situation::StandBy;
 			}
 
@@ -38,6 +39,7 @@ void BattleState::Update()
 			//Ÿ‚Ìó‘Ô‚ğ•Û‘¶
 			m_nextSituation= Situation::EnemyTure;
 
+			//‘Ò‹@‚³‚¹‚é
 			m_situation = Situation::StandBy;
 		}
 
@@ -66,6 +68,7 @@ void BattleState::Update()
 			//Ÿ‚Ìó‘Ô‚ğ•Û‘¶
 			m_nextSituation = Situation::PlayerTure;
 
+			//‘Ò‹@‚³‚¹‚é
 			m_situation = Situation::StandBy;
 		}
 

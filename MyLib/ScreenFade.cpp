@@ -21,7 +21,7 @@ void ScreenFade::Update(int screen)
 	// フェード中でなければ何もしない
 	if (!IsFade()) return;
 
-	Debug::Log("Brightness: %f\n", m_brightness.GetValue());
+	//Debug::Log("Brightness: %f\n", m_brightness.GetValue());
 
 	// Tweenの再生が終わったらフェード終了
 	if (!m_brightness.IsPlaying())

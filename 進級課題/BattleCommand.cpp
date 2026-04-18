@@ -30,7 +30,7 @@ void BattleCommand::DefenseCommand(Character* action)
 void BattleCommand::EscapeCommand(Character* action)
 {
 	//逃走成功の確率を計算する
-	int escapeChance = 50; // 基本の逃走成功率（例: 50%）
+	int escapeChance = 50;			// 基本の逃走成功率（例: 50%）
 	int randomValue = GetRand(100); // 0から99までのランダムな値を生成
 	if (randomValue < escapeChance)
 	{

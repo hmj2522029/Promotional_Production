@@ -11,7 +11,9 @@ Actor2D* EnemyFactory::RandomEnemy(const TileContext& tile, Camera* camera)
 	switch (enemyType)
 	{
 	case 0:
+
 		return new Slime(tile, camera);
+
 		break;
 	//case 1:
 		//	return new Bat(tile, camera);
@@ -22,4 +24,6 @@ Actor2D* EnemyFactory::RandomEnemy(const TileContext& tile, Camera* camera)
 
 
 	}
+
+	return nullptr;
 }

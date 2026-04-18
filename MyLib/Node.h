@@ -23,6 +23,7 @@ protected:
 	virtual void Update() {}
 	virtual void Draw() {}
 
+	int m_drawOrder;	//レイヤー
 
 	// 自身の削除
 	void Destroy();
@@ -39,7 +40,8 @@ public:
 		m_parent(nullptr),
 		m_isDestroyed(false),
 		m_isLoaded(false),
-		m_updateFunc(&Node::Start_)	//Nodeが生成されたらStart_関数を呼ぶ
+		m_updateFunc(&Node::Start_),	//Nodeが生成されたらStart_関数を呼ぶ
+		m_drawOrder(0)
 	{
 	}
 
@@ -56,6 +58,9 @@ public:
 	// 子ノードの削除
 	void RemoveChild(Node* node);
 
+	//レイヤー設定
+	int GetDrawOrder() const { return m_drawOrder; }
+	void SetDrawOrder(int order) { m_drawOrder = order; }
 
 
 };

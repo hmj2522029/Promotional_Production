@@ -53,8 +53,9 @@ public:
 	void Draw(const Transform& transform);
 
 	//“o˜^
-	void Register(const SpriteRegion& sprite);		//ˆêƒRƒ}‰æ‘œ—p‚ğ“o˜^‚·‚é‚ÌŠÖ”
+	void Register(const SpriteRegion& sprite);		//Ø‚è”²‚«‰æ‘œ‚ğ“o˜^‚·‚é‚ÌŠÖ”
 	void Register(const Animation2D& anime);		//ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ“o˜^‚·‚éŠÖ”
+	void Register(const char* textureName);			//ˆêƒRƒ}‰æ‘œ‚ğ“o˜^‚·‚éŠÖ”
 
 	//Ä¶
 	void Play(int index, float time);

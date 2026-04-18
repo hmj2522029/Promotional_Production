@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 AirGround::AirGround(const TileContext& tile, Camera* camera) :
-	Actor2D(Tag::Ground, Rigidbody2D::Type::Kinematic),
+	Actor2D(DrawLayer::GroundLayer ,Tag::Ground, Rigidbody2D::Type::Kinematic),
 	m_camera(camera),
 	m_tileContext(tile),
 	m_offsetCol(0, 0),

@@ -1,6 +1,5 @@
 #pragma once
 #include "Player.h"
-#include "BattleCommand.h"
 #include "MyLib.h"
 
 class ActionButton : public Actor2D
@@ -9,13 +8,13 @@ private:
 	
 	static constexpr Vector2 Size = Vector2(30, 30);
 
-	Vector2 m_size;		// ボタンのサイズ
+	Vector2 m_size;						// ボタンのサイズ
+	Player::ActionType m_actionType;	//押された時の行動
 	Player* m_player;
-	BattleCommand* m_command;
-	Button m_button;
+	Button m_button;					//ボタン機能
 
 	//ボタンが押された時に呼ばれる関数
-	//void OnClick() {m_command->}
+	void OnClick() { m_player->ActionSelection(m_actionType); }
 
 protected:
 
@@ -23,6 +22,13 @@ protected:
 	void Draw() override;
 
 public:
+	
+	ActionButton(
+		const Vector2& position,			//ボタンの座標
+		Player::ActionType actionType,		//ボタンが押した時の行動
+		const char* textureName,			//ボタンの画像
+		Player* const playerNod
+	);
 
 
 };

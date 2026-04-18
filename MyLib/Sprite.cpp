@@ -3,6 +3,8 @@
 #include "Time.h"
 #include "DxLib.h"
 
+#include "Debug.h"
+
 void Sprite::Load()
 {
 	//最初のテクスチャを覚えておくための箱
@@ -12,6 +14,8 @@ void Sprite::Load()
 	{
 		for (auto& anime : m_animeationList)
 		{
+			//Debug::Log("d");
+
 			//アニメーションから画像のパスを取り出してIDを取得する
 			anime.textureId = ImageLoader::GetInstance()->LoadAndGetId(anime.textureName);
 
@@ -68,7 +72,6 @@ void Sprite::Release()
 		ImageLoader::GetInstance()->Delete(image.textureId); 
 	}
 	m_regionList.clear();
-	m_currentRegion = nullptr;
 
 }
 
@@ -111,7 +114,7 @@ void Sprite::Draw(const Transform& transform)
 		else
 		{
 			//経過時間で描画するコマを計算する
-			SrcX = static_cast<int>((m_time / GetDrawingTime()) * gridSize.x);
+			SrcX = static_cast<int>(m_time / GetDrawingTime()) * gridSize.x;
 			SrcY = (m_currentAnime->column - 1) * gridSize.y;
 
 		}
@@ -125,6 +128,7 @@ void Sprite::Draw(const Transform& transform)
 		SrcY = m_currentRegion->position.y;
 
 		ID = m_currentRegion->textureId;
+
 	}
 
 
@@ -146,13 +150,13 @@ void Sprite::Draw(const Transform& transform)
 
 void Sprite::Register(const SpriteRegion& sprite)
 {
+
 	//リストに画像を登録
 	m_regionList.push_back(sprite);
 
 	//一番最初に登録した画像を現在の画像にする
 	m_currentRegion = &m_regionList.front();
-
-	//画像モードにする
+	
 	m_mode = SpriteMode::Region;
 }
 void Sprite::Register(const Animation2D& anime)
@@ -165,6 +169,10 @@ void Sprite::Register(const Animation2D& anime)
 
 	//アニメーションモードにする
 	m_mode = SpriteMode::Animation;
+}
+void Sprite::Register(const char* textureName)
+{
+	Register(SpriteRegion(textureName));
 }
 
 void Sprite::Play(int index, float time)

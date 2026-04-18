@@ -1,4 +1,7 @@
 #include "Node.h"
+#include <vector>
+#include "Actor2D.h"
+#include <algorithm>
 
 Node::~Node()
 {
@@ -119,8 +122,26 @@ void Node::TreeDraw()
 	// 自身
 	Draw();
 
+	//子一旦vectorにコピー(ソート用)
+	std::vector<Node*> sorted(m_children.begin(), m_children.end());
+
+	//stable_sort → 同じ値なら元の順番を維持する
+	// Actor2DだけdrawOrderでソート(sort(開始, 終了, 比較ルール))
+	std::stable_sort(sorted.begin(), sorted.end(), [](Node* a, Node* b)
+	{
+
+		//同じ値じゃないなら
+		if (a->GetDrawOrder() != b->GetDrawOrder())
+		{
+			return a->GetDrawOrder() < b->GetDrawOrder();
+		}
+
+		return false;
+	});
+
+
 	// 子
-	for (Node* node : m_children)
+	for (Node* node : sorted)
 	{
 		node->TreeDraw();
 	}

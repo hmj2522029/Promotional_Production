@@ -6,10 +6,10 @@ class Status
 {
 private:
 	//各ステータスの最大値
-	static constexpr int MaxLevel = 100;		//レベルの最大値
-	static constexpr int MaxHp = 999;		//HPの最大値
-	static constexpr int MaxAttack = 999;	//攻撃力の最大値
-	static constexpr int MaxDefense = 999;	//防御力の最大値
+	static constexpr int MaxLevel = 100;			//レベルの最大値
+	static constexpr int MaxHp = 999;				//HPの最大値
+	static constexpr int MaxAttack = 999;			//攻撃力の最大値
+	static constexpr int MaxDefense = 999;			//防御力の最大値
 	static constexpr int MaxExpToNextLevel = 9999;	//次のレベルまでの経験値の最大値
 
 	//次のレベルまでの経験値の倍率

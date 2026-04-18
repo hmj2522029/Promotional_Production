@@ -9,7 +9,7 @@ public:
 		Tag tag = Tag::None,
 		Rigidbody2D::Type body = Rigidbody2D::Type::Static
 	) :
-		Actor2D(tag, body)
+		Actor2D(0,tag, body)
 	{
 		m_collider = new BoxCollider(size);
 		m_rigidbody2d.bounciness = 0;

@@ -4,7 +4,7 @@
 class Camera : public Actor2D
 {
 public:
-    static constexpr float MOVE_SPEED = 2.0f;
+    static constexpr float MOVE_SPEED = 3.0f;
     static constexpr Vector2 Size = Vector2(10, 10);
 
 	Vector2 m_velocity; // ƒJƒƒ‰‚ÌˆÚ“®‘¬“x

@@ -13,7 +13,8 @@ public:
 	Character(	//アニメーション
 		const Animation2D& anime,
 		const Vector2& gridSize,
-		const Vector2& pos,
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static,
 		int Lv = 0,
@@ -21,14 +22,16 @@ public:
 		int attack = 0,
 		int defense = 0
 	) :
-		Actor2D(anime, gridSize, pos, tag, type),
+		Actor2D(anime, gridSize, pos, drawOrder, tag, type),
 		m_status(Lv, Hp, attack, defense),
 		m_isAction(false)
 	{
 	}
 	Character(	//画像
-		const char* textureName,
-		const Vector2& pos,
+		const SpriteRegion& image,
+		const Vector2& gtidSize = Vector2(),
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static,
 		int Lv = 0,
@@ -36,13 +39,15 @@ public:
 		int attack = 0,
 		int defense = 0
 	) :
-		Actor2D(textureName, pos, tag, type),
+		Actor2D(image, gtidSize, pos, drawOrder, tag, type),
 		m_status(Lv, Hp, attack, defense),
 		m_isAction(false)
 	{
 	}
-
-	Character(	//アニメーションなし
+	Character(
+		const char* textureName,
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static,
 		int Lv = 0,
@@ -50,7 +55,21 @@ public:
 		int attack = 0,
 		int defense = 0
 	) :
-		Character(nullptr, Vector2(0, 0), tag, type, Lv, Hp, attack, defense)
+		Actor2D(textureName, pos, drawOrder, tag, type),
+		m_status(Lv, Hp, attack, defense),
+		m_isAction(false)
+	{
+	}
+	Character(	//アニメーションなし
+		const int drawOrder = 0,
+		Tag tag = Tag::None,
+		Rigidbody2D::Type type = Rigidbody2D::Type::Static,
+		int Lv = 0,
+		int Hp = 0,
+		int attack = 0,
+		int defense = 0
+	) :
+		Character(nullptr, Vector2(), drawOrder, tag, type, Lv, Hp, attack, defense)
 	{
 	}
 

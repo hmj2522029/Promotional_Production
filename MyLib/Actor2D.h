@@ -38,20 +38,33 @@ public:
 		const Animation2D& anime,		//アニメーション
 		const Vector2& gridSize,		//一コマのサイズ
 		const Vector2& pos = Vector2(),	//座標
+		const int drawOrder = 0,
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
 	);
-	Actor2D(	//一コマ画像用
+	Actor2D(	//一コマ画像用または切り抜き画像用
 		const SpriteRegion& image,
 		const Vector2& gridSize = Vector2(),
 		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
+		Tag tag = Tag::None,
+		Rigidbody2D::Type type = Rigidbody2D::Type::Static
+	);
+	Actor2D(	//画像の名前だけでも登録できるようにするため(一コマの画像用)
+		const char* textureName,
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
 	);
 	Actor2D(	//アニメーションも画像も使用しない用
+		const int drawOrder,
 		Tag tag,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
-	);
+	) :
+		Actor2D(nullptr, Vector2(), drawOrder, tag, type)
+	{
+	}
 
 	// ツリー更新(Node)
 	virtual void TreeUpdate() override;
@@ -70,7 +83,7 @@ public:
 
 	// 衝突判定の形状を取得
 	const Collider* GetCollider() const { return m_collider; }
-
+	
 	// 衝突イベント
 	virtual void OnCollisionEnter(const Actor2D* other) {}
 	virtual void OnCollision(const Actor2D* other) {}

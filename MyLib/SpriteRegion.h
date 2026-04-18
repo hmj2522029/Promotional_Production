@@ -10,7 +10,7 @@ struct SpriteRegion
 
     constexpr SpriteRegion(
         const char* textureName,
-        Vector2 pos
+        Vector2 pos = Vector2()
     ) : 
         textureName(textureName),
         textureId(0),

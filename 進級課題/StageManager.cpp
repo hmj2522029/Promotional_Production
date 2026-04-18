@@ -36,17 +36,18 @@ void StageManager::Update()
 
 	while (m_worldColumn < generateLimit)	//生成する列の上限まで生成する
 	{
-		//Debug::Log("Generate Column: %d\n", m_worldColumn);
 		GenerateColumn(m_localColumn, m_screenStage);
 		m_worldColumn++;
 		m_localColumn++;
+
 		m_screenStage++;
+		if(m_screenStage > MaxScreenStage)	//
+		{
+			m_screenStage = 1;	
+		}
+
 	}
 
-	if(m_screenStage > MaxScreenStage)	//
-	{
-		m_screenStage = 1;	
-	}
 
 	if (m_localColumn >= m_stage->GetWidth())	//現在のステージの最後まで生成したら次のステージを生成する
 	{
@@ -109,11 +110,9 @@ void StageManager::GenerateColumn(int column, int screenStage)
 	for (int y = 0; y < m_stage->GetHeight(); y++)
 	{
 		char tile = m_stage->GetTile(column, y);
-		//Debug::Log("Tile: %c\n", tile);
 
 
 		Vector2 pos(m_worldColumn * TILE_SIZE, UI_HEIGHT + y * TILE_SIZE);
-		//Debug::Log("Tile Position: (%f, %f)\n", pos.x, pos.y);
 
 		TileContext tileContext{tile, screenStage, pos, TILE_SIZE };	//タイルの情報を作成する
 

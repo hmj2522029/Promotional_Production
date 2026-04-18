@@ -6,7 +6,7 @@
 
 
 Player::Player(Camera* camera):
-	Character(Tag::Player, Rigidbody2D::Type::Dynamic, Level, Hp, Attack, Defense),
+	Character(DrawLayer::PlayerLayer , Tag::Player, Rigidbody2D::Type::Dynamic, Level, Hp, Attack, Defense),
 	m_camera(camera),
 	m_targetEnemy(nullptr),
 	m_isGround(false),
@@ -94,15 +94,18 @@ void Player::Draw()
 
 }
 
-void Player::ActionSelection(ActionType actionType, Enemy* enemy)
+void Player::ActionSelection(ActionType actionType)
 {
+
+	//çsìÆÇµÇΩÇÁçsìÆÇ≈Ç´Ç»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
+	if (isAction()) return;
 
 	switch (actionType)
 	{
 		
 	case ActionType::Attack:
 
-		m_command.AttackCommand(this, enemy);
+		m_command.AttackCommand(this, m_targetEnemy);
 
 		break;
 	case ActionType::Defense:

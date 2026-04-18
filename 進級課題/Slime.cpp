@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 Slime::Slime(const TileContext& tile, Camera* camera) :
-	Enemy(Tag::Enemy, Rigidbody2D::Type::Dynamic, 1, 15, 5, 2, 10),
+	Enemy(DrawLayer::EnemyLayer ,Tag::Enemy, Rigidbody2D::Type::Dynamic, 1, 15, 5, 2, 10),
 	m_camera(camera),
 	m_tileContext(tile),
 	m_size(0, 0),
@@ -16,6 +16,8 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 	m_collider = new BoxCollider(m_size, m_offsetCol);
 	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
 
+	SetDrawOrder(DrawLayer::EnemyLayer);
+
 	// Sprite起動
 	m_sprite = new Sprite();
 	for (const auto& anime : AnimeData)
@@ -27,11 +29,13 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 	m_transform.scale = 2.0f;	//スライムは小さいので、少し大きくする
 
 
+	Debug::Log("Enemy: %d\n", this->GetDrawOrder());
 
 }
 
 void Slime::Update()
 {
+
 
 	if(m_status.IsDead())
 	{

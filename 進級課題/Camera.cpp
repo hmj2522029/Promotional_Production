@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 Camera::Camera() :
-	Actor2D(Tag::None, Rigidbody2D::Type::Kinematic),
+	Actor2D(0 ,Tag::None, Rigidbody2D::Type::Kinematic),
 	m_velocity(MOVE_SPEED,0),
 	m_position(0, 0)
 {

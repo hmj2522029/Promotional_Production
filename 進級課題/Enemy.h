@@ -15,7 +15,8 @@ public:
 	Enemy( //アニメーション
 		const Animation2D& anime,
 		const Vector2& gridSize,
-		const Vector2& pos,
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
 		int Lv = 0,
@@ -24,13 +25,15 @@ public:
 		int defense = 0,
 		int expReward = 0
 	) :
-		Character(anime, gridSize, pos, tag, type, Lv, Hp, attack, defense),
+		Character(anime, gridSize, pos, drawOrder, tag, type, Lv, Hp, attack, defense),
 		m_expReward(expReward)
 	{
 	}
 	Enemy( //画像
-		const char* textureName,
-		const Vector2& pos,
+		const SpriteRegion& image,
+		const Vector2& gridSize = Vector2(),
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
 		int Lv = 0,
@@ -39,12 +42,14 @@ public:
 		int defense = 0,
 		int expReward = 0
 	) :
-		Character(textureName, pos, tag, type, Lv, Hp, attack, defense),
+		Character(image, gridSize, pos, drawOrder, tag, type, Lv, Hp, attack, defense),
 		m_expReward(expReward)
 	{
 	}
-
 	Enemy(
+		const char* textureName,
+		const Vector2& pos = Vector2(),
+		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
 		int Lv = 0,
@@ -53,7 +58,21 @@ public:
 		int defense = 0,
 		int expReward = 0
 	) :
-		Enemy(nullptr, Vector2(0, 0), tag, type, Lv, Hp, attack, defense, expReward)
+		Character(textureName, pos, drawOrder, tag, type, Lv, Hp, attack, defense),
+		m_expReward(expReward)
+	{
+	}
+	Enemy(
+		const int drawOrder = 0,
+		Tag tag = Tag::Enemy,
+		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
+		int Lv = 0,
+		int Hp = 0,
+		int attack = 0,
+		int defense = 0,
+		int expReward = 0
+	) :
+		Enemy(nullptr, Vector2(), drawOrder, tag, type, Lv, Hp, attack, defense, expReward)
 	{
 	}
 

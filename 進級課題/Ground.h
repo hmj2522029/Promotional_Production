@@ -10,6 +10,7 @@ class Ground : public Actor2D
 private:
 
 	Vector2 m_size;		//サイズ
+	Vector2 m_center;	//中心座標
 	Camera* m_camera;
 	TileContext m_tileContext;
 

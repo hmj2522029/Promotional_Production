@@ -10,17 +10,21 @@ void SceneGame::Initialize()
 {
 	m_rootNode = new Node();
 
+	//背景
+	m_rootNode->AddChild(new Actor2D("background.jpg", Screen::Center - Vector2(0, 70), DrawLayer::BackgroundLayer));
+
 	// カメラの生成
 	m_camera = new Camera();
 	m_rootNode->AddChild(m_camera);
 
-	// プレイヤーの生成
-	m_player = new Player(m_camera);
-	m_rootNode->AddChild(m_player);
 
 	// ステージマネージャーの生成
 	m_stageManager = new StageManager(m_camera);
 	m_rootNode->AddChild(m_stageManager);
+
+	// プレイヤーの生成
+	m_player = new Player(m_camera);
+	m_rootNode->AddChild(m_player);
 
 	// UIの生成
 	m_sceneGameUI = new SceneGameUI(m_player);
