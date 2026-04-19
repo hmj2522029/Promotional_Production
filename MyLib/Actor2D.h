@@ -28,11 +28,11 @@ protected:
 
 public:
 
-	struct CollisionInfo
-	{
-		Actor2D* other;
-		Vector2 resolve;
-	};
+	//struct CollisionInfo
+	//{
+	//	Actor2D* other;
+	//	Vector2 resolve;
+	//};
 
 	Actor2D(	//アニメーション用
 		const Animation2D& anime,		//アニメーション

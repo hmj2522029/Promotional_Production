@@ -6,7 +6,7 @@ class ActionButton : public Actor2D
 {
 private:
 	
-	static constexpr Vector2 Size = Vector2(30, 30);
+	static constexpr Vector2 Size = Vector2(100, 100);
 
 	Vector2 m_size;						// ボタンのサイズ
 	Player::ActionType m_actionType;	//押された時の行動

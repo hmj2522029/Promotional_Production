@@ -136,7 +136,7 @@ void Node::TreeDraw()
 			return a->GetDrawOrder() < b->GetDrawOrder();
 		}
 
-		return false;
+		return false;	//’l‚ª“¯‚¶‚È‚ç‡”ÔˆÛ
 	});
 
 

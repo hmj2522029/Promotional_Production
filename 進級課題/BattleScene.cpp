@@ -1,5 +1,6 @@
 #include "BattleScene.h"
 #include "SceneGame.h"
+#include "ActionButton.h"
 #include "Player.h"
 #include "Enemy.h"
 
@@ -13,6 +14,8 @@ void BattleScene::Initialize()
 
 
 
+	//s“®ƒ{ƒ^ƒ“
+	m_rootNode->AddChild(new ActionButton(Vector2(300, 300), Player::ActionType::Attack, "sword-wound.png", m_player));
 
 }
 
@@ -75,10 +78,14 @@ void BattleScene::Update()
 	}
 
 
+	m_rootNode->TreeUpdate();
+
 }
 
 void BattleScene::Draw()
 {
+
+	m_rootNode->TreeDraw();
 
 
 }

@@ -7,17 +7,19 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 	m_camera(camera),
 	m_tileContext(tile),
 	m_size(0, 0),
-	m_center(0, 0)
+	m_center(0, 0),
+	m_offsetPos(0, 65),
+	m_offsetCol(0, 95)
 {
 
 	m_size = Vector2(m_tileContext.tileSize, m_tileContext.tileSize * 3);
 
 	m_center = Vector2(m_size) / 2;
-	m_transform.position = m_tileContext.pos - m_camera->GetPosition() + m_center - Vector2(0, 65);
+	m_transform.position = m_tileContext.pos - m_camera->GetPosition() + m_center - m_offsetPos;
 
 	//Debug::Log("%f, %f\n", m_transform.position.x, m_transform.position.y);
 
-	m_collider = new BoxCollider(m_size, Vector2(0, 95));
+	m_collider = new BoxCollider(m_size, m_offsetCol);
 
 	m_rigidbody2d.bounciness = 0;
 
@@ -27,8 +29,6 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 	m_sprite->gridSize = m_size;
 	
 
-	//Debug::Log("Ground: %d\n", this->GetDrawOrder());
-	Debug::Log("stage: %d\n", m_tileContext.screenStage);
 }
 
 void Ground::Update()
