@@ -17,7 +17,8 @@ public:
     static const int WIDTH  = 50;
     static const int HEIGHT = 5;
 
-    using StageMap = const char* [HEIGHT];
+    //using StageMap = const char* [HEIGHT];
+    using StageMap = std::vector<std::string>;
 
 private:
 

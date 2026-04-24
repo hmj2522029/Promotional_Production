@@ -10,10 +10,20 @@ class Player : public Character
 {
 private:
 
+	//プレイヤーのステータス情報(テキストファイル読み込み用の仮のデータ)
+	struct PlayerData
+	{
+		int Level = 0;		//レベル(初期)		
+		int Hp = 0;			//HP(初期)
+		int Attack = 0;		//攻撃力(初期)
+		int Defense = 0;	//防御力(初期)
+	};
+
+
 	// プレイヤー情報
 	static constexpr Vector2 SpawnPos = Vector2(250, 478);	// 初期位置
 	static constexpr float InvincibleTime = 1.5f;	// 無敵時間
-	static constexpr float JUMP_SCALE = 7.0f;
+	static constexpr float JumpScale = 7.0f;
 	static constexpr Vector2 Size = Vector2(32, 32);
 
 	//ステータス情報(初期)
@@ -34,9 +44,12 @@ private:
 	Camera* m_camera;		//カメラ
 	Enemy* m_targetEnemy;	//当たった時の対象の敵
 	BattleCommand m_command;
+	PlayerData m_playerData;	
 
 	bool m_isGround;		//地面判定
 	float m_invincibleTime;	//残りの無敵時間
+
+	PlayerData Convert(const std::unordered_map<std::string, std::string>& data);
 	
 protected:
 

@@ -12,6 +12,7 @@ private:
 
 
 	bool m_isLoaded;				// Load関数を実行済みか
+	bool m_needSort;				// 子ノードの描画順をソートする必要があるか
 	void (Node::* m_updateFunc)();	//一回だけスタート関数を呼ぶ
 
 	void Start_();
@@ -40,6 +41,7 @@ public:
 		m_parent(nullptr),
 		m_isDestroyed(false),
 		m_isLoaded(false),
+		m_needSort(false),
 		m_updateFunc(&Node::Start_),	//Nodeが生成されたらStart_関数を呼ぶ
 		m_drawOrder(0)
 	{
@@ -60,7 +62,7 @@ public:
 
 	//レイヤー設定
 	int GetDrawOrder() const { return m_drawOrder; }
-	void SetDrawOrder(int order) { m_drawOrder = order; }
+	void SetDrawOrder(int order);
 
 
 };

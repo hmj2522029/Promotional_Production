@@ -1,0 +1,5 @@
+Level 1		
+Hp 15		
+Attack 15	
+Defense 2	
+ExpReward 10;

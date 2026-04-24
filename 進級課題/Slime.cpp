@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 Slime::Slime(const TileContext& tile, Camera* camera) :
-	Enemy(DrawLayer::EnemyLayer ,Tag::Enemy, Rigidbody2D::Type::Dynamic, 1, 15, 5, 2, 10),
+	Enemy(DrawLayer::EnemyLayer, Tag::Enemy, Rigidbody2D::Type::Dynamic, Convert(LoadKeyValueFile("Data/Enemy/Slime/Status.txt"))),
 	m_camera(camera),
 	m_tileContext(tile),
 	m_size(0, 0),
@@ -28,14 +28,12 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 
 	m_transform.scale = 2.0f;	//スライムは小さいので、少し大きくする
 
-
-	Debug::Log("Enemy: %d\n", this->GetDrawOrder());
-
 }
 
 void Slime::Update()
 {
 
+	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
 
 	if(m_status.IsDead())
 	{
@@ -44,6 +42,9 @@ void Slime::Update()
 
 		//アニメーションを再生する
 		m_sprite->Play(static_cast<int>(anime), 0.0f);
+
+		//死亡モーションが終わったら消す
+		if(m_sprite->isAnimationFinished())	Destroy();
 
 		return;
 	}
@@ -57,7 +58,6 @@ void Slime::Update()
 	}
 
 
-	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
 
 	//オブジェクト画面外に出たら消す
 	if (m_transform.position.x + m_tileContext.tileSize <= Screen::Left)
@@ -70,12 +70,6 @@ void Slime::Update()
 
 void Slime::Draw()
 {
-	if(m_status.IsDead() && m_sprite->isAnimationFinished())
-	{
-		return;
-	}
-
-
 
 	Actor2D::Draw();
 }

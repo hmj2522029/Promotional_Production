@@ -33,10 +33,10 @@ public:
 	void Update(int screen);
 
 	// フェードイン(見えない → 見える)
-	void StartFadeIn(bool once = false, float duration = 0.5f, Color color = Color::Black);
+	void StartFadeIn( float duration = 0.5f, bool once = false, Color color = Color::Black);
 
 	// フェードアウト(見える → 見えない)
-	void StartFadeOut(bool once = false, float duration = 0.5f, Color color = Color::Black);
+	void StartFadeOut( float duration = 0.5f, bool once = false, Color color = Color::Black);
 
 	// フェード中かどうか
 	bool IsFade() const { return m_isFade; }

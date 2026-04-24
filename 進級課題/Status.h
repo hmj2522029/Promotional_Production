@@ -31,14 +31,14 @@ private:
 public:
 
 
-    Status(int level, int hp, int attack, int defense) :
-        m_level(level),
-        m_hp(hp),
-        m_maxHp(hp),
-        m_attack(attack),
-        m_defense(defense),
+    Status() :
+        m_level(0),
+        m_hp(0),
+        m_maxHp(0),
+        m_attack(0),
+        m_defense(0),
 		m_exp(0),
-		m_expToNextLevel(level * ExpMultiplier), // 次のレベルまでの経験値はレベル×100
+		m_expToNextLevel(0),
 		m_isDefending(false)
     {}
 
@@ -49,6 +49,9 @@ public:
     int GetAttack() const { return m_attack; }
 	int GetDefense() const { return m_defense; }
 	bool IsDead() const { return m_hp <= 0; }
+
+	//ステータスを初期化する
+	void InitializeStatus(int level, int hp, int attack, int defense);
 
     //ダメージ計算
     int CalculateDamage(const Status& target);

@@ -8,6 +8,12 @@
 #include "Hole.h"
 #include "Camera.h"
 
+#include <sstream>
+#include <fstream>
+#include <unordered_map>
+#include <string>
+
+
 StageManager::StageManager(Camera* camera) :
 	m_stage(nullptr),
 	m_camera(camera),
@@ -18,19 +24,18 @@ StageManager::StageManager(Camera* camera) :
 	m_situation(Situation::EarlyStage)
 {
 	
-	LoadEarlyMapData();		//序盤
-	LoadMiddleMapData();	//中盤
-	LoadLateMapData();		//終盤
+	m_mapEarlyStageData = LoadStageData("Data/Stage/EarlyStage/Stage.txt");
+	m_mapMiddleStageData = LoadStageData("Data/Stage/MiddleStage/Stage.txt");
+	m_mapLateStageData = LoadStageData("Data/Stage/LateStage/Stage.txt");
 
-
-	m_stage = std::make_unique<StageData>(*m_mapEarlyStageData[0]);	//最初のステージデータを読み込む(最初だけ固定)
+	m_stage = std::make_unique<StageData>(m_mapEarlyStageData[0]);	//最初のステージデータを読み込む(最初だけ固定)
 
 }
 
 void StageManager::Update()
 {
 
-	int cameraTileX = static_cast<int>(m_camera->GetPos().x / TILE_SIZE);		//カメラの位置からタイルの列を計算する
+	int cameraTileX = static_cast<int>(m_camera->GetPos().x / TileSize);		//カメラの位置からタイルの列を計算する
 
 	int generateLimit = cameraTileX + 20;	//カメラの位置から20列先まで生成する
 
@@ -79,25 +84,25 @@ void StageManager::Draw()
 {
 
 #ifdef _DEBUG
-//ステージ全体の枠を描画
-if (m_isBlockDraw)
-{
-	for (auto& pos : m_debugBlocks)
+	//ステージ全体の枠を描画
+	if (m_isBlockDraw)
 	{
-		float screenX = pos.x - m_camera->GetPosition().x;
-		float screenY = pos.y - m_camera->GetPosition().y;
-
-		DrawBoxAA(
-			screenX,
-			screenY,
-			screenX + TILE_SIZE,
-			screenY + TILE_SIZE,
-			GetColor(255, 0, 0),
-			false
-		);
+		for (auto& pos : m_debugBlocks)
+		{
+			float screenX = pos.x - m_camera->GetPosition().x;
+			float screenY = pos.y - m_camera->GetPosition().y;
+	
+			DrawBoxAA(
+				screenX,
+				screenY,
+				screenX + TileSize,
+				screenY + TileSize,
+				GetColor(255, 0, 0),
+				false
+			);
+		}
+	
 	}
-
-}
 #endif
 
 
@@ -112,9 +117,9 @@ void StageManager::GenerateColumn(int column, int screenStage)
 		char tile = m_stage->GetTile(column, y);
 
 
-		Vector2 pos(m_worldColumn * TILE_SIZE, UI_HEIGHT + y * TILE_SIZE);
+		Vector2 pos(m_worldColumn * TileSize, UiHeight + y * TileSize);
 
-		TileContext tileContext{tile, screenStage, pos, TILE_SIZE };	//タイルの情報を作成する
+		TileContext tileContext{tile, screenStage, pos, TileSize };	//タイルの情報を作成する
 
 		//タイルの種類に応じたオブジェクトを生成する
 		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tileContext, m_camera))
@@ -133,367 +138,70 @@ void StageManager::GenerateColumn(int column, int screenStage)
 
 
 
-StageData::StageMap* StageManager::GetRandomStage(const std::vector<StageData::StageMap*>& list)
+StageData::StageMap* StageManager::GetRandomStage(std::vector<StageData::StageMap>& list)
 {
 
 	int index;
 
 	do
 	{
-		index = GetRand(list.size() - 1);
+		index = GetRand(static_cast<int>(list.size()) - 1);
 	} while (index == m_prevStageIndex);
 
 	m_prevStageIndex = index;
 
-	return list[index];
+	return &list[index];
 }
 
 
-void StageManager::LoadEarlyMapData()	
+std::vector<StageData::StageMap> StageManager::LoadStageData(const std::string& path)
 {
-	static StageData::StageMap stage1 =
+	//テキストファイルからステージデータを読み込む関数(複数)
+	std::ifstream file(path);
+
+	
+	//ステージデータを保存するベクター
+	std::vector<StageData::StageMap> stages;
+
+	//ファイルが開けなかった場合は返す
+	if (!file.is_open())return stages;
+
+	//現在読み込んでいるステージデータ
+	StageData::StageMap current;
+
+	//テキストファイルを1行ずつ読み込む
+	std::string line;
+
+	//空行でステージデータを区切る
+	while (std::getline(file, line))
 	{
-		"..................................................",
-		"..................................................",
-		"...................S..............................",
-		"........E.......S...............^.....E...........",
-		"GGGGGGGGGGGPGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-	};
+		//空行の場合は現在のステージデータを保存して次のステージデータの読み込みを開始する
+		if (line.empty())
+		{
+			//現在のステージデータが空でない場合は保存する
+			if (!current.empty())
+			{
+				stages.push_back(current);
+				current.clear();
+			}
+			continue;
+		}
 
-	static StageData::StageMap stage2 =
+		//行の先頭が#の場合はコメント行とみなして読み飛ばす
+		if (line[0] == '#') continue;
+
+		current.push_back(line);
+	}
+
+	//最後のステージデータが空でない場合は保存する
+	if (!current.empty())
 	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+		stages.push_back(current);
+	}
 
-	};
-
-	static StageData::StageMap stage3 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage4 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage5 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage6 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage7 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage8 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage9 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage10 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-	};
-
-
-	m_mapEarlyStageData.push_back(&stage1);
-	m_mapEarlyStageData.push_back(&stage2);
-	m_mapEarlyStageData.push_back(&stage3);
-	m_mapEarlyStageData.push_back(&stage4);
-	m_mapEarlyStageData.push_back(&stage5);
-	m_mapEarlyStageData.push_back(&stage6);
-	m_mapEarlyStageData.push_back(&stage7);
-	m_mapEarlyStageData.push_back(&stage8);
-	m_mapEarlyStageData.push_back(&stage9);
-	m_mapEarlyStageData.push_back(&stage10);
+	return stages;
 }
 
-void StageManager::LoadMiddleMapData()	
-{
-
-	static StageData::StageMap stage11 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage12 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage13 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage14 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage15 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage16 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage17 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage18 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage19 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage20 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-
-	m_mapMiddleStageData.push_back(&stage11);
-	m_mapMiddleStageData.push_back(&stage12);
-	m_mapMiddleStageData.push_back(&stage13);
-	m_mapMiddleStageData.push_back(&stage14);
-	m_mapMiddleStageData.push_back(&stage15);
-	m_mapMiddleStageData.push_back(&stage16);
-	m_mapMiddleStageData.push_back(&stage17);
-	m_mapMiddleStageData.push_back(&stage18);
-	m_mapMiddleStageData.push_back(&stage19);
-	m_mapMiddleStageData.push_back(&stage20);
-
-}
-
-void StageManager::LoadLateMapData()	
-{
-
-	static StageData::StageMap stage21 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage22 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage23 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage24 =
-	{ 
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-	};
-
-	static StageData::StageMap stage25 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage26 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage27 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage28 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage29 =
-	{
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-	static StageData::StageMap stage30 =
-	{
-		"..................................................",
-		"..................................................",
- 		"..................................................",
-		"..................................................",
-		"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
-
-	};
-
-
-	m_mapLateStageData.push_back(&stage21);
-	m_mapLateStageData.push_back(&stage22);
-	m_mapLateStageData.push_back(&stage23);
-	m_mapLateStageData.push_back(&stage24);
-	m_mapLateStageData.push_back(&stage25);
-	m_mapLateStageData.push_back(&stage26);
-	m_mapLateStageData.push_back(&stage27);
-	m_mapLateStageData.push_back(&stage28);
-	m_mapLateStageData.push_back(&stage29);
-	m_mapLateStageData.push_back(&stage30);
-
-}
 
 #ifdef _DEBUG
 
@@ -509,8 +217,8 @@ void StageManager::BlockDraw()
 			DrawBoxAA(
 				screenX,
 				screenY,
-				screenX + TILE_SIZE,
-				screenY + TILE_SIZE,
+				screenX + TileSize,
+				screenY + TileSize,
 				GetColor(255, 0, 0),
 				false
 			);

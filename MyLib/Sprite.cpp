@@ -1,6 +1,6 @@
 #include "Sprite.h"
 #include "ImageLoader.h"
-#include "Time.h"
+#include "Time.hpp"
 #include "DxLib.h"
 
 #include "Debug.h"
@@ -108,14 +108,14 @@ void Sprite::Draw(const Transform& transform)
 		if (isAnimationFinished())
 		{
 			//アニメーションが終了していたら 最後のコマにする
-			SrcX = (m_currentAnime->gridAmount - 1) * gridSize.x;
-			SrcY = (m_currentAnime->column - 1) * gridSize.y;
+			SrcX = static_cast<int>((m_currentAnime->gridAmount - 1) * gridSize.x);
+			SrcY = static_cast<int>((m_currentAnime->column - 1) * gridSize.y);
 		}
 		else
 		{
 			//経過時間で描画するコマを計算する
-			SrcX = static_cast<int>(m_time / GetDrawingTime()) * gridSize.x;
-			SrcY = (m_currentAnime->column - 1) * gridSize.y;
+			SrcX = static_cast<int>(m_time / GetDrawingTime()) * static_cast<int>(gridSize.x);
+			SrcY = static_cast<int>((m_currentAnime->column - 1) * gridSize.y);
 
 		}
 
@@ -124,8 +124,8 @@ void Sprite::Draw(const Transform& transform)
 	else if(m_mode == SpriteMode::Region)
 	{
 		//一コマの画像・切り抜いた画像の切り抜き位置の計算
-		SrcX = m_currentRegion->position.x;
-		SrcY = m_currentRegion->position.y;
+		SrcX = static_cast<int>(m_currentRegion->position.x);
+		SrcY = static_cast<int>(m_currentRegion->position.y);
 
 		ID = m_currentRegion->textureId;
 
@@ -137,8 +137,8 @@ void Sprite::Draw(const Transform& transform)
 		static_cast<int>(transform.position.y),
 		static_cast<int>(SrcX),
 		static_cast<int>(SrcY),
-		gridSize.x,
-		gridSize.y,
+		static_cast<int>(gridSize.x),
+		static_cast<int>(gridSize.y),
 		transform.scale,
 		transform.angle,
 		ID,

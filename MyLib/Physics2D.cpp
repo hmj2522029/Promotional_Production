@@ -1,6 +1,6 @@
 #include "Physics2D.h"
 #include "Actor2D.h"
-#include "Time.h"
+#include "Time.hpp"
 #include "Rigidbody2D.h"
 #include "Vector2.h"
 #include "Collider.h"

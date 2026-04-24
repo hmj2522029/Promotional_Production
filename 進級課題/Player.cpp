@@ -6,12 +6,16 @@
 
 
 Player::Player(Camera* camera):
-	Character(DrawLayer::PlayerLayer , Tag::Player, Rigidbody2D::Type::Dynamic, Level, Hp, Attack, Defense),
+	Character(DrawLayer::PlayerLayer , Tag::Player, Rigidbody2D::Type::Dynamic),
 	m_camera(camera),
 	m_targetEnemy(nullptr),
 	m_isGround(false),
-	m_invincibleTime(0)
+	m_invincibleTime(0),
+	m_playerData(Convert(LoadKeyValueFile("Data/Player/Status.txt")))
 {
+
+	//ステータスの初期化
+	m_status.InitializeStatus(m_playerData.Level, m_playerData.Hp, m_playerData.Attack, m_playerData.Defense);
 
 	m_transform.position = SpawnPos - m_camera->GetPosition();
 
@@ -42,8 +46,13 @@ void Player::Release()
 
 void Player::Update()
 {
+
 	//死んでいたら更新しない
-	if (m_status.IsDead()) return;
+	if (m_status.IsDead())
+	{
+		Debug::Log("プレイヤーは死んでいるため、更新をスキップします。");
+		return;
+	}
 
 	//レベルアップのチェック
 	m_status.CheckLevelUp(UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin);
@@ -59,7 +68,7 @@ void Player::Update()
 	//操作
 	if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
 	{
-		m_rigidbody2d.AddForce(Vector2(0, -1) * JUMP_SCALE);
+		m_rigidbody2d.AddForce(Vector2(0, -1) * JumpScale);
 
 		m_isGround = false;
 	}
@@ -121,6 +130,30 @@ void Player::ActionSelection(ActionType actionType)
 	}
 
 
+}
+
+Player::PlayerData Player::Convert(const std::unordered_map<std::string, std::string>& data)
+{
+	//マップから特定のキーの値を整数に変換して取得するラムダ関数
+	auto getInt = [&](const std::string& key, int defaultValue = 0) //ラムダ関数(その場で無名関数を作る)
+		{
+			if (data.count(key)) return std::stoi(data.at(key));    //キーが存在する場合はを整数に変換して返す(std::stoi)
+
+			return defaultValue;
+		};
+
+	PlayerData player;
+
+	//stringからintに変換してEnemyDataに格納(std::stoi)
+	player.Level = getInt("Level");
+	player.Hp = getInt("Hp");
+	player.Attack = getInt("Attack");
+	player.Defense = getInt("Defense");
+	//もしステータスが増えたらここに追加する
+
+
+
+	return player;
 }
 
 

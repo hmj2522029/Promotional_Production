@@ -52,7 +52,7 @@
 //Utility
 #include "Debug.h"
 #include "ScreenFade.h"
-#include "Time.h"
+#include "Time.hpp"
 
 #include "NumberDrawer.h"
 #include "DrawLayer.h"

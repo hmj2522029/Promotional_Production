@@ -48,6 +48,9 @@ void Node::AddChild(Node* node)
 	// 子を登録
 	m_children.push_back(node);
 
+	// 子ノードの描画順をソートする必要があることを伝える
+	m_needSort = true;
+
 	// 子のリソース読み込み
 	node->TreeLoad();
 }
@@ -122,27 +125,43 @@ void Node::TreeDraw()
 	// 自身
 	Draw();
 
-	//子一旦vectorにコピー(ソート用)
-	std::vector<Node*> sorted(m_children.begin(), m_children.end());
 
-	//stable_sort → 同じ値なら元の順番を維持する
-	// Actor2DだけdrawOrderでソート(sort(開始, 終了, 比較ルール))
-	std::stable_sort(sorted.begin(), sorted.end(), [](Node* a, Node* b)
+	if(m_needSort)
 	{
+		//stable_sort → 同じ値なら元の順番を維持する
+		// Actor2DだけdrawOrderでソート(sort(開始, 終了, 比較ルール))
+		std::stable_sort(m_children.begin(), m_children.end(), [](Node* a, Node* b)
+			{
+	
+				//同じ値じゃないなら
+				if (a->GetDrawOrder() != b->GetDrawOrder())
+				{
+					return a->GetDrawOrder() < b->GetDrawOrder();
+				}
+	
+				return false;	//値が同じなら順番維持
+			});
 
-		//同じ値じゃないなら
-		if (a->GetDrawOrder() != b->GetDrawOrder())
-		{
-			return a->GetDrawOrder() < b->GetDrawOrder();
-		}
-
-		return false;	//値が同じなら順番維持
-	});
-
+		m_needSort = false;
+	}
 
 	// 子
-	for (Node* node : sorted)
+	for (Node* node : m_children)
 	{
 		node->TreeDraw();
 	}
+}
+
+void Node::SetDrawOrder(int drawOrder)
+{
+	
+	m_drawOrder = drawOrder;
+
+	//描画順を変更したら、親に子ノードの描画順をソートする必要があることを伝える
+	if (m_parent)
+	{
+		m_parent->m_needSort = true;
+	}
+
+
 }

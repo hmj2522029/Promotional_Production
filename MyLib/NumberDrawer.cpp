@@ -9,9 +9,9 @@ void NumberDrawer::DrawNumberTextFont(Vector2 position, int number, int fontHand
 
 	// 文字列の幅を計算
 	int totalWidth = GetDrawStringWidthToHandle(
-		numberStr.c_str(),	// 文字列
-		numberStr.size(),	// 文字列の長さ
-		fontHandle			// フォントハンドル
+		numberStr.c_str(),					// 文字列
+		static_cast<int>(numberStr.size()),	// 文字列の長さ
+		fontHandle							// フォントハンドル
 	);
 
 	// 揃え位置を適用してX座標を計算
@@ -33,7 +33,7 @@ void NumberDrawer::DrawNumberSpriteFont(Vector2 position, int number, int textur
 	//揃え位置を適用してX座標を計算
 	int startX = ApplyAlign(
 		static_cast<int>(position.x),
-		GetNumberWidth(number, charSize, padding, scale),
+		static_cast<int>(GetNumberWidth(number, charSize, padding, scale)),
 		align
 	);
 

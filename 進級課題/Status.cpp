@@ -1,5 +1,17 @@
 #include "Status.h"
 
+void Status::InitializeStatus(int level, int hp, int attack, int defense)
+{
+	m_level = level;
+	m_hp = hp;
+	m_maxHp = hp; 
+	m_attack = attack;
+	m_defense = defense;
+	m_exp = 0;
+	m_expToNextLevel = m_level * ExpMultiplier; // レベルに応じて次のレベルまでの経験値を設定
+	m_isDefending = false; // 初期状態では防御していない
+}
+
 int Status::CalculateDamage(const Status& target)
 {
 	// ダメージ計算

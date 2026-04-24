@@ -48,7 +48,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteRegion.h" />
     <ClInclude Include="Tag.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="Time.hpp" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Tween.h" />
     <ClInclude Include="Vector2.h" />

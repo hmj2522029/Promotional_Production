@@ -26,10 +26,10 @@ private:
 
 
 
-	static constexpr int UI_HEIGHT = 195;	//UIを表示するためのyの範囲
-	static constexpr int PLAYER_Y  = 500;	//置きたいプレイヤーの位置
-	static constexpr int GROUND_Y  = 544;	//置きたいブロックの位置
-	static constexpr int TILE_SIZE = 80;	//タイルのサイズ
+	static constexpr int UiHeight = 195;	//UIを表示するためのyの範囲
+	static constexpr int PlayerY  = 500;	//置きたいプレイヤーの位置
+	static constexpr int GroundY  = 544;	//置きたいブロックの位置
+	static constexpr int TileSize = 80;	//タイルのサイズ
 
 	static constexpr int MaxScreenStage = 16;	//画面に表示される最大のステージ数(画面の幅 / タイルのサイズ)
 
@@ -44,21 +44,21 @@ private:
 	int m_screenStage;		//現在画面に表示されているステージの数
 
 	//マップデータ
-	std::vector<StageData::StageMap*> m_mapEarlyStageData;	//序盤のマップデータ
-	std::vector<StageData::StageMap*> m_mapMiddleStageData;	//中盤のマップデータ
-	std::vector<StageData::StageMap*> m_mapLateStageData;	//終盤のマップデータ
+	std::vector<StageData::StageMap> m_mapEarlyStageData;	//序盤のマップデータ
+	std::vector<StageData::StageMap> m_mapMiddleStageData;	//中盤のマップデータ
+	std::vector<StageData::StageMap> m_mapLateStageData;	//終盤のマップデータ
 
 
-	StageData::StageMap* GetRandomStage(const std::vector<StageData::StageMap*>& list);	//マップデータのリストからランダムにマップデータを取得する関数
-
-	//マップデータの読み込み
-	void LoadEarlyMapData();	//序盤のマップデータの読み込み
-	void LoadMiddleMapData();	//中盤のマップデータの読み込み
-	void LoadLateMapData();		//終盤のマップデータの読み込み
-
+	StageData::StageMap* GetRandomStage(std::vector<StageData::StageMap>& list);	//マップデータのリストからランダムにマップデータを取得する関数
 
 	//ステージの生成
 	void GenerateColumn(int column, int screenStage);	//マップデータの列を生成する関数
+
+	//テキストファイルからステージデータを読み込む関数(複数)
+	std::vector<StageData::StageMap>LoadStageData(const std::string& filePath);
+
+	//テキストファイルから読み込んだデータをStageData構造体に変換する関数(map → 構造体)
+	//StageData::StageMap* Convert(const std::unordered_map<std::string, std::string>& data);
 
 		
 protected:
@@ -75,7 +75,8 @@ public:
 
 
 	//ステージの進んでいる距離を取得する関数(1ブロック = 1メートル)
-	float GetDistance() const { return m_worldColumn * TILE_SIZE / 100.0f; }
+	float GetDistance() const { return m_worldColumn * TileSize / 100.0f; }
+
 
 
 #ifdef _DEBUG

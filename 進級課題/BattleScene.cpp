@@ -51,7 +51,7 @@ void BattleScene::Update()
 		if (m_player->m_status.IsDead()|| m_enemy->m_status.IsDead())
 		{
 
-			ScreenFade::GetInstance()->StartFadeOut(true, 0.2);
+			ScreenFade::GetInstance()->StartFadeOut(0.2f, true);
 
 			Physics2D::GetInstance()->Active();
 			SceneManager::GetInstance()->PopScene();

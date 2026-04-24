@@ -42,7 +42,7 @@ void ScreenFade::Update(int screen)
 }
 
 // フェードイン
-void ScreenFade::StartFadeIn(bool once, float duration, Color color)
+void ScreenFade::StartFadeIn( float duration, bool once, Color color)
 {
 	// フェードインは一回だけ通す(trueなら)
 	if (once)
@@ -65,7 +65,7 @@ void ScreenFade::StartFadeIn(bool once, float duration, Color color)
 }
 
 // フェードアウト
-void ScreenFade::StartFadeOut(bool once, float duration, Color color)
+void ScreenFade::StartFadeOut(float duration, bool once,  Color color)
 {
 	// フェードインは一回だけ通す(trueなら)
 	if (once)

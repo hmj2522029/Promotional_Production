@@ -28,7 +28,6 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 	m_sprite->Register(SpriteRegion("ground.jpg", Vector2((m_tileContext.screenStage - 1) * m_tileContext.tileSize, 0)));
 	m_sprite->gridSize = m_size;
 	
-
 }
 
 void Ground::Update()
