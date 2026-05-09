@@ -18,11 +18,13 @@ private:
 
 	
 	Node* m_rootNode;
-	FadeState m_fadeState;	//フェード状態
-	Player* m_player;		//プレイヤー
-	Enemy* m_enemy;			//当たった敵
+	FadeState m_fadeState;		//フェード状態
+	Player* m_player;			//プレイヤー
+	Enemy* m_enemy;				//当たった敵(ステータスとかのデータ取得)
+	Actor2D* m_drawingEnemy;	//描画している敵(当たった敵のデータからその敵の描画)
+	BattleState* m_state;		//状態
 
-	BattleState* m_state;	//状態
+	int m_fontHandle;		//フォントハンドル
 
 
 public:
@@ -31,8 +33,10 @@ public:
 		m_rootNode(nullptr),
 		m_fadeState(FadeState::Fade),
 		m_player(player),
-		m_enemy(nullptr),
-		m_state(nullptr)
+		m_enemy(nullptr),				//当たった敵
+		m_drawingEnemy(nullptr),		//描画している敵
+		m_state(nullptr),
+		m_fontHandle(0)
 	{
 	}
 	
@@ -40,5 +44,6 @@ public:
 	virtual void Finalize() override;
 	virtual void Update() override;
 	virtual void Draw() override;
+
 
 };

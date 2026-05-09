@@ -70,5 +70,7 @@ public:
 	//行動をリセット
 	void ResetAction() { m_isAction = false; }
 
+	//HPバーの描画
+	static void DrawHPBar(int x, int y, int currentHP, int maxHP, int width = 100, int height = 10);
 
 };

@@ -59,7 +59,7 @@ public:
 	);
 	Actor2D(	//アニメーションも画像も使用しない用
 		const int drawOrder,
-		Tag tag,
+		Tag tag = Tag::None,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Static
 	) :
 		Actor2D(nullptr, Vector2(), drawOrder, tag, type)
@@ -72,6 +72,9 @@ public:
 	// 姿勢情報の取得
 	const Transform& GetTransform() const { return m_transform; }
 
+	//スケール指定
+	void SetScale(const float scale){ m_transform.scale = scale; }
+
 	// 座標の取得
 	const Vector2 GetPosition() const { return m_transform.position; }
 
@@ -83,6 +86,9 @@ public:
 
 	// 衝突判定の形状を取得
 	const Collider* GetCollider() const { return m_collider; }
+
+	// 画像を取得
+	const Sprite* GetSprite() const { return m_sprite; }
 	
 	// 衝突イベント
 	virtual void OnCollisionEnter(const Actor2D* other) {}

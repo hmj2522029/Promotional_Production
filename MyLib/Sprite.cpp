@@ -164,6 +164,10 @@ void Sprite::Register(const Animation2D& anime)
 	//リストにアニメーションを登録
 	m_animeationList.push_back(anime);
 
+	//アニメーションの名前とインデックスを紐づける
+	int index = static_cast<int>(m_animeationList.size()) - 1;
+	m_animeIndex[anime.name] = index;
+
 	//一番最初に登録したアニメーションを再生中のアニメーションにする
 	m_currentAnime = &m_animeationList.front();
 
@@ -188,3 +192,41 @@ void Sprite::Play(int index, float time)
 	m_time = time;
 
 }
+
+void Sprite::Play(const std::string& name, float time)
+{
+	//アニメーションの名前からインデックスを取得
+	auto it = m_animeIndex.find(name);
+
+	//インデックスが見つかったらアニメーションを再生する
+	if (it != m_animeIndex.end())
+	{
+
+		//it->secondは<std::string, int>のintの部分を指す
+		Play(it->second, time);
+	}
+	else
+	{
+		Debug::Log("Animation not found: %s\n", name.c_str());
+	}
+}
+
+const Animation2D* Sprite::GetAnimation(const std::string& name) const
+{
+	//アニメーションの名前からインデックスを取得
+	auto it = m_animeIndex.find(name);
+
+	//インデックスが見つかったらアニメーションを返す
+	if (it != m_animeIndex.end())
+	{
+		//it->secondは<std::string, int>のintの部分を指す
+		int index = it->second;
+
+		//インデックスからアニメーションを返す
+		return &m_animeationList.at(index);
+	}
+
+	return nullptr; //見つからない場合はnullptrを返す
+}
+
+

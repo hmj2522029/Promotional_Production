@@ -5,19 +5,25 @@
 
 
 
-Player::Player(Camera* camera):
+Player::Player():
 	Character(DrawLayer::PlayerLayer , Tag::Player, Rigidbody2D::Type::Dynamic),
-	m_camera(camera),
+	m_sceneActionType(SceneActionType::ScenePrep),	//最初にプレイヤーが出で来るシーンはScenePrepなので一旦ScenePrepにする
 	m_targetEnemy(nullptr),
 	m_isGround(false),
-	m_invincibleTime(0),
-	m_playerData(Convert(LoadKeyValueFile("Data/Player/Status.txt")))
+	m_hasCollided(false),
+	m_lvelUpFlag(false),
+	m_invincibleTime(0)
 {
 
 	//ステータスの初期化
-	m_status.InitializeStatus(m_playerData.Level, m_playerData.Hp, m_playerData.Attack, m_playerData.Defense);
+	m_status.InitializeStatus(
+		PlayerData::GetInstance()->GetPlayerStatus().Level,
+		PlayerData::GetInstance()->GetPlayerStatus().MaxHp,
+		PlayerData::GetInstance()->GetPlayerStatus().Attack,
+		PlayerData::GetInstance()->GetPlayerStatus().Defense
+	);
 
-	m_transform.position = SpawnPos - m_camera->GetPosition();
+	m_transform.position = SpawnPos;
 
 	m_collider = new BoxCollider(Size);
 	m_collider->SetPhysicsBehavior(Tag::Hole, PhysicsBehavior::Trigger);
@@ -25,6 +31,27 @@ Player::Player(Camera* camera):
 	m_collider->SetPhysicsBehavior(Tag::Enemy, PhysicsBehavior::Trigger);
 
 	m_rigidbody2d.gravityScale = 1.6f;
+
+	//アニメデータ
+	AnimeData =
+	{
+		Animation2D("Idle", "Knight 2D Pixel Art/with_outline/IDLE.png", 7, 5, true),
+		Animation2D("Run", "Knight 2D Pixel Art/with_outline/RUN.png", 8, 10, true),
+		Animation2D("Die", "Knight 2D Pixel Art/with_outline/DEATH.png", 12, 12, false),
+		Animation2D("Jump", "Knight 2D Pixel Art/with_outline/JUMP.png", 5, 5, false),
+	};
+
+	
+
+	// Sprite起動
+	m_sprite = new Sprite();
+	for (const auto& anime : AnimeData)
+	{
+		m_sprite->Register(anime);
+	}
+	m_sprite->gridSize = GridSize;
+
+	m_transform.scale = 2.0f;
 
 }
 
@@ -46,32 +73,90 @@ void Player::Release()
 
 void Player::Update()
 {
-
-	//死んでいたら更新しない
-	if (m_status.IsDead())
+	switch (m_sceneActionType)
 	{
-		Debug::Log("プレイヤーは死んでいるため、更新をスキップします。");
-		return;
+		case SceneActionType::SceneGame:
+
+			//死んでいたら更新しない
+			if (m_status.IsDead())
+			{
+		
+				//アニメーションを再生する(死亡)
+				m_sprite->Play("Die", 0.0f);
+		
+				return;
+			}
+			else if(m_isGround)
+			{
+		
+				//アニメーションを再生する(走る)
+				m_sprite->Play("Run", 0.0f);
+
+				//プレイヤーが動いていないなら、アニメーションを再生する(待機)
+				if(Camera::GetInstance()->IsMoving())
+				{
+					m_sprite->Play("Idle", 0.0f);
+				}
+		
+			}
+				
+			//レベルアップ
+			if (CheckLevelUp())
+			{
+				//シーンの追加はシーンゲームの方で行う
+				m_lvelUpFlag = true;
+			}
+			
+		
+			// 無敵時間のカウントダウン
+			if (m_invincibleTime > 0)
+			{
+				m_invincibleTime -= Time::GetInstance()->GetDeltaTime();
+			}
+		
+		
+			//ジャンプ
+			if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
+			{
+				m_rigidbody2d.AddForce(Vector2(0, -1) * JumpScale);
+		
+		
+				//アニメーションを再生する(ジャンプ)
+				m_sprite->Play("Jump", 0.0f);
+		
+				m_isGround = false;
+			}
+		
+			//もし過去に何かのオブジェクトに衝突していて、現在の位置が初期位置と違う場合、初期位置に戻るようにする
+			if(m_hasCollided)
+			{
+				//地面についていない場合は、初期位置に戻さない
+				if (!m_isGround) return;
+		
+				float direction = SpawnPos.x - m_transform.position.x;
+		
+				//float問題を回避するための閾値を1.0fとする
+				if(abs(direction) > 1.0f)
+				{
+					m_transform.position.x += (SpawnPos.x - m_transform.position.x) * 0.05f;
+				}
+				else
+				{
+					m_transform.position.x = SpawnPos.x;
+					m_hasCollided = false;
+				}
+		
+			}
+
+
+		break;
+		case SceneActionType::ScenePrep:
+
+
+
+		break;
 	}
 
-	//レベルアップのチェック
-	m_status.CheckLevelUp(UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin);
-	
-
-		// 無敵時間のカウントダウン
-	if (m_invincibleTime > 0)
-	{
-		m_invincibleTime -= Time::GetInstance()->GetDeltaTime();
-	}
-
-
-	//操作
-	if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
-	{
-		m_rigidbody2d.AddForce(Vector2(0, -1) * JumpScale);
-
-		m_isGround = false;
-	}
 
 
 }
@@ -89,21 +174,12 @@ void Player::Draw()
 	}
 
 
-	DrawBoxAA(
-		m_transform.position.x - Size.x / 2,
-		m_transform.position.y - Size.y / 2,
-		m_transform.position.x + Size.x / 2,
-		m_transform.position.y + Size.y / 2,
-		GetColor(0, 0, 255),
-		true
-	);
-
 	// Actor2D本来の描画処理
 	Actor2D::Draw();
 
 }
 
-void Player::ActionSelection(ActionType actionType)
+void Player::ActionSelection(ActionType actionType, Enemy* target)
 {
 
 	//行動したら行動できないようにする
@@ -114,7 +190,7 @@ void Player::ActionSelection(ActionType actionType)
 		
 	case ActionType::Attack:
 
-		m_command.AttackCommand(this, m_targetEnemy);
+		m_command.AttackCommand(this, target);
 
 		break;
 	case ActionType::Defense:
@@ -132,29 +208,21 @@ void Player::ActionSelection(ActionType actionType)
 
 }
 
-Player::PlayerData Player::Convert(const std::unordered_map<std::string, std::string>& data)
+
+PlayerData::PlayerStatus Player::ToPlayerStatus() const
 {
-	//マップから特定のキーの値を整数に変換して取得するラムダ関数
-	auto getInt = [&](const std::string& key, int defaultValue = 0) //ラムダ関数(その場で無名関数を作る)
-		{
-			if (data.count(key)) return std::stoi(data.at(key));    //キーが存在する場合はを整数に変換して返す(std::stoi)
+	PlayerData::PlayerStatus status;
 
-			return defaultValue;
-		};
+	status.Level = m_status.GetLevel();
+	status.MaxHp = m_status.GetMaxHp();
+	status.Attack = m_status.GetAttack();
+	status.Defense = m_status.GetDefense();
+	status.Exp = m_status.GetExp();
+	status.NextExp = m_status.GetExpToNextLevel();
 
-	PlayerData player;
-
-	//stringからintに変換してEnemyDataに格納(std::stoi)
-	player.Level = getInt("Level");
-	player.Hp = getInt("Hp");
-	player.Attack = getInt("Attack");
-	player.Defense = getInt("Defense");
-	//もしステータスが増えたらここに追加する
-
-
-
-	return player;
+	return status;
 }
+
 
 
 // 衝突イベント
@@ -189,9 +257,12 @@ void Player::OnCollisionEnter(const Actor2D* other)
 	{
 		Debug::Log("敵に当たった");
 
-		//対象の敵を保存する
-		m_targetEnemy = const_cast<Enemy*>(dynamic_cast<const Enemy*>(other));
-
+		//当たった敵を保存する
+		Enemy* enemy = dynamic_cast<Enemy*>(const_cast<Actor2D*>(other));
+		if (enemy)
+		{
+			m_targetEnemy = enemy;
+		}
 	}
 
 
@@ -219,5 +290,30 @@ void Player::OnCollisionExit(const Actor2D* other)
 	{
 		m_isGround = false;
 	}
+
+
+	//タグを取得して、衝突判定の形状を取得する
+	auto tag = other->GetTag();
+	auto behavior = other->GetCollider()->GetPhysicsBehavior(tag);
+
+	//衝突判定の形状が衝突の場合、衝突していた(過去形)とする
+	if (behavior == PhysicsBehavior::Collision)
+	{
+		
+		float playerBottom = m_transform.position.y + Size.y / 2;
+		float groundTop = other->GetTransform().position.y;
+	
+		//もし衝突オブジェクトに上から乗っている場合は、初期位置はずれないのでreturnする
+		if (m_rigidbody2d.velocity.y >= 0 &&
+			playerBottom <= groundTop + 5.0f)
+		{
+			return;
+		}
+	
+		Debug::Log("衝突していたオブジェクトから離れた");
+		m_hasCollided = true;
+	}
+
+
 }
 

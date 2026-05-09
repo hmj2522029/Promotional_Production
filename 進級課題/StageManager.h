@@ -57,9 +57,6 @@ private:
 	//テキストファイルからステージデータを読み込む関数(複数)
 	std::vector<StageData::StageMap>LoadStageData(const std::string& filePath);
 
-	//テキストファイルから読み込んだデータをStageData構造体に変換する関数(map → 構造体)
-	//StageData::StageMap* Convert(const std::unordered_map<std::string, std::string>& data);
-
 		
 protected:
 

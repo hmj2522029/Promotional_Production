@@ -17,8 +17,6 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 	m_center = Vector2(m_size) / 2;
 	m_transform.position = m_tileContext.pos - m_camera->GetPosition() + m_center - m_offsetPos;
 
-	//Debug::Log("%f, %f\n", m_transform.position.x, m_transform.position.y);
-
 	m_collider = new BoxCollider(m_size, m_offsetCol);
 
 	m_rigidbody2d.bounciness = 0;

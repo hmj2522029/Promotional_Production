@@ -151,8 +151,12 @@
     <ClInclude Include="Hole.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="SceneGame.h" />
-    <ClInclude Include="SceneGameUI.h" />
+    <ClInclude Include="ScenePrep.h" />
+    <ClInclude Include="SceneSelectionButton.h" />
+    <ClInclude Include="SceneStatus.h" />
+    <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Spike.h" />
     <ClInclude Include="StageData.h" />
@@ -177,8 +181,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="SceneGame.cpp" />
-    <ClCompile Include="SceneGameUI.cpp" />
+    <ClCompile Include="ScenePrep.cpp" />
+    <ClCompile Include="SceneSelectionButton.cpp" />
+    <ClCompile Include="SceneStatus.cpp" />
+    <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Spike.cpp" />
     <ClCompile Include="StageData.cpp" />

@@ -4,6 +4,7 @@
 #include "SpriteRegion.h"
 #include "Transform.h"
 #include <vector>
+#include <unordered_map>
 
 class Sprite
 {
@@ -17,8 +18,9 @@ private:
 		Region
 	};
 
-	std::vector <Animation2D> m_animeationList;	//複数のアニメーションを保持する配列(例 待機とか走るを入れる)
-	const Animation2D* m_currentAnime;			//現在再生中のアニメーション
+	std::unordered_map<std::string, int> m_animeIndex;	//アニメーションの名前とインデックスを紐づけるマップ(例 待機 = 0, 走る = 1)
+	std::vector <Animation2D> m_animeationList;			//複数のアニメーションを保持する配列(例 待機とか走るを入れる)
+	const Animation2D* m_currentAnime;					//現在再生中のアニメーション
 
 	std::vector <SpriteRegion> m_regionList;	
 	const SpriteRegion* m_currentRegion;		//一コマの画像または切り抜いた画像を保持する変数
@@ -59,6 +61,11 @@ public:
 
 	//再生
 	void Play(int index, float time);
+	void Play(const std::string& name, float time);
+
+	//アニメーションの名前からデータを取得
+	const Animation2D* GetAnimation(const std::string& name) const;
+
 
 	//アニメーションの一コマの描画時間を取得
 	float GetDrawingTime()

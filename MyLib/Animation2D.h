@@ -1,7 +1,9 @@
 #pragma once
+#include <string>
 
 struct Animation2D
 {
+	std::string name;			//そのアニメーションの名前(例 待機とか走るとか)
 	const char* textureName;	//画像パス
 	int textureId;				//画像ID
 	int gridAmount;				//コマ数
@@ -10,7 +12,8 @@ struct Animation2D
 	bool loop;					//ループするかどうか(true = ループ : false = 一回で終わり)
 
 	//暗黙的な型変換禁止のためにexplicitをつける
-	explicit constexpr Animation2D(
+	explicit Animation2D(
+		const char* name,
 		const char* anime,
 		int amount = 1,		
 		int rate = 10,		
@@ -18,6 +21,7 @@ struct Animation2D
 		int column = 1	
 	
 	) :
+		name(name),
 		textureName(anime),
 		textureId(0),
 		gridAmount(amount),

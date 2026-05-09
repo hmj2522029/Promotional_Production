@@ -5,11 +5,13 @@ ActionButton::ActionButton(
 	const Vector2& position,		
 	Player::ActionType actionType,	
 	const char* textureName,	
-	Player* const player
+	Player* const player,
+	Enemy* const enemy
 ) :
 	Actor2D(textureName, position, DrawLayer::UILayer),
 	m_actionType(actionType),
 	m_player(player),
+	m_enemy(enemy),
 	m_button(Size, MOUSE_INPUT_LEFT, std::bind(&ActionButton::OnClick, this))
 {
 }

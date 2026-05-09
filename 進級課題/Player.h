@@ -2,6 +2,7 @@
 #include "BattleCommand.h"
 #include "Character.h"
 #include "MyLib.h"
+#include "PlayerData.h"
 
 class Camera;
 class Enemy;
@@ -10,27 +11,22 @@ class Player : public Character
 {
 private:
 
-	//プレイヤーのステータス情報(テキストファイル読み込み用の仮のデータ)
-	struct PlayerData
+	//シーン違いによるプレイヤーの行動の違い
+	enum class SceneActionType	
 	{
-		int Level = 0;		//レベル(初期)		
-		int Hp = 0;			//HP(初期)
-		int Attack = 0;		//攻撃力(初期)
-		int Defense = 0;	//防御力(初期)
+		SceneGame,
+		ScenePrep
 	};
 
+
+	//画像
+	static constexpr Vector2 GridSize = Vector2(95, 84);	//グリッドサイズ
 
 	// プレイヤー情報
 	static constexpr Vector2 SpawnPos = Vector2(250, 478);	// 初期位置
 	static constexpr float InvincibleTime = 1.5f;	// 無敵時間
-	static constexpr float JumpScale = 7.0f;
-	static constexpr Vector2 Size = Vector2(32, 32);
-
-	//ステータス情報(初期)
-	static constexpr int Level = 1;		//レベル(初期)
-	static constexpr int Hp	= 50;		//HP(初期)
-	static constexpr int Attack = 10;	//攻撃力(初期)
-	static constexpr int Defense = 5;	//防御力(初期)
+	static constexpr float JumpScale = 8.0f;
+	static constexpr Vector2 Size = Vector2(25, 32);
 
 	//レベルアップの時のステータスの上昇値の範囲
 	static constexpr int UpHpMax = 10;		//レベルアップの時のHPの上昇値の最大値
@@ -41,15 +37,15 @@ private:
 	static constexpr int UpDefenseMin = 1;	//レベルアップの時の防御力の上昇値の最小値
 
 
-	Camera* m_camera;		//カメラ
-	Enemy* m_targetEnemy;	//当たった時の対象の敵
+	Enemy* m_targetEnemy;				//当たった時の対象の敵
 	BattleCommand m_command;
-	PlayerData m_playerData;	
+	SceneActionType m_sceneActionType;	//シーン違いによるプレイヤーの行動の違い
 
 	bool m_isGround;		//地面判定
+	bool m_hasCollided;		//何かのオブジェクトに衝突しているかどうか(初期位置のずれを直すため)
+	bool m_lvelUpFlag;		//レベルアップしているかどうかのフラグ	
 	float m_invincibleTime;	//残りの無敵時間
 
-	PlayerData Convert(const std::unordered_map<std::string, std::string>& data);
 	
 protected:
 
@@ -59,6 +55,7 @@ protected:
 	void Draw()override;
 
 public:
+
 	enum class ActionType
 	{
 		Attack,		//攻撃
@@ -67,16 +64,35 @@ public:
 
 	};
 
-	Player(Camera* camera);
+	//アニメーションデータ
+	std::vector<Animation2D> AnimeData;
+
+
+	Player();
 
 	int GetX() const { return static_cast<int>(m_transform.position.x); }
 
 	//当たった敵を返す
 	Enemy* GetTargetEnemy() const { return m_targetEnemy; }
 
-	//プレイヤーの行動
-	void ActionSelection(ActionType actionType);
+	//当たった敵をリセットする
+	void ResetTargetEnemy() { m_targetEnemy = nullptr; }
 
+	//レベルアップフラグの取得
+	bool GetLevelUpFlag() { return m_lvelUpFlag; }
+
+	//レベルアップフラグのリセット
+	void ResetLevelUpFlag() { m_lvelUpFlag = false; }
+
+	//レベルアップしているか
+	bool CheckLevelUp() { return m_status.CheckLevelUp(UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin); }
+
+	//プレイヤーの行動
+	void ActionSelection(ActionType actionType, Enemy* target);
+
+	//プレイヤーデータをPlayerStatusに変換する関数(ステータスの保管)
+	PlayerData::PlayerStatus ToPlayerStatus() const;
+	 
 	// 衝突イベント
 	virtual void OnCollisionEnter(const Actor2D* other) override;
 	virtual void OnCollision(const Actor2D* other) override;

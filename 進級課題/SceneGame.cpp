@@ -2,12 +2,18 @@
 #include "Player.h"
 #include "Camera.h"
 #include "StageManager.h"
-#include "SceneGameUI.h"
 #include "BattleScene.h"
+#include "SceneStatus.h"
 
 
 void SceneGame::Initialize()
 {
+
+	//フォント読み込み
+	AddFontResourceEx("Resource/PixelMplus/PixelMplus12-Regular.ttf", FR_PRIVATE, NULL);
+	m_fontHandle = CreateFontToHandle("PixelMplus12", 25, -1);
+
+
 	m_rootNode = new Node();
 
 	//背景
@@ -26,15 +32,12 @@ void SceneGame::Initialize()
 	m_player = new Player(m_camera);
 	m_rootNode->AddChild(m_player);
 
-	// UIの生成
-	m_sceneGameUI = new SceneGameUI(m_player);
-	m_rootNode->AddChild(m_sceneGameUI);
-
 	//戦闘画面
 	m_battleScene = new BattleScene(m_player);
-	m_battleScene->Initialize();
 
-	//リザルト画面
+	//ステータス画面
+	m_sceneStatus = new SceneStatus(m_player);
+	m_sceneStatus->Initialize();
 
 }
 
@@ -57,6 +60,14 @@ void SceneGame::Finalize()
 
 	}
 
+	if(m_sceneStatus)
+	{
+		SceneManager::GetInstance()->RemoveScene(m_sceneStatus);
+		m_sceneStatus->Finalize();
+		delete m_sceneStatus;
+		m_sceneStatus = nullptr;
+	}
+
 
 }
 
@@ -75,8 +86,37 @@ void SceneGame::Update()
 		//フェードアウト
 		ScreenFade::GetInstance()->StartFadeOut(true);
 
+		Debug::Log("戦闘画面に遷移");
+
+		//戦闘画面の初期化
+		m_battleScene->Initialize();
+
 		SceneManager::GetInstance()->PushScene(m_battleScene);
 
+	}
+
+	//プレイヤーがレベルアップしていたらシーンの追加
+	if (m_player->GetLevelUpFlag())
+	{
+		//止める
+		m_camera->Stop();
+
+		//レベルアップフラグのリセット
+		m_player->ResetLevelUpFlag();
+
+		//レベルアップのシーンに切り替える
+		//SceneManager::GetInstance()->PushScene());
+
+	}
+
+	//ステータス画面の表示
+	if (Keyboard::isDown(KEY_INPUT_X))
+	{
+		//止める
+		m_camera->Stop();
+
+		Physics2D::GetInstance()->Deactive();
+		SceneManager::GetInstance()->PushScene(m_sceneStatus);
 	}
 
 
@@ -101,6 +141,13 @@ void SceneGame::Draw()
 {
 	m_rootNode->TreeDraw();
 
+	DrawStringToHandle(
+		Screen::Width / 5 * 3, Screen::Height - 25,
+		"X: ステータス画面  SPACE: ジャンプ",
+		GetColor(255, 255, 255),
+		m_fontHandle,
+		GetColor(0, 0, 0)
+	);
 
 
 

@@ -18,6 +18,15 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 
 	SetDrawOrder(DrawLayer::EnemyLayer);
 
+	//アニメデータ
+	AnimeData =
+	{
+		Animation2D("Idle", "FreeSlime/slime_idle.png", 4, 7, true),
+		Animation2D("Run", "FreeSlime/slime_run.png", 6, 11, true),
+		Animation2D("Die", "FreeSlime/slime_die.png", 5, 9, false),
+	};
+
+
 	// Sprite起動
 	m_sprite = new Sprite();
 	for (const auto& anime : AnimeData)
@@ -37,11 +46,9 @@ void Slime::Update()
 
 	if(m_status.IsDead())
 	{
-		//アニメーションを死亡モーションにする
-		Anime anime = Anime::Die;
 
-		//アニメーションを再生する
-		m_sprite->Play(static_cast<int>(anime), 0.0f);
+		//アニメーションを再生する(死亡)
+		m_sprite->Play("Die", 0.0f);
 
 		//死亡モーションが終わったら消す
 		if(m_sprite->isAnimationFinished())	Destroy();
@@ -50,11 +57,9 @@ void Slime::Update()
 	}
 	else
 	{
-		//アニメーションを待機モーションにする
-		Anime anime = Anime::Idle;
 
-		//アニメーションを再生する
-		m_sprite->Play(static_cast<int>(anime), 0.0f);
+		//アニメーションを再生する(待機)
+		m_sprite->Play("Idle", 0.0f);
 	}
 
 

@@ -1,13 +1,13 @@
 #include "Status.h"
 
-void Status::InitializeStatus(int level, int hp, int attack, int defense)
+void Status::InitializeStatus(int level, int hp, int attack, int defense, int exp)
 {
 	m_level = level;
 	m_hp = hp;
 	m_maxHp = hp; 
 	m_attack = attack;
 	m_defense = defense;
-	m_exp = 0;
+	m_exp = exp;
 	m_expToNextLevel = m_level * ExpMultiplier; // レベルに応じて次のレベルまでの経験値を設定
 	m_isDefending = false; // 初期状態では防御していない
 }
@@ -66,19 +66,25 @@ void Status::GainExp(int amount)
 
 void Status::LevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense)
 {
-	m_exp -= m_expToNextLevel; // レベルアップに必要な経験値を減らす
-	m_level++;
 
-	int UpHp = GetRand(maxHp - minHp) + minHp;						// レベルアップごとに最大HPがMax～Min増える
-	int UpAttack = GetRand(maxAttack - minAttack) + minAttack;		// レベルアップごとに攻撃力がMax～Min増える
-	int UpDefense = GetRand(maxDefense - minDefense) + minDefense;	// レベルアップごとに防御力がMax～Min増える
-
-	m_maxHp += UpHp;
-	m_attack += UpAttack;
-	m_defense += UpDefense;
-	m_hp = m_maxHp;					// レベルアップするとHPが全回復する
-
-	m_expToNextLevel = m_level * 100; // 次のレベルまでの経験値が増える
+	while (m_exp >= m_expToNextLevel)
+	{
+		m_exp -= m_expToNextLevel; // レベルアップに必要な経験値を減らす
+		m_level++;
+	
+		int UpHp = GetRand(maxHp - minHp) + minHp;						// レベルアップごとに最大HPがMax～Min増える
+		int UpAttack = GetRand(maxAttack - minAttack) + minAttack;		// レベルアップごとに攻撃力がMax～Min増える
+		int UpDefense = GetRand(maxDefense - minDefense) + minDefense;	// レベルアップごとに防御力がMax～Min増える
+	
+		m_maxHp += UpHp;
+		m_attack += UpAttack;
+		m_defense += UpDefense;
+		m_hp = m_maxHp;					// レベルアップするとHPが全回復する
+	
+		m_expToNextLevel = m_level * 100; // 次のレベルまでの経験値が増える
+	
+	
+	}
 
 	// ステータスの最大値を超えないようにする
 	if (m_level > MaxLevel) { m_level = MaxLevel; }
@@ -89,10 +95,16 @@ void Status::LevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int max
 
 }
 
-void Status::CheckLevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense)
+bool Status::CheckLevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense)
 {
-	while (m_exp >= m_expToNextLevel)
+	// レベルアップの条件を満たしているかどうかをチェックする
+	if(m_exp >= m_expToNextLevel)
 	{
 		LevelUp(maxHp, minHp, maxAttack, minAttack, maxDefense, minDefense);
+
+		return true; // レベルアップした
+
 	}
+
+	return false; // レベルアップしていない
 }

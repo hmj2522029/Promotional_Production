@@ -32,22 +32,8 @@ protected:
 
 public: 
 
-	enum class Anime
-	{
-		Idle,
-		Ran,
-		Die,
-
-		Length,
-	};
-	static constexpr Animation2D AnimeData[static_cast<int>(Anime::Length)] =
-	{
-		Animation2D("FreeSlime/slime_idle.png", 4, 7, true),
-		Animation2D("FreeSlime/slime_run.png", 6, 11, true),
-		Animation2D("FreeSlime/slime_die.png", 5, 9, false),
-	};
-
-
+	//アニメーションデータ
+	std::vector<Animation2D> AnimeData;
 
 	Slime(const TileContext& tile, Camera* camera);
 

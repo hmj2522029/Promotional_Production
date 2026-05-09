@@ -42,16 +42,19 @@ public:
 		m_isDefending(false)
     {}
 
-    
+	//各ステータスのゲッター
 	int GetLevel() const { return m_level; }
     int GetHp() const { return m_hp; }
     int GetMaxHp() const { return m_maxHp; }
     int GetAttack() const { return m_attack; }
 	int GetDefense() const { return m_defense; }
+	int GetExp() const { return m_exp; }
+	int GetExpToNextLevel() const { return m_expToNextLevel; }
+
 	bool IsDead() const { return m_hp <= 0; }
 
 	//ステータスを初期化する
-	void InitializeStatus(int level, int hp, int attack, int defense);
+	void InitializeStatus(int level, int hp, int attack, int defense, int exp = 0);
 
     //ダメージ計算
     int CalculateDamage(const Status& target);
@@ -72,13 +75,15 @@ public:
     void LevelUp(int maxHp, int minHp,int maxAttack,int minAttack, int maxDefense, int minDefense);
 
 	// レベルアップ判定
-	void CheckLevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense);
+	bool CheckLevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense);
 
 	//防御しているかどうか
 	bool IsDefending() const { return m_isDefending; }
 
-	//防御する・やめる
+	//防御する
 	void StartDefend() { m_isDefending = true; }
+
+	//防御をやめる
 	void EndDefend() { m_isDefending = false; }
 
 

@@ -7,7 +7,6 @@ public:
 
 	Vector2 position;
 
-	//今は使わないけどいつか使うかもしれないから
 	float angle;		// 角度（ラジアン）
 	float scale;		// 拡縮
 

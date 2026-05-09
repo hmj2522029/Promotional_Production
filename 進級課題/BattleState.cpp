@@ -23,18 +23,29 @@ void BattleState::Update()
 		//行動したら敵のターンにする
 		if (m_player->isAction())
 		{
+
 			//敵が死んだら戦闘終了
 			if (m_enemy->m_status.IsDead())
 			{
+
+
 				//次の状態を保存
 				m_nextSituation = Situation::EndBattle;
 
 				//待機させる
 				m_situation = Situation::StandBy;
+
+				break;
 			}
 
 			//敵の行動をリセット
 			m_enemy->ResetAction();
+
+			//もし敵が防御していたら防御を解除する
+			if (m_enemy->m_status.IsDefending())
+			{
+				m_enemy->m_status.EndDefend();
+			}
 
 			//次の状態を保存
 			m_nextSituation= Situation::EnemyTure;
@@ -56,14 +67,24 @@ void BattleState::Update()
 			//プレイヤーが死んだら戦闘終了
 			if (m_player->m_status.IsDead())
 			{
+
 				//次の状態を保存
 				m_nextSituation = Situation::EndBattle;
 
+				//待機させる
 				m_situation = Situation::StandBy;
+
+				break;
 			}
 
 			//プレイヤーの行動をリセット
 			m_player->ResetAction();
+
+			//もしプレイヤーが防御していたら防御を解除する
+			if (m_player->m_status.IsDefending())
+			{
+				m_player->m_status.EndDefend();
+			}
 
 			//次の状態を保存
 			m_nextSituation = Situation::PlayerTure;
@@ -73,20 +94,25 @@ void BattleState::Update()
 		}
 
 
-		//敵の行動をランダムに選ぶ
-		static int ActionSelection = GetRand(100);
+		//敵が行動していなかったら
+		if (!m_enemy->isAction())
+		{
+			//敵の行動をランダムに選ぶ
+			int ActionSelection = GetRand(100);
 
-		if (ActionSelection > 70)	//0から70(70%)
-		{
-			m_battlecommand.AttackCommand(m_enemy, m_player);
-		}
-		else if(ActionSelection > 90)	//70から90(20%) 
-		{
-			m_battlecommand.DefenseCommand(m_enemy);
-		}
-		else //90から100(10%)
-		{
-			m_battlecommand.EscapeCommand(m_enemy);
+			if (ActionSelection < 70)	//0から70(70%)
+			{
+				m_battlecommand.AttackCommand(m_enemy, m_player);
+			}
+			else if(ActionSelection < 90)	//70から90(20%) 
+			{
+				m_battlecommand.DefenseCommand(m_enemy);
+			}
+			else //90から100(10%)
+			{
+				m_battlecommand.EscapeCommand(m_enemy);
+			}
+
 		}
 
 
@@ -95,7 +121,6 @@ void BattleState::Update()
 	case Situation::EndBattle:
 
 		//シーンの切り替えはBattleSceneで行う
-
 		m_isBattle = false;
 
 		break;

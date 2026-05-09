@@ -21,7 +21,7 @@ private:
 	};
 	Situation m_nextSituation;	//Ÿ‚Ìó‘Ô
 
-	Situation m_situation;	
+	Situation m_situation;		//Œ»İ‚Ìó‘Ô
 	BattleCommand m_battlecommand;
 	Player* m_player;
 	Enemy* m_enemy;
@@ -36,8 +36,6 @@ protected:
 public:
 
 	BattleState(Player* player, Enemy* enemy);
-
-
 
 	//í“¬’†‚©‚Ç‚¤‚©
 	bool isBattel() const { return m_isBattle; }	

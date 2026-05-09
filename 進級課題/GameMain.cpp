@@ -1,17 +1,14 @@
 #include "GameMain.h"
 #include "GameConfig.h"
-#include "SceneGame.h"
+#include "SceneTitle.h"
 #include "MyLib.h"
 #include "DxLib.h"
 
  GameMain::GameMain() :
-	 m_screen(0),
-	 m_sceneGame()
+	 m_screen(0)
 {
 	 Debug::Initialize();
 
-	 m_sceneGame = new SceneGame();
-	 //m_sceneGame->Initialize();
 }
 
 
@@ -48,7 +45,7 @@ void GameMain::Run()
 	Debug::Initialize();
 
 	//シーン起動
-	SceneManager::GetInstance()->Setup(new SceneGame);
+	SceneManager::GetInstance()->Setup(new SceneTitle);
 
 
 	// スクリーン作成
