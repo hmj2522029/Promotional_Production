@@ -26,5 +26,5 @@ namespace Screen
 
 	static constexpr int Black = 0;		//•
 	static constexpr int White = 255;	//”’
-	static constexpr int ScreenColor =  White;	//”wŒi‰æ–Ê‚ÌF
+	static constexpr int ScreenColor = Black;	//”wŒi‰æ–Ê‚ÌF
 }

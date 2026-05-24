@@ -5,25 +5,33 @@
 
 
 
-Player::Player():
+Player::Player(Vector2 pos):
 	Character(DrawLayer::PlayerLayer , Tag::Player, Rigidbody2D::Type::Dynamic),
-	m_sceneActionType(SceneActionType::ScenePrep),	//最初にプレイヤーが出で来るシーンはScenePrepなので一旦ScenePrepにする
+	m_moveMode(MoveMode::StageDriven),
+	m_velocity(Speed),
+	m_stopUpdating(false),
 	m_targetEnemy(nullptr),
 	m_isGround(false),
 	m_hasCollided(false),
 	m_lvelUpFlag(false),
+	m_isDead(false),
 	m_invincibleTime(0)
 {
+
+	m_rigidbody2d.velocity.x = 0;
+
+	Debug::Log("velocity: %d\n", m_velocity);
 
 	//ステータスの初期化
 	m_status.InitializeStatus(
 		PlayerData::GetInstance()->GetPlayerStatus().Level,
 		PlayerData::GetInstance()->GetPlayerStatus().MaxHp,
 		PlayerData::GetInstance()->GetPlayerStatus().Attack,
-		PlayerData::GetInstance()->GetPlayerStatus().Defense
+		PlayerData::GetInstance()->GetPlayerStatus().Defense,
+		PlayerData::GetInstance()->GetPlayerStatus().Exp
 	);
 
-	m_transform.position = SpawnPos;
+	m_transform.position = pos;
 
 	m_collider = new BoxCollider(Size);
 	m_collider->SetPhysicsBehavior(Tag::Hole, PhysicsBehavior::Trigger);
@@ -72,92 +80,102 @@ void Player::Release()
 }
 
 void Player::Update()
-{
-	switch (m_sceneActionType)
+{	
+
+	//アップデートを止めている場合は更新しない
+	if (m_stopUpdating) return;
+
+	//死んでいたら更新しない
+	if (m_status.IsDead())
 	{
-		case SceneActionType::SceneGame:
+		//カメラを止める
+		Camera::GetInstance()->StopPlayer();
 
-			//死んでいたら更新しない
-			if (m_status.IsDead())
-			{
-		
-				//アニメーションを再生する(死亡)
-				m_sprite->Play("Die", 0.0f);
-		
-				return;
-			}
-			else if(m_isGround)
-			{
-		
-				//アニメーションを再生する(走る)
-				m_sprite->Play("Run", 0.0f);
+		//アニメーションを再生する(死亡)
+		m_sprite->Play("Die", 0.0f);
 
-				//プレイヤーが動いていないなら、アニメーションを再生する(待機)
-				if(Camera::GetInstance()->IsMoving())
-				{
-					m_sprite->Play("Idle", 0.0f);
-				}
-		
-			}
-				
-			//レベルアップ
-			if (CheckLevelUp())
-			{
-				//シーンの追加はシーンゲームの方で行う
-				m_lvelUpFlag = true;
-			}
-			
-		
-			// 無敵時間のカウントダウン
-			if (m_invincibleTime > 0)
-			{
-				m_invincibleTime -= Time::GetInstance()->GetDeltaTime();
-			}
-		
-		
-			//ジャンプ
-			if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
-			{
-				m_rigidbody2d.AddForce(Vector2(0, -1) * JumpScale);
-		
-		
-				//アニメーションを再生する(ジャンプ)
-				m_sprite->Play("Jump", 0.0f);
-		
-				m_isGround = false;
-			}
-		
-			//もし過去に何かのオブジェクトに衝突していて、現在の位置が初期位置と違う場合、初期位置に戻るようにする
-			if(m_hasCollided)
-			{
-				//地面についていない場合は、初期位置に戻さない
-				if (!m_isGround) return;
-		
-				float direction = SpawnPos.x - m_transform.position.x;
-		
-				//float問題を回避するための閾値を1.0fとする
-				if(abs(direction) > 1.0f)
-				{
-					m_transform.position.x += (SpawnPos.x - m_transform.position.x) * 0.05f;
-				}
-				else
-				{
-					m_transform.position.x = SpawnPos.x;
-					m_hasCollided = false;
-				}
-		
-			}
+		//アニメーションが終了したら、死亡フラグを立てる
+		if (m_sprite->isAnimationFinished()) m_isDead = true;
+
+		return;
+	}
+	else if (m_isGround)
+	{
+
+		//アニメーションを再生する(走る)
+		m_sprite->Play("Run", 0.0f);
 
 
-		break;
-		case SceneActionType::ScenePrep:
+		//プレイヤーが動いていないなら、アニメーションを再生する(待機)
+		if (!Camera::GetInstance()->IsMovingPlayer())
+		{
+			m_sprite->Play("Idle", 0.0f);
+		}
 
+	}
 
-
-		break;
+	//レベルアップ
+	if (m_status.CheckLevelUp())
+	{
+		//シーンの追加はシーンゲームの方で行う
+		m_lvelUpFlag = true;
 	}
 
 
+	// 無敵時間のカウントダウン
+	if (m_invincibleTime > 0)
+	{
+		m_invincibleTime -= Time::GetInstance()->GetDeltaTime();
+	}
+
+
+	//ジャンプ
+	if (Keyboard::isDown(KEY_INPUT_SPACE) && m_isGround)
+	{
+		m_rigidbody2d.AddForce(Vector2(0, -1) * JumpScale);
+
+
+		//アニメーションを再生する(ジャンプ)
+		m_sprite->Play("Jump", 0.0f);
+
+		m_isGround = false;
+	}
+
+	if (m_moveMode == MoveMode::StageDriven)
+	{
+		//もし過去に何かのオブジェクトに衝突していて、現在の位置が初期位置と違う場合、初期位置に戻るようにする
+		if (m_hasCollided)
+		{
+	
+			//地面についていない場合は、初期位置に戻さない
+			if (!m_isGround) return;
+	
+			float direction = SpawnPos.x - m_transform.position.x;
+	
+			//float問題を回避するための閾値を1.0fとする
+			if (abs(direction) > 1.0f)
+			{
+	
+				m_transform.position.x += (SpawnPos.x - m_transform.position.x) * 0.05f;
+	
+			}
+			else
+			{
+				m_transform.position.x = SpawnPos.x;
+				m_hasCollided = false;
+			}
+	
+		}
+	}
+	else if (m_moveMode == MoveMode::SelfMove)
+	{
+
+		m_rigidbody2d.velocity.x = m_velocity;
+	}
+
+	Debug::Log("mode: %d\n", (int)m_moveMode);
+	Debug::Log("velocity: %f\n", m_velocity);
+	Debug::Log("posX: %f\n", m_transform.position.x);
 
 }
 
@@ -224,7 +242,6 @@ PlayerData::PlayerStatus Player::ToPlayerStatus() const
 }
 
 
-
 // 衝突イベント
 void Player::OnCollisionEnter(const Actor2D* other)
 {
@@ -249,7 +266,7 @@ void Player::OnCollisionEnter(const Actor2D* other)
 		m_invincibleTime = InvincibleTime;
 
 		// ダメージを受ける
-		m_status.TakeDamage(10, true);	// 10のダメージを受ける
+		m_status.TakeDamage(10);	// 10のダメージを受ける
 
 	}
 
@@ -310,7 +327,6 @@ void Player::OnCollisionExit(const Actor2D* other)
 			return;
 		}
 	
-		Debug::Log("衝突していたオブジェクトから離れた");
 		m_hasCollided = true;
 	}
 

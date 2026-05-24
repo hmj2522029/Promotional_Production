@@ -9,9 +9,8 @@ class AirGround : public Actor2D
 {
 private:
 
+	Vector2 m_center;		//中心
 	Vector2 m_size;			//サイズ
-	Vector2 m_offsetCol;	//座標をずらすため(当たり判定)
-	Camera* m_camera;
 	TileContext m_tileContext;
 
 
@@ -21,7 +20,7 @@ protected:
 	virtual void Draw() override;
 
 public:
-	AirGround(const TileContext& tile, Camera* camera);
+	AirGround(const TileContext& tile);
 
 
 };

@@ -13,9 +13,7 @@ private:
 	Vector2 m_center;		//中心座標
 	Vector2 m_offsetPos;	//座標をずらすため(地面)
 	Vector2 m_offsetCol;	//座標をずらすため(当たり判定)
-	Camera* m_camera;
 	TileContext m_tileContext;
-
 
 protected:
 
@@ -23,6 +21,6 @@ protected:
 	virtual void Draw() override;
 	
 public:
-	Ground(const TileContext& tile, Camera* camera);
+	Ground(const TileContext& tile);
 
 };

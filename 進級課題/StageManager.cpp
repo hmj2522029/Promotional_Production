@@ -14,9 +14,8 @@
 #include <string>
 
 
-StageManager::StageManager(Camera* camera) :
+StageManager::StageManager() :
 	m_stage(nullptr),
-	m_camera(camera),
 	m_prevStageIndex(-1),
 	m_worldColumn(0),
 	m_localColumn(0),
@@ -25,8 +24,8 @@ StageManager::StageManager(Camera* camera) :
 {
 	
 	m_mapEarlyStageData = LoadStageData("Data/Stage/EarlyStage/Stage.txt");
-	m_mapMiddleStageData = LoadStageData("Data/Stage/MiddleStage/Stage.txt");
-	m_mapLateStageData = LoadStageData("Data/Stage/LateStage/Stage.txt");
+	m_mapMiddleStageData = LoadStageData("Data/Stage/MidfieldStage/Stage.txt");
+	m_mapLateStageData = LoadStageData("Data/Stage/FinalStage/Stage.txt");
 
 	m_stage = std::make_unique<StageData>(m_mapEarlyStageData[0]);	//最初のステージデータを読み込む(最初だけ固定)
 
@@ -35,7 +34,7 @@ StageManager::StageManager(Camera* camera) :
 void StageManager::Update()
 {
 
-	int cameraTileX = static_cast<int>(m_camera->GetPos().x / TileSize);		//カメラの位置からタイルの列を計算する
+	int cameraTileX = static_cast<int>(Camera::GetInstance()->GetStagePos().x / TileSize);		//カメラの位置からタイルの列を計算する
 
 	int generateLimit = cameraTileX + 20;	//カメラの位置から20列先まで生成する
 
@@ -68,6 +67,9 @@ void StageManager::Update()
 		case Situation::MiddleStage:
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapMiddleStageData));
 			m_localColumn = 0;
+
+			Debug::Log("MiddleStage\n");
+
 			break;
 
 		case Situation::LateStage:
@@ -89,8 +91,8 @@ void StageManager::Draw()
 	{
 		for (auto& pos : m_debugBlocks)
 		{
-			float screenX = pos.x - m_camera->GetPosition().x;
-			float screenY = pos.y - m_camera->GetPosition().y;
+			float screenX = pos.x - Camera::GetInstance()->GetStagePos().x;
+			float screenY = pos.y - Camera::GetInstance()->GetStagePos().y;
 	
 			DrawBoxAA(
 				screenX,
@@ -122,7 +124,7 @@ void StageManager::GenerateColumn(int column, int screenStage)
 		TileContext tileContext{tile, screenStage, pos, TileSize };	//タイルの情報を作成する
 
 		//タイルの種類に応じたオブジェクトを生成する
-		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tileContext, m_camera))
+		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tileContext))
 		{
 			AddChild(obj);	//生成したオブジェクトをステージマネージャーの子として追加する
 		}
@@ -159,11 +161,10 @@ std::vector<StageData::StageMap> StageManager::LoadStageData(const std::string& 
 	//テキストファイルからステージデータを読み込む関数(複数)
 	std::ifstream file(path);
 
-	
 	//ステージデータを保存するベクター
 	std::vector<StageData::StageMap> stages;
 
-	//ファイルが開けなかった場合は返す
+ 	//ファイルが開けなかった場合は返す
 	if (!file.is_open())return stages;
 
 	//現在読み込んでいるステージデータ
@@ -175,6 +176,7 @@ std::vector<StageData::StageMap> StageManager::LoadStageData(const std::string& 
 	//空行でステージデータを区切る
 	while (std::getline(file, line))
 	{
+
 		//空行の場合は現在のステージデータを保存して次のステージデータの読み込みを開始する
 		if (line.empty())
 		{
@@ -211,8 +213,8 @@ void StageManager::BlockDraw()
 	{
 		for (auto& pos : m_debugBlocks)
 		{
-			float screenX = pos.x - m_camera->GetPosition().x;
-			float screenY = pos.y - m_camera->GetPosition().y;
+			float screenX = pos.x - Camera::GetInstance()->GetStagePos().x;
+			float screenY = pos.y - Camera::GetInstance()->GetStagePos().y;
 
 			DrawBoxAA(
 				screenX,

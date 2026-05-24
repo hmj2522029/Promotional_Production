@@ -12,8 +12,7 @@ class Camera;
 
 class StageManager : public Node
 {
-private:
-
+public:
 
 	//ステージの進み具合を表す定数
 	enum Situation
@@ -24,18 +23,21 @@ private:
 
 	};
 
+private:
+
+
+
 
 
 	static constexpr int UiHeight = 195;	//UIを表示するためのyの範囲
 	static constexpr int PlayerY  = 500;	//置きたいプレイヤーの位置
 	static constexpr int GroundY  = 544;	//置きたいブロックの位置
-	static constexpr int TileSize = 80;	//タイルのサイズ
+	static constexpr int TileSize = 80;		//タイルのサイズ
 
 	static constexpr int MaxScreenStage = 16;	//画面に表示される最大のステージ数(画面の幅 / タイルのサイズ)
 
 	//std::unique_ptrは自動的に所有者(StageManager)がなくなった場合にメモリを解放してくれる
 	std::unique_ptr<StageData> m_stage;
-	Camera* m_camera;
 
 	Situation m_situation;	//ステージの進み具合
 	int m_prevStageIndex;	//前のステージのインデックス(連続して同じステージを出さないため)
@@ -65,15 +67,14 @@ protected:
 
 public:
 
-	StageManager(Camera* camera);
+	StageManager();
 
 	//ステージの進み具合を変更する関数
 	void SetSituation(Situation situation) { m_situation = situation; }
 
-
-	//ステージの進んでいる距離を取得する関数(1ブロック = 1メートル)
-	float GetDistance() const { return m_worldColumn * TileSize / 100.0f; }
-
+	//タイルのサイズを取得する関数
+	static int GetTileSize() { return TileSize; }
+	static int GetMaxScreenStage() { return MaxScreenStage; }
 
 
 #ifdef _DEBUG

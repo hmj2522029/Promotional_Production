@@ -10,9 +10,8 @@ private:
 
 	Vector2 m_size;			//サイズ
 	Vector2 m_offsetPos;	//座標をずらすため(落とし穴)
-	Vector2 m_offsetCol;	//座標をずらすため(当たり判定)
+	Vector2 m_center;
 	TileContext m_tileContext;
-	Camera* m_camera;
 
 protected:
 	virtual void Update() override;
@@ -20,6 +19,6 @@ protected:
 
 public:
 
-	Spike(const TileContext& tile, Camera* camera);
+	Spike(const TileContext& tile);
 
 };

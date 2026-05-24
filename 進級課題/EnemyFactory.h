@@ -15,6 +15,6 @@ private:
 public:
 
 	//‚Ç‚Ì“G‚ğ¶¬‚·‚é‚©‚ğ•Ô‚·
-	static Actor2D* RandomEnemy(const TileContext& tile, Camera* camera);
+	static Actor2D* RandomEnemy(const TileContext& tile);
 
 };

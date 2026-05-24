@@ -12,7 +12,7 @@ void Status::InitializeStatus(int level, int hp, int attack, int defense, int ex
 	m_isDefending = false; // 初期状態では防御していない
 }
 
-int Status::CalculateDamage(const Status& target)
+int Status::CalculateDamage(const Status& target, bool penetration)
 {
 	// ダメージ計算
 	int damage = 0;
@@ -21,6 +21,10 @@ int Status::CalculateDamage(const Status& target)
 	{
 		damage = (m_attack / 2) - target.m_defense;	// 防御している場合のダメージ計算
 	} 
+	else if(penetration == true)
+	{
+		damage = m_attack;							// 貫通攻撃の場合のダメージ計算（防御力を無視）
+	}
 	else
 	{
 		damage = m_attack - target.m_defense;		// 通常のダメージ計算
@@ -30,17 +34,9 @@ int Status::CalculateDamage(const Status& target)
 	return damage;
 }
 
-void Status::TakeDamage(int damage, bool penetration)
+void Status::TakeDamage(int damage)
 {
-	// ダメージ計算
-	int actualDamage = 0;
-	if(penetration == false) actualDamage = damage - m_defense;	// 貫通攻撃でない場合、防御力を考慮する
-	if (penetration == true)  actualDamage = damage;			// 貫通攻撃の場合、防御力を無視する
-
-
-	if (actualDamage < 1) { actualDamage = 1; } // ダメージは1未満にならない
-
-	m_hp -= actualDamage;
+	m_hp -= damage;
 
 	if (m_hp < 0)
 	{
@@ -81,7 +77,7 @@ void Status::LevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int max
 		m_defense += UpDefense;
 		m_hp = m_maxHp;					// レベルアップするとHPが全回復する
 	
-		m_expToNextLevel = m_level * 100; // 次のレベルまでの経験値が増える
+		m_expToNextLevel = m_level * ExpMultiplier; // 次のレベルまでの経験値が増える
 	
 	
 	}
@@ -95,12 +91,11 @@ void Status::LevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int max
 
 }
 
-bool Status::CheckLevelUp(int maxHp, int minHp, int maxAttack, int minAttack, int maxDefense, int minDefense)
+bool Status::CheckLevelUp()
 {
 	// レベルアップの条件を満たしているかどうかをチェックする
 	if(m_exp >= m_expToNextLevel)
 	{
-		LevelUp(maxHp, minHp, maxAttack, minAttack, maxDefense, minDefense);
 
 		return true; // レベルアップした
 

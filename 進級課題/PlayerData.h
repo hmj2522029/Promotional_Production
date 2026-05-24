@@ -14,8 +14,8 @@ public:
 		int Defense;	//防御力
 		int Exp;		//経験値
 		int NextExp;	//次のレベルまでの経験値
-	};
 
+	};
 
 	//シングルトン
 	static PlayerData* GetInstance()

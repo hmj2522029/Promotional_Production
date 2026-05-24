@@ -4,17 +4,22 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Character.h"
+#include "ResultData.h"
 
 void BattleScene::Initialize()
 {
 	//フォントの読み込み
 	AddFontResourceEx("Resource/PixelMplus/PixelMplus12-Regular.ttf", FR_PRIVATE, NULL);
 	m_fontHandle = CreateFontToHandle("PixelMplus12", 30, -1);
+	m_smallFontHandle = CreateFontToHandle("PixelMplus12", 20, -1);
 
 	m_rootNode = new Node;
 
 	//当たった敵を取得
 	m_enemy = m_player->GetTargetEnemy();
+
+	m_fadeState = FadeState::Fade;
+	m_timer = 0;
 
 	//背景
 	m_rootNode->AddChild(new Actor2D("grassland4.jpg", Screen::Center, DrawLayer::BackgroundLayer));
@@ -60,15 +65,12 @@ void BattleScene::Finalize()
 		m_rootNode = nullptr;
 	}
 
-
-
 }
 
 void BattleScene::Update()
-{
-	//敵のHP表示
-	//Debug::Log("Enemy HP: %d\n", m_enemy ? m_enemy->m_status.GetHp() : 0);
+{	
 
+	m_timer += Time::GetInstance()->GetDeltaTime();
 
 	switch (m_fadeState)
 	{
@@ -82,46 +84,56 @@ void BattleScene::Update()
 
 	case FadeState::Run:
 
-
-		//勝敗のシーン追加や切り替え
-		if (m_enemy->m_status.IsDead() && !m_state->isBattel())	//敵が死んだらプレイヤーの勝ち
+		//戦闘が終わったら
+		if (!m_state->isBattel())
 		{
 
-			//経験値を獲得
-			m_player->m_status.GainExp(m_enemy->GetExpReward());
+			//勝敗のシーン追加や切り替え
+			if (m_enemy->m_status.IsDead())	//敵が死んだらプレイヤーの勝ち
+			{
 
-			//レベルが上がったかどうかの判定
-			if (m_player->CheckLevelUp())
-			{
-				//レベルアップのシーンに切り替える
-				//SceneManager::GetInstance()->PushScene());
-			}
-			else
-			{
+				//経験値を獲得
+				m_player->m_status.GainExp(m_enemy->GetExpReward());
+
+				//リザルトデータに各データを加算する
+				m_resultData->AddEnemies(1);
+				m_resultData->AddExp(m_enemy->GetExpReward());
+				m_resultData->AddPlayTime(m_timer);	
+
 
 				ScreenFade::GetInstance()->StartFadeOut(0.5f, true);
 
 				//当たった敵のリセット
 				m_player->ResetTargetEnemy();
 
-				Physics2D::GetInstance()->Active();
 				SceneManager::GetInstance()->PopScene();
 
 
+
+			}
+			else if(m_player->m_status.IsDead()) //プレイヤーが死んだらプレイヤーの負け
+			{
+				//シーンゲームに戻す(死亡処理はシーンゲームの方で書く)
+
+				SceneManager::GetInstance()->PopScene();
+
+			}
+			else
+			{
+
+				//勝敗に入らなかったら逃げたことにする
+
+				//当たった敵のリセット
+				m_player->ResetTargetEnemy();
+
+				ScreenFade::GetInstance()->StartFadeOut(0.5f, true);
+
+				SceneManager::GetInstance()->PopScene();
+
 			}
 
-
-
-			//SceneManager::GetInstance()->PushScene()
-
 		}
-		else if(m_player->m_status.IsDead() && !m_state->isBattel()) //プレイヤーが死んだらプレイヤーの負け
-		{
-			//シーンゲームに戻す(死亡処理はシーンゲームの方で書く)
 
-			SceneManager::GetInstance()->PopScene();
-
-		}
 
 
 
@@ -183,6 +195,15 @@ void BattleScene::Draw()
 		m_enemy->m_status.GetHp(),
 		m_enemy->m_status.GetMaxHp(),
 		120, 15
+	);
+	//敵のレベル表示
+	DrawFormatStringToHandle(
+		static_cast<int>(m_drawingEnemy->GetPosition().x - 62),
+		static_cast<int>(m_drawingEnemy->GetPosition().y - 70),
+		GetColor(0, 0, 0),
+		m_smallFontHandle,
+		"Lv: %d",
+		m_enemy->m_status.GetLevel()
 	);
 
 

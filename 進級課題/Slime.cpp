@@ -1,9 +1,17 @@
 #include "Slime.h"
 #include "Camera.h"
 
-Slime::Slime(const TileContext& tile, Camera* camera) :
-	Enemy(DrawLayer::EnemyLayer, Tag::Enemy, Rigidbody2D::Type::Dynamic, Convert(LoadKeyValueFile("Data/Enemy/Slime/Status.txt"))),
-	m_camera(camera),
+Slime::Slime(const TileContext& tile) :
+	Enemy(
+		DrawLayer::EnemyLayer,
+		Tag::Enemy, 
+		Rigidbody2D::Type::Dynamic, 
+		Convert(LoadKeyValueFile("Data/Enemy/Slime/Status.txt")),
+		StatusIncreaseValue{ UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin, UpExpReward },
+		EnemyLevelParam{ Multiplier, MinOffset, MaxOffset },
+		static_cast<int>(tile.pos.x / tile.tileSize),	//距離(メートル)
+		LevelPerDistance
+		),
 	m_tileContext(tile),
 	m_size(0, 0),
 	m_offsetCol(0, 0),
@@ -14,9 +22,7 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 	m_offsetPos = Vector2(m_tileContext.tileSize / 2, m_tileContext.tileSize - (m_size.y / 2));
 
 	m_collider = new BoxCollider(m_size, m_offsetCol);
-	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
-
-	SetDrawOrder(DrawLayer::EnemyLayer);
+	m_transform.position = (m_tileContext.pos - Camera::GetInstance()->GetStagePos() + m_offsetPos);
 
 	//アニメデータ
 	AnimeData =
@@ -34,6 +40,7 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 		m_sprite->Register(anime);
 	}
 	m_sprite->gridSize = GridSize;
+	m_sprite->flipX = true;
 
 	m_transform.scale = 2.0f;	//スライムは小さいので、少し大きくする
 
@@ -42,7 +49,7 @@ Slime::Slime(const TileContext& tile, Camera* camera) :
 void Slime::Update()
 {
 
-	m_transform.position = (m_tileContext.pos - m_camera->GetPosition() + m_offsetPos);
+	m_transform.position = (m_tileContext.pos - Camera::GetInstance()->GetStagePos() + m_offsetPos);
 
 	if(m_status.IsDead())
 	{

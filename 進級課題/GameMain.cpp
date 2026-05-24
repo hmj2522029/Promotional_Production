@@ -1,6 +1,8 @@
 #include "GameMain.h"
 #include "GameConfig.h"
 #include "SceneTitle.h"
+#include "PlayerData.h"
+#include "TotalData.h"
 #include "MyLib.h"
 #include "DxLib.h"
 
@@ -43,6 +45,9 @@ void GameMain::Run()
 
 	// デバッグコンソール起動
 	Debug::Initialize();
+
+	PlayerData::GetInstance()->Initialize();
+	TotalData::GetInstance()->Initialize();
 
 	//シーン起動
 	SceneManager::GetInstance()->Setup(new SceneTitle);

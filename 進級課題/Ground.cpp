@@ -2,9 +2,8 @@
 #include "Camera.h"
 #include "HitBox.h"
 
-Ground::Ground(const TileContext& tile, Camera* camera) :
+Ground::Ground(const TileContext& tile) :
 	Actor2D(DrawLayer::GroundLayer ,Tag::Ground, Rigidbody2D::Type::Static),
-	m_camera(camera),
 	m_tileContext(tile),
 	m_size(0, 0),
 	m_center(0, 0),
@@ -15,7 +14,7 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 	m_size = Vector2(m_tileContext.tileSize, m_tileContext.tileSize * 3);
 
 	m_center = Vector2(m_size) / 2;
-	m_transform.position = m_tileContext.pos - m_camera->GetPosition() + m_center - m_offsetPos;
+	m_transform.position = m_tileContext.pos - Camera::GetInstance()->GetStagePos() + m_center - m_offsetPos;
 
 	m_collider = new BoxCollider(m_size, m_offsetCol);
 
@@ -30,7 +29,7 @@ Ground::Ground(const TileContext& tile, Camera* camera) :
 
 void Ground::Update()
 {
-	m_transform.position = m_tileContext.pos - m_camera->GetPosition() + m_center - Vector2(0, 95);
+	m_transform.position = m_tileContext.pos - Camera::GetInstance()->GetStagePos() + m_center - Vector2(0, 95);
 
 
 	if (m_transform.position.x + m_tileContext.tileSize <= Screen::Left)

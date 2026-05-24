@@ -1,28 +1,36 @@
 #pragma once
 #include "MyLib.h"
 
+class PrepPlayerController;
+class SceneStatus;
+class SceneCredit;
+
 class ScenePrep : public SceneBase
 {
 
 private:
 
 	Node* m_rootNode;
-	Player* m_player;
+	PrepPlayerController* m_playerController;
+	SceneStatus* m_sceneStatus;
+	SceneCredit* m_sceneCredit;
 	int m_fontHandle;	//フォントハンドル
-
 
 public:
 
 	enum class SceneSelectionType
 	{
 		SceneGame,		//ゲームシーン
+		SceneStatus,	//タイトルシーン
 		SceneCredits	//クレジット情報シーン
 	};
 	 
 
 	ScenePrep() :
 		m_rootNode(nullptr),
-		m_player(nullptr),
+		m_playerController(nullptr),
+		m_sceneStatus(nullptr),
+		m_sceneCredit(nullptr),
 		m_fontHandle(0)
 	{ }
 

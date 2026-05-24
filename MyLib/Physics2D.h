@@ -12,7 +12,7 @@ class Physics2D
 private:
 
 	static constexpr float Gravity = 9.8f;          // d—Í‰Á‘¬“x
-	static constexpr float LimitSpeedFall = 50.0f;   // Å‘å—‰º‘¬“x
+	static constexpr float LimitSpeedFall = 50.0f;  // Å‘å—‰º‘¬“x
 	static constexpr int LimitDistance =            // Õ“Ë”»’è‚Ì‹——£§ŒÀ(‰æ–Ê‚Ì‘ÎŠpü‚Ì”¼•ª‚Ì’·‚³‚Ì2æ)
         ((std::max)(Screen::Width, Screen::Height) / 2) *
         ((std::max)(Screen::Width, Screen::Height) / 2);
@@ -48,9 +48,10 @@ public:
         return &instance;
     }
 
-	// •¨—‰‰Z‚Ì—LŒø‰»E–³Œø‰»
+	// •¨—‰‰Z‚Ì—LŒø‰»
     void Active() { m_isActive = true; }
 
+    //•¨—‰‰Z‚Ì–³Œø‰»
     void Deactive() { m_isActive = false; }
 
 	// Actor2D‚Ì“o˜^‚Æíœ

@@ -145,15 +145,21 @@
     <ClInclude Include="EnemyFactory.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameMain.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="HitBox.h" />
     <ClInclude Include="Hole.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerData.h" />
+    <ClInclude Include="PrepPlayerController.h" />
+    <ClInclude Include="ResultData.h" />
+    <ClInclude Include="SceneClear.h" />
+    <ClInclude Include="SceneCredit.h" />
     <ClInclude Include="SceneGame.h" />
+    <ClInclude Include="SceneLevelUp.h" />
+    <ClInclude Include="SceneLoading.h" />
     <ClInclude Include="ScenePrep.h" />
+    <ClInclude Include="SceneResults.h" />
     <ClInclude Include="SceneSelectionButton.h" />
     <ClInclude Include="SceneStatus.h" />
     <ClInclude Include="SceneTitle.h" />
@@ -164,6 +170,7 @@
     <ClInclude Include="Status.h" />
     <ClInclude Include="TileContext.h" />
     <ClInclude Include="BattleState.h" />
+    <ClInclude Include="TotalData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionButton.cpp" />
@@ -175,15 +182,20 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyFactory.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Hole.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerData.cpp" />
+    <ClCompile Include="PrepPlayerController.cpp" />
+    <ClCompile Include="ResultData.cpp" />
+    <ClCompile Include="SceneClear.cpp" />
+    <ClCompile Include="SceneCredit.cpp" />
     <ClCompile Include="SceneGame.cpp" />
+    <ClCompile Include="SceneLevelUp.cpp" />
     <ClCompile Include="ScenePrep.cpp" />
+    <ClCompile Include="SceneResults.cpp" />
     <ClCompile Include="SceneSelectionButton.cpp" />
     <ClCompile Include="SceneStatus.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
@@ -193,6 +205,7 @@
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="Status.cpp" />
     <ClCompile Include="BattleState.cpp" />
+    <ClCompile Include="TotalData.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

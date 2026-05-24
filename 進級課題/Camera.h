@@ -1,18 +1,20 @@
 #pragma once
 #include "MyLib.h"
 
-class Camera : public Actor2D
+class Camera
 {
-public:
-    static constexpr float MoveSpeed = 3.0f;
-    //static constexpr Vector2 Size = Vector2(10, 10);
 
-	Vector2 m_velocity; // カメラの移動速度
-	Vector2 m_position; // カメラの位置
+private:
+    static constexpr float MoveSpeed = 3.5f;
+    static constexpr Vector2 SpawnPos = Vector2(0, 0);
 
-protected:
+    //ステージ用
+	Vector2 m_stageVelocity;     // カメラの移動速度
+    Vector2 m_stagePos;          // カメラの位置(ステージとかの描画用)
 
-    void Update() override;
+	Vector2 m_playerVelocity;    // カメラの移動速度
+	Vector2 m_playerPos;         // カメラの位置(プレイヤー用)
+    
 
 public:
 
@@ -26,14 +28,28 @@ public:
 
     Camera();               // コンストラクタ
 
-    //カメラを止める・動かす
-	void Stop() { m_velocity = Vector2(0, 0); }
-	void Move() { m_velocity = Vector2(MoveSpeed, 0); }
+    void Update();
+    void Initialization();
+
+    //カメラを止める・動かす(ステージ)
+	void StopStage() { m_stageVelocity = Vector2(0, 0); }
+	void MoveStage() { m_stageVelocity = Vector2(MoveSpeed, 0); }
 
     //カメラが動いているかどうか
-	bool IsMoving() const { return m_velocity.x != 0; }
+	bool IsMovingStage() const { return m_stageVelocity.x != 0; }
 
-    Vector2 GetPos() const { return m_transform.position; }     // カメラ位置取得
+    Vector2 GetStagePos() const { return m_stagePos; }        // カメラ位置取得
+
+	//カメラを止める・動かす(プレイヤー)
+	void StopPlayer() { m_playerVelocity = Vector2(0, 0); }
+	void MovePlayer() { m_playerVelocity = Vector2(MoveSpeed, 0); }
+
+	//カメラが動いているかどうか
+	bool IsMovingPlayer() const { return m_playerVelocity.x != 0; }
+
+	Vector2 GetPlayerPos() const { return m_playerPos; } // プレイヤー位置取得
+
+
     float GetSpeed() const { return MoveSpeed; }
 
 };

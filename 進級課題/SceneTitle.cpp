@@ -52,7 +52,7 @@ void SceneTitle::Draw()
 	m_rootNode->TreeDraw();
 
 	DrawStringToHandle(
-		Screen::BottomCenter.x - 150, Screen::BottomCenter.y - 150,
+		static_cast<int>(Screen::BottomCenter.x) - 150, static_cast<int>(Screen::BottomCenter.y) - 150,
 		"Press Any Key",
 		GetColor(255, 255, 255),
 		m_fontHandle,

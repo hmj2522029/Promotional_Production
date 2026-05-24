@@ -7,6 +7,7 @@ class Character : public Actor2D
 protected:
 
 	bool m_isAction;	//各キャラクターが行動したかどうか
+	bool m_isRanAway;	//各キャラクターが逃げたかどうか
 
 	//テキストファイルからデータを読み込む関数(共通(単体))
 	std::unordered_map<std::string, std::string> LoadKeyValueFile(const std::string& path);
@@ -24,7 +25,8 @@ public:
 	) :
 		Actor2D(anime, gridSize, pos, drawOrder, tag, type),
 		m_status(),
-		m_isAction(false)
+		m_isAction(false),
+		m_isRanAway(false)
 	{
 	}
 	Character(	//画像
@@ -37,7 +39,8 @@ public:
 	) :
 		Actor2D(image, gtidSize, pos, drawOrder, tag, type),
 		m_status(),
-		m_isAction(false)
+		m_isAction(false),
+		m_isRanAway(false)
 	{
 	}
 	Character(
@@ -49,7 +52,8 @@ public:
 	) :
 		Actor2D(textureName, pos, drawOrder, tag, type),
 		m_status(),
-		m_isAction(false)
+		m_isAction(false),
+		m_isRanAway(false)
 	{
 	}
 	Character(	//アニメーションなし
@@ -69,6 +73,15 @@ public:
 
 	//行動をリセット
 	void ResetAction() { m_isAction = false; }
+
+	//逃げたかどうか
+	bool isRanAway() { return m_isRanAway; }
+
+	//逃げた
+	void RanAway() { m_isRanAway = true; }
+
+	//逃げるのリセット
+	void ResetRanAway() { m_isRanAway = false; }
 
 	//HPバーの描画
 	static void DrawHPBar(int x, int y, int currentHP, int maxHP, int width = 100, int height = 10);

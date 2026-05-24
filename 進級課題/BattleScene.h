@@ -4,6 +4,7 @@
 
 class Player;
 class Enemy;
+class ResultData;
 
 class BattleScene : public SceneBase
 {
@@ -23,20 +24,25 @@ private:
 	Enemy* m_enemy;				//当たった敵(ステータスとかのデータ取得)
 	Actor2D* m_drawingEnemy;	//描画している敵(当たった敵のデータからその敵の描画)
 	BattleState* m_state;		//状態
+	ResultData* m_resultData;	//リザルトデータに加算するためのデータ
 
 	int m_fontHandle;		//フォントハンドル
-
+	int m_smallFontHandle;	//小さいフォントハンドル
+	float m_timer;			//リザルトデータに加算するためのタイマー	
 
 public:
 
-	BattleScene(Player* player) :
+	BattleScene(Player* player, ResultData* resultData) :
 		m_rootNode(nullptr),
 		m_fadeState(FadeState::Fade),
 		m_player(player),
 		m_enemy(nullptr),				//当たった敵
 		m_drawingEnemy(nullptr),		//描画している敵
 		m_state(nullptr),
-		m_fontHandle(0)
+		m_resultData(resultData),
+		m_fontHandle(0),
+		m_smallFontHandle(0),
+		m_timer(0)
 	{
 	}
 	

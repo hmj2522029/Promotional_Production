@@ -10,13 +10,22 @@ class Slime : public Enemy
 {
 private:
 
-	//ステータス情報(初期)
-	static constexpr int Level = 1;			//レベル(初期)
-	static constexpr int Hp = 15;			//HP(初期)
-	static constexpr int Attack = 15;		//攻撃力(初期)
-	static constexpr int Defense = 2;		//防御力(初期)
-	static constexpr int ExpReward = 10;	//倒したときの経験値(初期)
+	static constexpr int LevelPerDistance = 30;	//距離何ごとにレベルを上げるか(メートル)
 
+	//レベルアップの時のステータスの上昇値の範囲
+	static constexpr int UpHpMax = 7;		//レベルアップの時のHPの上昇値の最大値
+	static constexpr int UpHpMin = 4;		//レベルアップの時のHPの上昇値の最小値
+	static constexpr int UpAttackMax = 3;	//レベルアップの時の攻撃力の上昇値の最大値
+	static constexpr int UpAttackMin = 1;	//レベルアップの時の攻撃力の上昇値の最小値
+	static constexpr int UpDefenseMax = 2;	//レベルアップの時の防御力の上昇値の最大値
+	static constexpr int UpDefenseMin = 1;	//レベルアップの時の防御力の上昇値の最小値
+	static constexpr int UpExpReward = 50;	//レベルアップの時の経験値の上昇値
+
+
+	//距離によってレベルを変えるためのパラメータ
+	static constexpr float Multiplier = 0.5f;	// 成長倍率
+	static constexpr int MinOffset = 0;			// 最低補正
+	static constexpr int MaxOffset = 3;			// 最大補正
 
 	static constexpr Vector2 GridSize = Vector2(32, 32);	//グリッドサイズ
 
@@ -24,7 +33,6 @@ private:
 	Vector2 m_offsetPos;	//座標をずらすため()
 	Vector2 m_offsetCol;	//座標をずらすため(当たり判定)
 	TileContext m_tileContext;
-	Camera* m_camera;
 
 protected:
 	virtual void Update() override;
@@ -35,7 +43,7 @@ public:
 	//アニメーションデータ
 	std::vector<Animation2D> AnimeData;
 
-	Slime(const TileContext& tile, Camera* camera);
+	Slime(const TileContext& tile);
 
 	int GetExpReward() const { return m_expReward * m_status.GetLevel(); }
 

@@ -9,7 +9,7 @@ class Enemy;
 class BattleState : public Node
 {
 private:
-	static constexpr float WAITING_TIME = 2.0f;	//‘Ò‹@ŠÔ
+	static constexpr float WAITING_TIME = 1.0f;	//‘Ò‹@ŠÔ
 
 	//ó‘Ô
 	enum class Situation

@@ -30,6 +30,9 @@ void SceneStatus::Initialize()
 void SceneStatus::Finalize()
 {
 
+	DeleteFontToHandle(m_largeFontHandle);
+	DeleteFontToHandle(m_smallFontHandle);
+
 	if (m_rootNode)
 	{
 		m_rootNode->TreeRelease();
@@ -50,6 +53,7 @@ void SceneStatus::Update()
 
 		Physics2D::GetInstance()->Active();
 		SceneManager::GetInstance()->PopScene();
+
 	}
 
 
@@ -63,10 +67,10 @@ void SceneStatus::Draw()
 	m_rootNode->TreeDraw();
 
 	//プレイヤーのステータスを描画
-		//プレイヤーのステータス表示
+	//プレイヤーのステータス表示
 	DrawFormatStringToHandle(	//プレイヤーのレベル表示
-		Screen::Center.x - 45,
-		Screen::Center.y - 80,
+		static_cast<int>(Screen::Center.x) - 45,
+		static_cast<int>(Screen::Center.y) - 80,
 		GetColor(255, 255, 255),
 		m_largeFontHandle,
 		"Lv: %d",
@@ -75,47 +79,65 @@ void SceneStatus::Draw()
 
 
 	DrawFormatStringToHandle(	//プレイヤーのHP表示
-		Screen::Center.x - 100,
-		Screen::Center.y - 20,
+		static_cast<int>(Screen::Center.x) - 100,
+		static_cast<int>(Screen::Center.y) - 20,
 		GetColor(255, 255, 255),
 		m_smallFontHandle,
 		"HP :        / %d",
 		m_player->m_status.GetMaxHp()
 	);
 	NumberDrawer::DrawNumberTextFont(
-		Vector2(Screen::Center.x + 40, Screen::Center.y - 20) ,
+		Vector2(
+			static_cast<int>(Screen::Center.x) + 40,
+			static_cast<int>(Screen::Center.y) - 20
+		) ,
 		m_player->m_status.GetHp(),
 		m_smallFontHandle,
 		Align::Right
 	);
 	DrawFormatStringToHandle(	//プレイヤーの攻撃力表示
-		Screen::Center.x - 100,
-		Screen::Center.y + 25,
+		static_cast<int>(Screen::Center.x) - 100,
+		static_cast<int>(Screen::Center.y) + 25,
 		GetColor(255, 255, 255),
 		m_smallFontHandle,
 		"ATK:"
 	);
 	NumberDrawer::DrawNumberTextFont(
-		Vector2(Screen::Center.x + 110, Screen::Center.y + 25),
+		Vector2(
+			static_cast<int>(Screen::Center.x) + 110,
+			static_cast<int>(Screen::Center.y) + 25
+		),
 		m_player->m_status.GetAttack(),
 		m_smallFontHandle,
 		Align::Right
 	);
 
 	DrawFormatStringToHandle(	//プレイヤーの防御力表示
-		Screen::Center.x - 100,
-		Screen::Center.y + 70,
+		static_cast<int>(Screen::Center.x) - 100,
+		static_cast<int>(Screen::Center.y) + 70,
 		GetColor(255, 255, 255),
 		m_smallFontHandle,
 		"DEF:"
 	);
 	NumberDrawer::DrawNumberTextFont(
-		Vector2(Screen::Center.x + 110, Screen::Center.y + 70),
+		Vector2(
+			static_cast<int>(Screen::Center.x) + 110,
+			static_cast<int>(Screen::Center.y) + 70
+		),
 		m_player->m_status.GetDefense(),
 		m_smallFontHandle,
 		Align::Right
 	);
 
+
+	DrawStringToHandle(
+		static_cast<int>(Screen::Center.x) - 50,
+		static_cast<int>(Screen::Center.y) + 200,
+		"戻る [X]",
+		GetColor(255, 255, 255),
+		m_smallFontHandle,
+		GetColor(0, 0, 0)
+	);
 
 
 

@@ -5,17 +5,17 @@
 
 //敵の生成関数のテンプレート
 template<typename T>
-Enemy* Create(const TileContext& t, Camera* c) {
-	return new T(t, c);
+Enemy* Create(const TileContext& t) {
+	return new T(t);
 }
 
-Actor2D* EnemyFactory::RandomEnemy(const TileContext& tile, Camera* camera)
+Actor2D* EnemyFactory::RandomEnemy(const TileContext& tile)
 {
 	//敵の生成関数の配列
-	static Enemy* (*factory[])(const TileContext&, Camera*) = {
+	static Enemy* (*factory[])(const TileContext&) = {
 	  Create<Slime>,
-	  //??Create<Bat>,
-	  //??Create<Goblin>
+	  //Create<Bat>,
+	  //Create<Goblin>
 	};
 
 	//敵の種類はランダムに決める
@@ -23,7 +23,7 @@ Actor2D* EnemyFactory::RandomEnemy(const TileContext& tile, Camera* camera)
 
 	//敵の種類が配列の範囲内なら生成関数を呼び出す
 	if (enemyType >= 0 && enemyType < std::size(factory)) {
-		return factory[enemyType](tile, camera);
+		return factory[enemyType](tile);
 	}
 
 	return nullptr;

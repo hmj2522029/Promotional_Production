@@ -24,16 +24,27 @@ void BattleState::Update()
 		if (m_player->isAction())
 		{
 
-			//敵が死んだら戦闘終了
-			if (m_enemy->m_status.IsDead())
+			//プレイヤーが逃げれた戦闘終了
+			if (m_player->isRanAway())
 			{
-
-
 				//次の状態を保存
 				m_nextSituation = Situation::EndBattle;
 
 				//待機させる
 				m_situation = Situation::StandBy;
+
+				break;
+			}
+
+			//敵が死んだら戦闘終了
+			if (m_enemy->m_status.IsDead())
+			{
+				//次の状態を保存
+				m_nextSituation = Situation::EndBattle;
+
+				//待機させる
+				m_situation = Situation::StandBy;
+
 
 				break;
 			}
@@ -63,6 +74,20 @@ void BattleState::Update()
 		//行動をしたら敵のターンにする
 		if (m_enemy->isAction())
 		{
+
+			//敵か逃げるたら戦闘終了
+			if (m_enemy->isRanAway())
+			{
+				//次の状態を保存
+				m_nextSituation = Situation::EndBattle;
+
+				//待機させる
+				m_situation = Situation::StandBy;
+
+				break;
+
+			}
+
 
 			//プレイヤーが死んだら戦闘終了
 			if (m_player->m_status.IsDead())
@@ -119,6 +144,13 @@ void BattleState::Update()
 		break;
 
 	case Situation::EndBattle:
+
+		//逃げるリセット
+		m_player->ResetRanAway();
+
+		//プレイヤーの行動をリセット
+		m_player->ResetAction();
+
 
 		//シーンの切り替えはBattleSceneで行う
 		m_isBattle = false;
