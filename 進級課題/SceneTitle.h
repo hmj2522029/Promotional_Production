@@ -8,6 +8,7 @@ private:
 
 	Node* m_rootNode;
 	int m_fontHandle;			//フォントハンドル
+	int m_bgm;					//BGM	
 	float m_waitTransitionTime;	//遷移までの待ち時間	
 
 
@@ -16,6 +17,7 @@ public:
 	SceneTitle() :
 		m_rootNode(nullptr),
 		m_fontHandle(0),
+		m_bgm(0),
 		m_waitTransitionTime(WaitTransitionTime)
 	{ }
 

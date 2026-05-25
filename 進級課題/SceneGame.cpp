@@ -54,6 +54,12 @@ void SceneGame::Initialize()
 	//クリアシーン
 	m_sceneClear = new SceneClear(m_resultData);
 
+
+	// BGM
+	m_bgm = SoundLoader::GetInstance()->LoadAndGetId("sound/ゲーム.mp3");
+	ChangeVolumeSoundMem(70, m_bgm);
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP);
+
 }
 
 void SceneGame::Finalize()
@@ -108,6 +114,9 @@ void SceneGame::Finalize()
 		delete m_sceneClear;
 		m_sceneClear = nullptr;
 	}
+
+	// BGM
+	SoundLoader::GetInstance()->Delete(m_bgm);
 
 
 }

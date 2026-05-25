@@ -15,6 +15,7 @@ private:
 	SceneStatus* m_sceneStatus;
 	SceneCredit* m_sceneCredit;
 	int m_fontHandle;	//フォントハンドル
+	int m_bgm;			//BGM
 
 public:
 
@@ -31,7 +32,8 @@ public:
 		m_playerController(nullptr),
 		m_sceneStatus(nullptr),
 		m_sceneCredit(nullptr),
-		m_fontHandle(0)
+		m_fontHandle(0),
+		m_bgm(0)
 	{ }
 
 

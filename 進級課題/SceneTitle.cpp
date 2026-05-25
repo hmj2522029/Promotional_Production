@@ -15,6 +15,10 @@ void SceneTitle::Initialize()
 	//タイトル
 	m_rootNode->AddChild(new Actor2D("title.png", Screen::Center - Vector2(0, 120), DrawLayer::UILayer));
 
+	// BGM
+	m_bgm = SoundLoader::GetInstance()->LoadAndGetId("sound/タイトルBGM.mp3");
+	ChangeVolumeSoundMem(150, m_bgm);
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP);
 
 }
 
@@ -28,6 +32,9 @@ void SceneTitle::Finalize()
 		delete m_rootNode;
 		m_rootNode = nullptr;
 	}
+
+	// BGM
+	SoundLoader::GetInstance()->Delete(m_bgm);
 
 }
 

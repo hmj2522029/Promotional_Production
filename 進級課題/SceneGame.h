@@ -33,8 +33,9 @@ private:
 	SceneClear* m_sceneClear;
 	FadeState m_fadeState;
 
-	int m_fontHandle;	//フォントハンドル
+	int m_fontHandle;		//フォントハンドル
 	int m_largeFontHandle;	//大きいフォントのハンドル
+	int m_bgm;				//BGM
 
 public:
 
@@ -50,7 +51,8 @@ public:
 		m_sceneClear(nullptr),
 		m_fadeState(FadeState::Run),
 		m_fontHandle(0),
-		m_largeFontHandle(0)
+		m_largeFontHandle(0),
+		m_bgm(0)
 	{ }
 
 	virtual void Initialize() override;

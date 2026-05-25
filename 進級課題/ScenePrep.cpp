@@ -39,6 +39,12 @@ void ScenePrep::Initialize()
 	m_sceneCredit = new SceneCredit();
 	m_sceneCredit->Initialize();
 
+
+	// BGM
+	m_bgm = SoundLoader::GetInstance()->LoadAndGetId("sound/‘Ò‹@BGM.mp3");
+	ChangeVolumeSoundMem(150, m_bgm);
+	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP);
+
 }
 
 void ScenePrep::Finalize()
@@ -69,6 +75,8 @@ void ScenePrep::Finalize()
 	}
 
 
+	// BGM
+	SoundLoader::GetInstance()->Delete(m_bgm);
 
 }
 
