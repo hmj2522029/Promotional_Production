@@ -18,9 +18,9 @@ StageManager::StageManager() :
 	m_stage(nullptr),
 	m_prevStageIndex(-1),
 	m_worldColumn(0),
-	m_localColumn(0),
+	m_localColumn(0),    
 	m_screenStage(1),
-	m_situation(Situation::EarlyStage)
+	m_situation(Situation::LateStage)
 {
 	
 	m_mapEarlyStageData = LoadStageData("Data/Stage/EarlyStage/Stage.txt");

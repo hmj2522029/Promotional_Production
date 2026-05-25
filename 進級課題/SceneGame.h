@@ -49,7 +49,8 @@ public:
 		m_resultData(nullptr),
 		m_sceneClear(nullptr),
 		m_fadeState(FadeState::Run),
-		m_fontHandle(0)
+		m_fontHandle(0),
+		m_largeFontHandle(0)
 	{ }
 
 	virtual void Initialize() override;

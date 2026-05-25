@@ -133,8 +133,8 @@ void SceneGame::Update()
 
 		Camera::GetInstance()->Update();
 
-		if (m_resultData->GetDistance() > 300) { m_stageManager->SetSituation(m_stageManager->MiddleStage); }
-		else if (m_resultData->GetDistance() > 700) { m_stageManager->SetSituation(m_stageManager->LateStage); }
+		if (m_resultData->GetDistance() > 400) { m_stageManager->SetSituation(m_stageManager->MiddleStage); }
+		else if (m_resultData->GetDistance() > 800) { m_stageManager->SetSituation(m_stageManager->LateStage); }
 	
 		if (m_resultData->GetDistance() >= 1000 - m_stageManager->GetMaxScreenStage() + 2)
 		{

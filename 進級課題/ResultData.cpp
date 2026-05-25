@@ -16,7 +16,7 @@ void ResultData::Update()
 	m_data.m_playTime += Time::GetInstance()->GetDeltaTime();
 
 	//距離を更新する(プレイヤーがどれぐらい進んだか)
-	m_data.m_distance = Camera::GetInstance()->GetPlayerPos().x / m_tile;
+	m_data.m_distance = static_cast<int>(Camera::GetInstance()->GetPlayerPos().x) / m_tile;
 
 }
 

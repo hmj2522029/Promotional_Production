@@ -26,15 +26,15 @@ private:
 	static constexpr Vector2 SpawnPos = Vector2(250, 478);	// 初期位置
 	static constexpr float InvincibleTime = 1.5f;			// 無敵時間
 	static constexpr float JumpScale = 9.0f;
-	static constexpr float Speed = 3.0f;		
+	static constexpr float Speed = 3.5f;		
 	static constexpr Vector2 Size = Vector2(25, 32);
 
 	//レベルアップの時のステータスの上昇値の範囲
 	static constexpr int UpHpMax = 10;		//レベルアップの時のHPの上昇値の最大値
 	static constexpr int UpHpMin = 5;		//レベルアップの時のHPの上昇値の最小値
-	static constexpr int UpAttackMax = 5;	//レベルアップの時の攻撃力の上昇値の最大値
+	static constexpr int UpAttackMax = 3;	//レベルアップの時の攻撃力の上昇値の最大値
 	static constexpr int UpAttackMin = 2;	//レベルアップの時の攻撃力の上昇値の最小値
-	static constexpr int UpDefenseMax = 3;	//レベルアップの時の防御力の上昇値の最大値
+	static constexpr int UpDefenseMax = 2;	//レベルアップの時の防御力の上昇値の最大値
 	static constexpr int UpDefenseMin = 1;	//レベルアップの時の防御力の上昇値の最小値
 
 

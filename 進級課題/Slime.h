@@ -10,7 +10,7 @@ class Slime : public Enemy
 {
 private:
 
-	static constexpr int LevelPerDistance = 30;	//距離何ごとにレベルを上げるか(メートル)
+	static constexpr int LevelPerDistance = 20;	//距離何ごとにレベルを上げるか(メートル)
 
 	//レベルアップの時のステータスの上昇値の範囲
 	static constexpr int UpHpMax = 7;		//レベルアップの時のHPの上昇値の最大値
@@ -19,7 +19,7 @@ private:
 	static constexpr int UpAttackMin = 1;	//レベルアップの時の攻撃力の上昇値の最小値
 	static constexpr int UpDefenseMax = 2;	//レベルアップの時の防御力の上昇値の最大値
 	static constexpr int UpDefenseMin = 1;	//レベルアップの時の防御力の上昇値の最小値
-	static constexpr int UpExpReward = 50;	//レベルアップの時の経験値の上昇値
+	static constexpr int UpExpReward = 30;	//レベルアップの時の経験値の上昇値
 
 
 	//距離によってレベルを変えるためのパラメータ

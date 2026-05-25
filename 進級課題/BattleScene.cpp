@@ -114,6 +114,13 @@ void BattleScene::Update()
 			else if(m_player->m_status.IsDead()) //プレイヤーが死んだらプレイヤーの負け
 			{
 				//シーンゲームに戻す(死亡処理はシーンゲームの方で書く)
+				
+
+				//当たった敵のリセット
+				m_player->ResetTargetEnemy();
+
+				ScreenFade::GetInstance()->StartFadeOut(0.5f, true);
+
 
 				SceneManager::GetInstance()->PopScene();
 

@@ -172,11 +172,6 @@ void Player::Update()
 
 		m_rigidbody2d.velocity.x = m_velocity;
 	}
-
-	Debug::Log("mode: %d\n", (int)m_moveMode);
-	Debug::Log("velocity: %f\n", m_velocity);
-	Debug::Log("posX: %f\n", m_transform.position.x);
-
 }
 
 void Player::Draw()
@@ -290,11 +285,11 @@ void Player::OnCollision(const Actor2D* other)
 	if (other->GetTag() == Tag::Ground)
 	{
 		float playerBottom = m_transform.position.y + Size.y / 2;
-		float groundTop = other->GetTransform().position.y;
+		float groundTop = other->GetTransform().position.y + 40;
 
 		// ã‚©‚çæ‚Á‚Ä‚é”»’è
 		if (m_rigidbody2d.velocity.y >= 0 &&
-			playerBottom <= groundTop + 5.0f) 
+			playerBottom <= groundTop + 1.0f) 
 		{
 			m_isGround = true;
 		}
