@@ -10,7 +10,7 @@ class ObjectFactory
 
 private:
 
-	using TileCreateFunc = Actor2D* (ObjectFactory::*)(const TileContext&);	//タイルを生成する関数の型(引数 Vector2 戻り値 Actor2D)
+	using TileCreateFunc = Actor2D* (ObjectFactory::*)(const TileContext&);	//タイルを生成する関数の型(引数  TileContext 戻り値 Actor2D)
 	std::unordered_map<char, TileCreateFunc> m_tileTable;	//マップ記号とタイル生成関数の対応表(キー = タイル文字 値 = 生成する関数)
 
 	Actor2D* CreateGround(const TileContext& tile);		//地面を生成する関数
