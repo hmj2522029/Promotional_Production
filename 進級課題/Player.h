@@ -47,7 +47,7 @@ private:
 	bool m_isGround;		//地面判定
 	bool m_hasCollided;		//何かのオブジェクトに衝突しているかどうか(初期位置のずれを直すため)
 	bool m_lvelUpFlag;		//レベルアップしているかどうかのフラグ	
-	bool m_isDead;			//死亡しているかどうかのフラグ(シーンの切り替えのタイミングを調整するため)
+	bool m_isDeadAnimeEnds;	//死亡アニメーションが終わっているかのフラグ(シーンの切り替えのタイミングを調整するため)
 	float m_invincibleTime;	//残りの無敵時間
 
 	
@@ -109,7 +109,7 @@ public:
 	void AnimationChange(const char* name, float time = 0) { m_sprite->Play(name, time); }
 
 	//死亡しているかどうかのフラグの取得
-	bool IsDead() const { return m_isDead; }
+	bool IsDeadAnimeEnds() const { return m_isDeadAnimeEnds; }
 
 	// 衝突イベント
 	virtual void OnCollisionEnter(const Actor2D* other) override;

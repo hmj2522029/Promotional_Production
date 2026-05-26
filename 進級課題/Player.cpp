@@ -14,7 +14,7 @@ Player::Player(Vector2 pos):
 	m_isGround(false),
 	m_hasCollided(false),
 	m_lvelUpFlag(false),
-	m_isDead(false),
+	m_isDeadAnimeEnds(false),
 	m_invincibleTime(0)
 {
 
@@ -95,7 +95,7 @@ void Player::Update()
 		m_sprite->Play("Die", 0.0f);
 
 		//アニメーションが終了したら、死亡フラグを立てる
-		if (m_sprite->isAnimationFinished()) m_isDead = true;
+		if (m_sprite->isAnimationFinished()) m_isDeadAnimeEnds = true;
 
 		return;
 	}

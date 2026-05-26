@@ -68,8 +68,6 @@ void StageManager::Update()
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapMiddleStageData));
 			m_localColumn = 0;
 
-			Debug::Log("MiddleStage\n");
-
 			break;
 
 		case Situation::LateStage:

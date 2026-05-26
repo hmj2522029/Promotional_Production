@@ -4,6 +4,7 @@
 #pragma comment(lib, "MyLib_d.lib")
 #else
 #pragma comment(lib, "MyLib.lib")
+
 #endif // _DEBUG
 
 //Root

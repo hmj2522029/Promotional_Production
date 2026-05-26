@@ -186,14 +186,14 @@ void SceneGame::Update()
 	
 		}
 
-		if (m_player->IsDead())
+		//ステージを止める
+		if(m_player->m_status.IsDead())Camera::GetInstance()->StopStage();
+
+		if (m_player->IsDeadAnimeEnds())
 		{
 
 			//初期化
-			m_sceneResults->Initialize();
-
-			//ステージを止める
-			Camera::GetInstance()->StopStage();
+			m_sceneResults->Initialize();			
 
 			//プレイヤーのデータ保存
 			PlayerData::GetInstance()->SavePlayerStatus(m_player->ToPlayerStatus());
