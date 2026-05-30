@@ -142,8 +142,6 @@ void BattleScene::Update()
 		}
 
 
-
-
 		break;
 	}
  

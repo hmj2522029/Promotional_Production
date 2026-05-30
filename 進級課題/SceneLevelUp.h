@@ -1,5 +1,6 @@
 #pragma once
 #include "MyLib.h"
+#include <vector>
 
 class Player;
 
@@ -48,6 +49,11 @@ private:
 	int m_width;	
 	int m_height;
 
+	int m_se;	//SE
+	int m_step;	//SEのタイミングを管理する用
+
+	std::vector<float> m_timings = { 1.0f, 2.0f, 3.0f, 4.0f };	//SEを鳴らすタイミング
+
 public:
 
 	SceneLevelUp(Player* player) :
@@ -60,7 +66,9 @@ public:
 		m_largeFontHandle(0),
 		m_smallFontHandle(0),
 		m_width(0),
-		m_height(0)
+		m_height(0),
+		m_se(0),
+		m_step(0)
 	{ }
 
 	virtual void Initialize() override;

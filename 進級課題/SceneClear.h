@@ -1,6 +1,7 @@
 #pragma once
 #include "MyLib.h"
 #include "ResultData.h"
+#include <vector>
 
 class SceneClear : public SceneBase
 {
@@ -19,7 +20,11 @@ private:
 	int m_hours;			//時間
 	int m_minutes;			//分
 	int m_seconds;			//秒
+	int m_se;				//SE
+	int m_step;				//SEのタイミングを管理する用
+	bool m_isEnding;
 
+	std::vector<float> m_timings = { 1.0f, 2.0f, 3.0f, 4.0f };	//SEを鳴らすタイミング
 
 public:
 	SceneClear(ResultData* data) :
@@ -31,7 +36,10 @@ public:
 		m_totalSeconds(0),
 		m_hours(0),
 		m_minutes(0),
-		m_seconds(0)
+		m_seconds(0),
+		m_se(0),
+		m_step(0),
+		m_isEnding(false)
 	{
 	}
 

@@ -36,14 +36,15 @@ protected:
 		int maxOffset = 0;    // 最大補正
 	};
 
-	int m_expReward;			//倒したときの経験値(現在)
+	int m_expReward;		//倒したときの経験値(現在)
+	int m_defenseSE;		//防御のSE
+	int m_escapeSE;			//逃走のSE
 
 	//敵のレベルに応じて全ステータスの上昇をさせる関数
 	void LevelUpStatus(int lv, StatusIncreaseValue increaseValue);
 
 	//テキストファイルから読み込んだデータをEnemyData構造体に変換する関数(map → 構造体)
 	EnemyData Convert(const std::unordered_map<std::string, std::string>& data);
-
 
 	//距離に応じて敵のレベルを設定する関数
 	void EnemyLevelSetting(EnemyLevelParam param, StatusIncreaseValue increaseValue, int distance, int levelPerDistance);
@@ -135,16 +136,10 @@ public:
 
 	int GetExpReward() const { return m_expReward; }
 
+	void PlayDefenseSE() { PlaySoundMem(m_defenseSE, DX_PLAYTYPE_BACK); }
+	void PlayEscapeSE() { PlaySoundMem(m_escapeSE, DX_PLAYTYPE_BACK); }
+
 	//初期化をまとめる関数
-	void Init(const EnemyData enemy, const StatusIncreaseValue increaseValue, const EnemyLevelParam enemyLevelParam, const int distance, const int levelPerDistance)
-	{
-		//ステータス初期化
-		m_status.InitializeStatus(enemy.Level, enemy.Hp, enemy.Attack, enemy.Defense);
+	void Init(const EnemyData enemy, const StatusIncreaseValue increaseValue, const EnemyLevelParam enemyLevelParam, const int distance, const int levelPerDistance);
 
-		//敵共通の情報の初期化
-		InitializeEnemy(enemy.ExpReward);
-
-		//レベル設定
-		EnemyLevelSetting(enemyLevelParam, increaseValue, distance, levelPerDistance);
-	}
 };

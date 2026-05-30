@@ -4,7 +4,6 @@
 void BattleCommand::AttackCommand(Character* action, Character* target)
 {
 
-	Debug::Log("AttackCommand executed!\n");
 	bool penetration = false;	// 貫通攻撃かどうかのフラグ（例: スキルや特定の武器で貫通攻撃を実装する場合に使用）
 	int damage = action->m_status.CalculateDamage(target->m_status, penetration);
 	target->m_status.TakeDamage(damage);
@@ -17,7 +16,6 @@ void BattleCommand::AttackCommand(Character* action, Character* target)
 
 void BattleCommand::DefenseCommand(Character* action)
 {
-	Debug::Log("DefenseCommand executed!\n");
 
 	// 防御状態にする
 	action->m_status.StartDefend();
@@ -33,7 +31,6 @@ void BattleCommand::DefenseCommand(Character* action)
 void BattleCommand::EscapeCommand(Character* action)
 {
 
-	Debug::Log("EscapeCommand executed!\n");
 
 	//逃走成功の確率を計算する
 	int escapeChance = 30;			// 基本の逃走成功率（例: 50%）
@@ -41,7 +38,6 @@ void BattleCommand::EscapeCommand(Character* action)
 	if (randomValue < escapeChance)
 	{
 		// 逃走成功
-		Debug::Log("Escape successful!\n");
 
 		action->RanAway();
 
@@ -49,7 +45,7 @@ void BattleCommand::EscapeCommand(Character* action)
 	else
 	{
 		// 逃走失敗
-		Debug::Log("Escape failed!\n");
+		//何もしない
 	}
 
 	//キャラクターは行動した

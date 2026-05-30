@@ -128,14 +128,23 @@ void BattleState::Update()
 			if (ActionSelection < 70)	//0‚©‚ç70(70%)
 			{
 				m_battlecommand.AttackCommand(m_enemy, m_player);
+
+				m_player->PlayDamageSE();	//ƒ_ƒ[ƒWSE‚ğÄ¶
+
 			}
 			else if(ActionSelection < 90)	//70‚©‚ç90(20%) 
 			{
 				m_battlecommand.DefenseCommand(m_enemy);
+
+				m_enemy->PlayDefenseSE();	//–hŒäSE‚ğÄ¶
+
 			}
 			else //90‚©‚ç100(10%)
 			{
 				m_battlecommand.EscapeCommand(m_enemy);
+
+				m_enemy->PlayEscapeSE();	//“¦‘–SE‚ğÄ¶
+
 			}
 
 		}

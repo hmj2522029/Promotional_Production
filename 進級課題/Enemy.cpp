@@ -20,13 +20,6 @@ void Enemy::LevelUpStatus(int lv, StatusIncreaseValue increaseValue)
 		m_expReward += increaseValue.expReward;	//経験値の上昇値は固定
 	}
 
-	Debug::Log("Level: %d\n", m_status.GetLevel());
-	Debug::Log("Hp: %d\n", m_status.GetHp());
-	Debug::Log("Attack: %d\n", m_status.GetAttack());
-	Debug::Log("Defense: %d\n", m_status.GetDefense());
-	Debug::Log("ExpReward: %d\n", m_expReward);
-	Debug::Log("MaxHp: %d\n", m_status.GetMaxHp());
-
 }
 
 
@@ -71,9 +64,6 @@ void Enemy::EnemyLevelSetting(const EnemyLevelParam param, const StatusIncreaseV
 	//レベルの下限を1にする
 	if (level < 1) level = 1;
 
-	Debug::Log("baseLevel: %d\n", baseLevel);
-	Debug::Log("level: %d\n", level);
-
 	//敵のレベルに応じてステータスを上昇させる
 	LevelUpStatus(
 		level, 
@@ -82,3 +72,14 @@ void Enemy::EnemyLevelSetting(const EnemyLevelParam param, const StatusIncreaseV
 
 }
 
+void Enemy::Init(const EnemyData enemy, const StatusIncreaseValue increaseValue, const EnemyLevelParam enemyLevelParam, const int distance, const int levelPerDistance)
+{
+	//ステータス初期化
+	m_status.InitializeStatus(enemy.Level, enemy.Hp, enemy.Attack, enemy.Defense);
+
+	//敵共通の情報の初期化
+	InitializeEnemy(enemy.ExpReward);
+
+	//レベル設定
+	EnemyLevelSetting(enemyLevelParam, increaseValue, distance, levelPerDistance);
+}

@@ -20,7 +20,7 @@ StageManager::StageManager() :
 	m_worldColumn(0),
 	m_localColumn(0),    
 	m_screenStage(1),
-	m_situation(Situation::LateStage)
+	m_situation(Situation::EarlyStage)
 {
 	
 	m_mapEarlyStageData = LoadStageData("Data/Stage/EarlyStage/Stage.txt");
@@ -33,25 +33,27 @@ StageManager::StageManager() :
 
 void StageManager::Update()
 {
+	//カメラの位置からタイルの列を計算する
+	int cameraTileX = static_cast<int>(Camera::GetInstance()->GetStagePos().x / TileSize);
 
-	int cameraTileX = static_cast<int>(Camera::GetInstance()->GetStagePos().x / TileSize);		//カメラの位置からタイルの列を計算する
+	//カメラの位置から20列先まで生成する
+	int generateLimit = cameraTileX + 20;	
 
-	int generateLimit = cameraTileX + 20;	//カメラの位置から20列先まで生成する
-
-	while (m_worldColumn < generateLimit)	//生成する列の上限まで生成する
+	//生成する列の上限まで生成する
+	while (m_worldColumn < generateLimit)	
 	{
 		GenerateColumn(m_localColumn, m_screenStage);
 		m_worldColumn++;
 		m_localColumn++;
 
 		m_screenStage++;
-		if(m_screenStage > MaxScreenStage)	//
+		//画面に表示される最大のステージ数を超えたらリセットする
+		if(m_screenStage > MaxScreenStage)
 		{
 			m_screenStage = 1;	
 		}
-
 	}
-
+	 
 
 	if (m_localColumn >= m_stage->GetWidth())	//現在のステージの最後まで生成したら次のステージを生成する
 	{
@@ -65,12 +67,16 @@ void StageManager::Update()
 			break;
 
 		case Situation::MiddleStage:
+
+			Debug::Log("MiddleStage\n");
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapMiddleStageData));
 			m_localColumn = 0;
 
 			break;
 
 		case Situation::LateStage:
+
+			Debug::Log("LateStage\n");
 			m_stage = std::make_unique<StageData>(*GetRandomStage(m_mapLateStageData));
 			m_localColumn = 0;
 			break;

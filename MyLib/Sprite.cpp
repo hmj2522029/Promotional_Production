@@ -173,6 +173,7 @@ void Sprite::Register(const Animation2D& anime)
 
 	//アニメーションモードにする
 	m_mode = SpriteMode::Animation;
+
 }
 void Sprite::Register(const char* textureName)
 {

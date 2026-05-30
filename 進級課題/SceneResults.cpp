@@ -21,6 +21,14 @@ void SceneResults::Initialize()
 	//背景
 	m_rootNode->AddChild(new Actor2D("Result.png", Screen::Center ,DrawLayer::UILayer));
 
+	//SEの読み込み
+	m_se = SoundLoader::GetInstance()->LoadAndGetId("sound/ピコ音.mp3");
+	ChangeVolumeSoundMem(200, m_se);
+
+
+	m_step = 0;
+	m_timer = 0;
+	m_isEnding = false;
 
 }
 
@@ -50,10 +58,23 @@ void SceneResults::Update()
 
 		TotalData::GetInstance()->AddData(m_resultData);
 
+		m_isEnding = true;
+
 		SceneManager::GetInstance()->LoadScene(new ScenePrep());
+
 	}
 
+	if(!m_isEnding && m_step < m_timings.size() && m_timer > m_timings[m_step])
+	{
+		PlaySoundMem(m_se, DX_PLAYTYPE_BACK);
+		m_step++;
 
+		if (m_step >= m_timings.size())
+		{
+			m_step = m_timings.size(); 
+		}
+
+	}
 
 }
 
@@ -64,6 +85,8 @@ void SceneResults::Draw()
 
 	if (m_timer > 1.0f)
 	{
+
+
 		//プレイヤーが何メートル進んだかを表示
 		DrawStringToHandle(
 			static_cast<int>(Screen::Center.x) - 150,
@@ -85,6 +108,7 @@ void SceneResults::Draw()
 	}
 	if (m_timer > 2.0f)
 	{
+
 		//獲得した経験値を表示
 		DrawFormatStringToHandle(
 			static_cast<int>(Screen::Center.x) - 150,
@@ -105,6 +129,7 @@ void SceneResults::Draw()
 	}
 	if (m_timer > 3.0f)
 	{
+
 		//倒した敵の数を表示
 		DrawFormatStringToHandle(
 			static_cast<int>(Screen::Center.x) - 150,
@@ -125,6 +150,7 @@ void SceneResults::Draw()
 	}
 	if (m_timer > 4.0f)
 	{
+
 		//プレイ時間を表示
 		DrawFormatStringToHandle(
 			static_cast<int>(Screen::Center.x) - 150,

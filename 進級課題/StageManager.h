@@ -30,8 +30,8 @@ private:
 
 
 	static constexpr int UiHeight = 195;	//UIを表示するためのyの範囲
-	static constexpr int PlayerY  = 500;	//置きたいプレイヤーの位置
-	static constexpr int GroundY  = 544;	//置きたいブロックの位置
+	static constexpr int PlayerY = 500;	//置きたいプレイヤーの位置
+	static constexpr int GroundY = 544;	//置きたいブロックの位置
 	static constexpr int TileSize = 80;		//タイルのサイズ
 
 	static constexpr int MaxScreenStage = 16;	//画面に表示される最大のステージ数(画面の幅 / タイルのサイズ)
@@ -59,7 +59,7 @@ private:
 	//テキストファイルからステージデータを読み込む関数(複数)
 	std::vector<StageData::StageMap>LoadStageData(const std::string& filePath);
 
-		
+
 protected:
 
 	virtual void Update() override;

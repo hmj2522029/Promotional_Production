@@ -34,15 +34,5 @@ void AirGround::Update()
 void AirGround::Draw()
 {
 
-	//DrawBoxAA(
-	//	m_transform.position.x,
-	//	m_transform.position.y,
-	//	m_transform.position.x + m_size.x,
-	//	m_transform.position.y + m_size.y,
-	//	GetColor(0, 255, 255),
-	//	true
-	//);
-
-
 	Actor2D::Draw();
 }

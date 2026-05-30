@@ -37,6 +37,7 @@ private:
 protected:
 	virtual void Update() override;
 	virtual void Draw() override;
+	virtual void Release() override;
 
 public: 
 

@@ -52,8 +52,8 @@ public:
 	// ƒŠƒ\[ƒX‚Ì”jŠü(ID‚ÅÁ‚·)
 	virtual void Delete(int id)
 	{
-		auto data = m_reverseLookup.find(id);
-		Delete_(data->second->first, id, &data->second->second);
+		auto data = m_reverseLookup.at(id);
+		Delete_(data->first, id, &data->second);
 	}
 
 };

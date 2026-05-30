@@ -58,7 +58,23 @@ void SceneGame::Initialize()
 	// BGM
 	m_bgm = SoundLoader::GetInstance()->LoadAndGetId("sound/ゲーム.mp3");
 	ChangeVolumeSoundMem(70, m_bgm);
-	PlaySoundMem(m_bgm, DX_PLAYTYPE_LOOP);
+
+
+	//戦闘のBGM
+	m_battleBgm = SoundLoader::GetInstance()->LoadAndGetId("sound/戦闘BGM.mp3");
+	ChangeVolumeSoundMem(150, m_battleBgm);
+
+	//クリアのBGM
+	m_clearBgm = SoundLoader::GetInstance()->LoadAndGetId("sound/クリア.mp3");
+	ChangeVolumeSoundMem(150, m_clearBgm);
+
+	//リザルトのBGM
+	m_resultBgm = SoundLoader::GetInstance()->LoadAndGetId("sound/リザルト.mp3");
+	ChangeVolumeSoundMem(150, m_resultBgm);
+
+	//レベルアップのBGM
+	m_revelUpBgm = SoundLoader::GetInstance()->LoadAndGetId("sound/レベルアップ.mp3");
+	ChangeVolumeSoundMem(150, m_revelUpBgm);
 
 }
 
@@ -117,7 +133,11 @@ void SceneGame::Finalize()
 
 	// BGM
 	SoundLoader::GetInstance()->Delete(m_bgm);
-
+	SoundLoader::GetInstance()->Delete(m_battleBgm);
+	SoundLoader::GetInstance()->Delete(m_clearBgm);
+	SoundLoader::GetInstance()->Delete(m_resultBgm);
+	SoundLoader::GetInstance()->Delete(m_revelUpBgm);
+	SoundLoader::GetInstance()->Delete("sound/ピコ音.mp3");
 
 }
 
@@ -140,10 +160,14 @@ void SceneGame::Update()
 
 	case FadeState::Run:
 
+
+		//BGMの切り替え
+		PlayChangeBGM(GameState::State_Play);
+
 		Camera::GetInstance()->Update();
 
 		if (m_resultData->GetDistance() > 400) { m_stageManager->SetSituation(m_stageManager->MiddleStage); }
-		else if (m_resultData->GetDistance() > 800) { m_stageManager->SetSituation(m_stageManager->LateStage); }
+		if (m_resultData->GetDistance() > 800) { m_stageManager->SetSituation(m_stageManager->LateStage); }
 	
 		if (m_resultData->GetDistance() >= 1000 - m_stageManager->GetMaxScreenStage() + 2)
 		{
@@ -155,6 +179,9 @@ void SceneGame::Update()
 		if (m_resultData->GetDistance() >= 1000)
 		{
 
+			//BGMをクリアのBGMに切り替える
+			PlayChangeBGM(GameState::State_Clear, false);
+			
 			//リザルトの初期化
 			m_sceneClear->Initialize();
 
@@ -171,6 +198,10 @@ void SceneGame::Update()
 		//戦闘画面に遷移するかどうかの判定
 		if (m_player->GetTargetEnemy() != nullptr)
 		{
+
+			//BGMを戦闘のBGMに切り替える
+			PlayChangeBGM(GameState::State_Battle);
+
 			//フェードアウト
 			ScreenFade::GetInstance()->StartFadeOut(true);
 		
@@ -189,8 +220,11 @@ void SceneGame::Update()
 		//ステージを止める
 		if(m_player->m_status.IsDead())Camera::GetInstance()->StopStage();
 
+		//プレイヤーの死亡アニメが終わったらリザルトシーンに遷移
 		if (m_player->IsDeadAnimeEnds())
 		{
+			//BGMをリザルトのBGMに切り替える
+			PlayChangeBGM(GameState::State_Results);
 
 			//初期化
 			m_sceneResults->Initialize();			
@@ -206,6 +240,9 @@ void SceneGame::Update()
 		//プレイヤーがレベルアップしていたらシーンの追加
 		if (m_player->GetLevelUpFlag())
 		{
+			//BGMをレベルアップのBGMに切り替える
+			PlayChangeBGM(GameState::State_LevelUp, false);
+
 			Physics2D::GetInstance()->Deactive();
 	
 			//レベルアップのシーンに切り替える
@@ -216,6 +253,7 @@ void SceneGame::Update()
 		//ステータス画面の表示
 		if (Keyboard::isDown(KEY_INPUT_X))
 		{
+
 			Physics2D::GetInstance()->Deactive();
 			SceneManager::GetInstance()->PushScene(m_sceneStatus);
 		}
@@ -270,6 +308,54 @@ void SceneGame::Draw()
 	);
 
 
-
 }
 
+void SceneGame::PlayChangeBGM(GameState gameState, bool loop)
+{
+
+	// 同じ状態なら何もしない
+	if (gameState == m_prevState) return;
+
+	//BGMを止める
+	if (m_currentBGM != -1)
+	{
+		StopSoundMem(m_currentBGM);
+	}
+
+	switch (gameState)
+	{
+	case GameState::State_Play:
+		m_currentBGM = m_bgm;
+		break;
+
+	case GameState::State_Battle:
+		m_currentBGM = m_battleBgm;
+		break;
+
+	case GameState::State_LevelUp:
+		m_currentBGM = m_revelUpBgm;
+		break;
+
+	case GameState::State_Results:
+		m_currentBGM = m_resultBgm;
+		break;
+
+	case GameState::State_Clear:
+		m_currentBGM = m_clearBgm;
+		break;
+
+	}
+
+	if (loop)
+	{
+		PlaySoundMem(m_currentBGM, DX_PLAYTYPE_LOOP);
+	}
+	else
+	{
+		PlaySoundMem(m_currentBGM, DX_PLAYTYPE_BACK);
+	}
+
+	// 状態を保存
+	m_prevState = gameState;
+
+}

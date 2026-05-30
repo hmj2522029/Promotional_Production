@@ -15,12 +15,18 @@ Player::Player(Vector2 pos):
 	m_hasCollided(false),
 	m_lvelUpFlag(false),
 	m_isDeadAnimeEnds(false),
-	m_invincibleTime(0)
+	m_prevGround(true),
+	m_invincibleTime(0),
+	m_attackSE(0),
+	m_damageSE(0),
+	m_jumpSE(0),
+	m_landingSE(0),
+	m_defenseSE(0),
+	m_escapeSE(0)
 {
 
 	m_rigidbody2d.velocity.x = 0;
 
-	Debug::Log("velocity: %d\n", m_velocity);
 
 	//ステータスの初期化
 	m_status.InitializeStatus(
@@ -32,6 +38,8 @@ Player::Player(Vector2 pos):
 	);
 
 	m_transform.position = pos;
+	m_rigidbody2d.bounciness = 0;
+
 
 	m_collider = new BoxCollider(Size);
 	m_collider->SetPhysicsBehavior(Tag::Hole, PhysicsBehavior::Trigger);
@@ -49,7 +57,6 @@ Player::Player(Vector2 pos):
 		Animation2D("Jump", "Knight 2D Pixel Art/with_outline/JUMP.png", 5, 5, false),
 	};
 
-	
 
 	// Sprite起動
 	m_sprite = new Sprite();
@@ -61,19 +68,44 @@ Player::Player(Vector2 pos):
 
 	m_transform.scale = 2.0f;
 
+
 }
 
 void Player::Load()
 {
 	Actor2D::Load();
 
+	//SEの読み込み
+	m_jumpSE  = SoundLoader::GetInstance()->LoadAndGetId("sound/ジャンプ音.mp3");
+	ChangeVolumeSoundMem(100, m_jumpSE);
 
+	m_landingSE = SoundLoader::GetInstance()->LoadAndGetId("sound/着地音.mp3");
+	ChangeVolumeSoundMem(100, m_landingSE);
+
+	m_damageSE = SoundLoader::GetInstance()->LoadAndGetId("sound/ダメージ.mp3");
+	ChangeVolumeSoundMem(100, m_damageSE);
+
+	m_attackSE = SoundLoader::GetInstance()->LoadAndGetId("sound/攻撃.mp3");
+	ChangeVolumeSoundMem(100, m_attackSE);
+
+	m_defenseSE = SoundLoader::GetInstance()->LoadAndGetId("sound/防御音.mp3");
+	ChangeVolumeSoundMem(100, m_defenseSE);
+
+	m_escapeSE = SoundLoader::GetInstance()->LoadAndGetId("sound/逃げる.mp3");
+	ChangeVolumeSoundMem(100, m_escapeSE);
 
 }
 
 void Player::Release()
 {
 	Actor2D::Release();
+
+	SoundLoader::GetInstance()->Delete(m_jumpSE);
+	SoundLoader::GetInstance()->Delete(m_landingSE);
+	SoundLoader::GetInstance()->Delete(m_damageSE);
+	SoundLoader::GetInstance()->Delete(m_attackSE);
+	SoundLoader::GetInstance()->Delete(m_defenseSE);
+	SoundLoader::GetInstance()->Delete(m_escapeSE);
 
 
 
@@ -84,6 +116,7 @@ void Player::Update()
 
 	//アップデートを止めている場合は更新しない
 	if (m_stopUpdating) return;
+
 
 	//死んでいたら更新しない
 	if (m_status.IsDead())
@@ -134,6 +167,8 @@ void Player::Update()
 	{
 		m_rigidbody2d.AddForce(Vector2(0, -1) * JumpScale);
 
+		//SEを再生
+		PlaySoundMem(m_jumpSE, DX_PLAYTYPE_BACK);
 
 		//アニメーションを再生する(ジャンプ)
 		m_sprite->Play("Jump", 0.0f);
@@ -172,6 +207,8 @@ void Player::Update()
 
 		m_rigidbody2d.velocity.x = m_velocity;
 	}
+
+
 }
 
 void Player::Draw()
@@ -203,15 +240,24 @@ void Player::ActionSelection(ActionType actionType, Enemy* target)
 		
 	case ActionType::Attack:
 
+		//攻撃SEを再生
+		PlaySoundMem(m_attackSE, DX_PLAYTYPE_BACK);
+		
 		m_command.AttackCommand(this, target);
 
 		break;
 	case ActionType::Defense:
 
+		//防御SEを再生
+		PlaySoundMem(m_defenseSE, DX_PLAYTYPE_BACK);
+
 		m_command.DefenseCommand(this);
 
 		break;
 	case ActionType::Escape:
+
+		//逃走SEを再生
+		PlaySoundMem(m_escapeSE, DX_PLAYTYPE_BACK);
 
 		m_command.EscapeCommand(this);
 
@@ -240,11 +286,17 @@ PlayerData::PlayerStatus Player::ToPlayerStatus() const
 // 衝突イベント
 void Player::OnCollisionEnter(const Actor2D* other)
 {
+
+	if(other->GetTag() == Tag::Ground && !m_prevGround)
+	{
+		//着地音を再生
+		PlaySoundMem(m_landingSE, DX_PLAYTYPE_BACK);
+
+	}
+
 	// 落とし穴
 	if (other->GetTag() == Tag::Hole)
 	{
-		Debug::Log("落ちた");
-
 		//落ちたら即死
 		m_status.InstantDeath();
 	}
@@ -252,8 +304,6 @@ void Player::OnCollisionEnter(const Actor2D* other)
 	//トゲ
 	if (other->GetTag() == Tag::Spike)
 	{
-		Debug::Log("トゲに当たった");
-
 		// 無敵中はダメージを受けない
 		if (m_invincibleTime > 0) return;
 
@@ -267,8 +317,6 @@ void Player::OnCollisionEnter(const Actor2D* other)
 
 	if (other->GetTag() == Tag::Enemy)
 	{
-		Debug::Log("敵に当たった");
-
 		//当たった敵を保存する
 		Enemy* enemy = dynamic_cast<Enemy*>(const_cast<Actor2D*>(other));
 		if (enemy)
@@ -291,7 +339,12 @@ void Player::OnCollision(const Actor2D* other)
 		if (m_rigidbody2d.velocity.y >= 0 &&
 			playerBottom <= groundTop + 1.0f) 
 		{
+
 			m_isGround = true;
+
+			// 前の状態保存
+			m_prevGround = m_isGround;
+
 		}
 	}
 }
@@ -301,6 +354,9 @@ void Player::OnCollisionExit(const Actor2D* other)
 	if (other->GetTag() == Tag::Ground)
 	{
 		m_isGround = false;
+
+		// 前の状態保存
+		m_prevGround = m_isGround;
 	}
 
 
@@ -321,7 +377,7 @@ void Player::OnCollisionExit(const Actor2D* other)
 		{
 			return;
 		}
-	
+
 		m_hasCollided = true;
 	}
 

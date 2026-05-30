@@ -18,6 +18,7 @@ Slime::Slime(const TileContext& tile) :
 	m_offsetPos(0, 0)
 {
 
+
 	m_size = Vector2(18, 18);
 	m_offsetPos = Vector2(m_tileContext.tileSize / 2, m_tileContext.tileSize - (m_size.y / 2));
 
@@ -43,6 +44,11 @@ Slime::Slime(const TileContext& tile) :
 	m_sprite->flipX = true;
 
 	m_transform.scale = 2.0f;	//ƒXƒ‰ƒCƒ€‚Í¬‚³‚¢‚Ì‚ÅA­‚µ‘å‚«‚­‚·‚é
+
+
+	m_defenseSE = SoundLoader::GetInstance()->LoadAndGetId("sound/–hŒä‰¹.mp3");
+	m_escapeSE = SoundLoader::GetInstance()->LoadAndGetId("sound/“¦‚°‚é.mp3");
+
 
 }
 
@@ -84,4 +90,13 @@ void Slime::Draw()
 {
 
 	Actor2D::Draw();
+}
+
+void Slime::Release()
+{
+	Actor2D::Release();
+
+	SoundLoader::GetInstance()->Delete(m_defenseSE);
+	SoundLoader::GetInstance()->Delete(m_escapeSE);
+
 }

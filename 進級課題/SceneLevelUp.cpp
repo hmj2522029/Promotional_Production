@@ -18,6 +18,8 @@ void SceneLevelUp::Initialize()
 	m_width = GetDrawStringWidthToHandle("LEVEL UP!!", static_cast<int>(strlen("LEVEL UP!!")), m_largeFontHandle);
 	m_height = GetFontSizeToHandle(m_largeFontHandle);
 
+	//SEの読み込み
+	m_se = SoundLoader::GetInstance()->LoadAndGetId("sound/ピコ音.mp3");
 
 }
 
@@ -34,7 +36,6 @@ void SceneLevelUp::Finalize()
 		m_rootNode = nullptr;
 	}
 	 
-
 }
 
 void SceneLevelUp::Update()
@@ -57,6 +58,9 @@ void SceneLevelUp::Update()
 				m_player->m_status.GetDefense()
 			);
 
+			//リセット
+			m_step = 0;
+
 			m_player->LevelUp();
 
 			m_state = State::LevelUpTable;
@@ -77,6 +81,13 @@ void SceneLevelUp::Update()
 		break;
 		
 	case State::Wait:
+
+		if (m_step < m_timings.size() && m_timer > m_timings[m_step])
+		{
+			PlaySoundMem(m_se, DX_PLAYTYPE_BACK);
+			m_step++;
+		}
+
 
 		if (Keyboard::isAnyPress() && m_timer > 5.5f)
 		{

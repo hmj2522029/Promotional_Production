@@ -42,13 +42,20 @@ private:
 	BattleCommand m_command;
 	MoveMode m_moveMode;		//移動モード
 
-	float m_velocity;			//移動速度
 	bool m_stopUpdating;	//更新を止めるかどうか
 	bool m_isGround;		//地面判定
 	bool m_hasCollided;		//何かのオブジェクトに衝突しているかどうか(初期位置のずれを直すため)
 	bool m_lvelUpFlag;		//レベルアップしているかどうかのフラグ	
 	bool m_isDeadAnimeEnds;	//死亡アニメーションが終わっているかのフラグ(シーンの切り替えのタイミングを調整するため)
+	bool m_prevGround;		//前のフレームの地面判定
+	float m_velocity;		//移動速度
 	float m_invincibleTime;	//残りの無敵時間
+	int m_jumpSE;			//ジャンプのSE
+	int m_landingSE;		//着地のSE
+	int m_damageSE;			//ダメージを受けたときのSE
+	int m_attackSE;			//攻撃のSE
+	int m_defenseSE;		//防御のSE
+	int m_escapeSE;			//逃走のSE
 
 	
 protected:
@@ -89,6 +96,8 @@ public:
 	void ResetLevelUpFlag() { m_lvelUpFlag = false; }
 
 	void SetMoveMode(MoveMode mode) { m_moveMode = mode; }
+
+	void PlayDamageSE() { PlaySoundMem(m_damageSE, DX_PLAYTYPE_BACK); }
 
 	//レベルアップしているか
 	void LevelUp() { m_status.LevelUp(UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin); }

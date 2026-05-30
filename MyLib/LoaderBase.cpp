@@ -51,5 +51,6 @@ void LoaderBase::Delete_(const std::string& path, int id, LoadData* loadData)
 		m_reverseLookup.erase(id);
 		m_image.erase(path);
 	}
+
 }
 

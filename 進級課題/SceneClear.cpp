@@ -24,7 +24,12 @@ void SceneClear::Initialize()
 	//”wŒi
 	m_rootNode->AddChild(new Actor2D("Clear.png", Screen::Center, DrawLayer::UILayer));
 
+	//SE‚Ì“Ç‚Ýž‚Ý
+	m_se = SoundLoader::GetInstance()->LoadAndGetId("sound/ƒsƒR‰¹.mp3");
 
+	m_step = 0;
+	m_isEnding = false;
+	m_timer = 0;
 
 }
 
@@ -40,7 +45,6 @@ void SceneClear::Finalize()
 		delete m_rootNode;
 		m_rootNode = nullptr;
 	}
-
 }
 
 void SceneClear::Update()
@@ -52,8 +56,24 @@ void SceneClear::Update()
 
 	if (m_timer > 5.5f && Keyboard::isAnyPress())
 	{
+		m_isEnding = true;
+
 		SceneManager::GetInstance()->LoadScene(new SceneTitle());
 	}
+
+	if (!m_isEnding && m_step < m_timings.size() && m_timer > m_timings[m_step])
+	{
+		PlaySoundMem(m_se, DX_PLAYTYPE_BACK);
+		m_step++;
+
+		if (m_step >= m_timings.size())
+		{
+			m_step = m_timings.size();
+		}
+
+	}
+
+
 
 }
 
