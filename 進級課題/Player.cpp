@@ -333,11 +333,15 @@ void Player::OnCollision(const Actor2D* other)
 	if (other->GetTag() == Tag::Ground)
 	{
 		float playerBottom = m_transform.position.y + Size.y / 2;
-		float groundTop = other->GetTransform().position.y + 40;
+		float playerRight = m_transform.position.x + Size.x / 2;
+
+		float groundTop = other->GetTransform().position.y;
+		float groundLeft = other->GetTransform().position.x - 40;
 
 		// ã‚©‚çæ‚Á‚Ä‚é”»’è
 		if (m_rigidbody2d.velocity.y >= 0 &&
-			playerBottom <= groundTop + 1.0f) 
+			playerBottom <= groundTop &&
+			playerRight >= groundLeft + 0.5f) 
 		{
 
 			m_isGround = true;
