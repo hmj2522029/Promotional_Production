@@ -11,6 +11,8 @@ class Slime : public Enemy
 private:
 
 	static constexpr int LevelPerDistance = 20;	//距離何ごとにレベルを上げるか(メートル)
+	static constexpr Vector2 GridSize = Vector2(32, 32);	//グリッドサイズ
+
 
 	//レベルアップの時のステータスの上昇値の範囲
 	static constexpr int UpHpMax = 7;		//レベルアップの時のHPの上昇値の最大値
@@ -27,7 +29,6 @@ private:
 	static constexpr int MinOffset = 0;			// 最低補正
 	static constexpr int MaxOffset = 3;			// 最大補正
 
-	static constexpr Vector2 GridSize = Vector2(32, 32);	//グリッドサイズ
 
 	Vector2 m_size;			//サイズ(当たり判定)
 	Vector2 m_offsetPos;	//座標をずらすため()

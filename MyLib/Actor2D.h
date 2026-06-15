@@ -28,12 +28,6 @@ protected:
 
 public:
 
-	//struct CollisionInfo
-	//{
-	//	Actor2D* other;
-	//	Vector2 resolve;
-	//};
-
 	Actor2D(	//アニメーション用
 		const Animation2D& anime,		//アニメーション
 		const Vector2& gridSize,		//一コマのサイズ
@@ -76,7 +70,7 @@ public:
 	void SetScale(const float scale){ m_transform.scale = scale; }
 
 	// 座標の取得
-	const Vector2 GetPosition() const { return m_transform.position; }
+	Vector2 GetPosition() const { return m_transform.position; }
 
 	// 座標の設定
 	void SetPosition(const Vector2 pos) { m_transform.position = pos; }

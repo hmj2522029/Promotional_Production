@@ -19,7 +19,7 @@ StageManager::StageManager() :
 	m_prevStageIndex(-1),
 	m_worldColumn(0),
 	m_localColumn(0),    
-	m_screenStage(1),
+	m_stageLoopIndex(1),
 	m_situation(Situation::EarlyStage)
 {
 	
@@ -37,20 +37,20 @@ void StageManager::Update()
 	int cameraTileX = static_cast<int>(Camera::GetInstance()->GetStagePos().x / TileSize);
 
 	//カメラの位置から20列先まで生成する
-	int generateLimit = cameraTileX + 20;	
+	int generateLimit = cameraTileX + GenerateAhead;
 
 	//生成する列の上限まで生成する
 	while (m_worldColumn < generateLimit)	
 	{
-		GenerateColumn(m_localColumn, m_screenStage);
+		GenerateColumn(m_localColumn, m_stageLoopIndex);
 		m_worldColumn++;
 		m_localColumn++;
 
-		m_screenStage++;
+		m_stageLoopIndex++;
 		//画面に表示される最大のステージ数を超えたらリセットする
-		if(m_screenStage > MaxScreenStage)
+		if(m_stageLoopIndex > MaxScreenStage)
 		{
-			m_screenStage = 1;	
+			m_stageLoopIndex = 1;	
 		}
 	}
 	 
@@ -84,6 +84,25 @@ void StageManager::Update()
 
 		}
 	}
+
+
+#ifdef _DEBUG
+
+	//デバック用のブロックの画面外に出たブロックの位置を削除す
+	for (auto it = m_debugBlocks.begin(); it != m_debugBlocks.end();)
+	{
+		if (it->x + TileSize < Screen::Left)
+		{
+			it = m_debugBlocks.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+}
+
+#endif
+
 }
 
 void StageManager::Draw()
@@ -126,6 +145,7 @@ void StageManager::GenerateColumn(int column, int screenStage)
 		Vector2 pos(m_worldColumn * TileSize, UiHeight + y * TileSize);
 
 		TileContext tileContext{tile, screenStage, pos, TileSize };	//タイルの情報を作成する
+
 
 		//タイルの種類に応じたオブジェクトを生成する
 		if(Actor2D* obj = ObjectFactory::GetInstance()->CreateObject(tileContext))

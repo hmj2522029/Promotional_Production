@@ -71,15 +71,15 @@ void Enemy::EnemyLevelSetting(const EnemyLevelParam param, const StatusIncreaseV
 	);
 
 }
-
-void Enemy::Init(const EnemyData enemy, const StatusIncreaseValue increaseValue, const EnemyLevelParam enemyLevelParam, const int distance, const int levelPerDistance)
+//const EnemyData enemy, const StatusIncreaseValue increaseValue, const EnemyLevelParam enemyLevelParam, const int distance, const int levelPerDistance
+void Enemy::Init(const EnemyInitData data)
 {
 	//ステータス初期化
-	m_status.InitializeStatus(enemy.Level, enemy.Hp, enemy.Attack, enemy.Defense);
+	m_status.InitializeStatus(data.base.Level, data.base.Hp, data.base.Attack, data.base.Defense);
 
 	//敵共通の情報の初期化
-	InitializeEnemy(enemy.ExpReward);
+	InitializeEnemy(data.base.ExpReward);
 
 	//レベル設定
-	EnemyLevelSetting(enemyLevelParam, increaseValue, distance, levelPerDistance);
+	EnemyLevelSetting(data.levelParam, data.growth, data.distance, data.levelPerDistance);
 }

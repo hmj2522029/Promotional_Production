@@ -37,11 +37,12 @@ private:
 	static constexpr int UpDefenseMax = 2;	//レベルアップの時の防御力の上昇値の最大値
 	static constexpr int UpDefenseMin = 1;	//レベルアップの時の防御力の上昇値の最小値
 
-
+	
 	Enemy* m_targetEnemy;		//当たった時の対象の敵
 	BattleCommand m_command;
 	MoveMode m_moveMode;		//移動モード
 
+	
 	bool m_stopUpdating;	//更新を止めるかどうか
 	bool m_isGround;		//地面判定
 	bool m_hasCollided;		//何かのオブジェクトに衝突しているかどうか(初期位置のずれを直すため)
@@ -50,6 +51,8 @@ private:
 	bool m_prevGround;		//前のフレームの地面判定
 	float m_velocity;		//移動速度
 	float m_invincibleTime;	//残りの無敵時間
+
+	//SE
 	int m_jumpSE;			//ジャンプのSE
 	int m_landingSE;		//着地のSE
 	int m_damageSE;			//ダメージを受けたときのSE

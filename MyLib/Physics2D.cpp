@@ -138,7 +138,7 @@ void Physics2D::Update()
 	
 			// 反射ベクトルを算出
 			const Vector2 Resolve = hitInfo.resolve.Normalized();	//どの方向に押し出すか
-			const float Dot = Vector2::Dot(		 //物体が壁に向かう速度
+			const float Dot = Vector2::Dot(		 //物体が壁にぶつかる速度
 				body1.velocity - body2.velocity, //相対速度(どのぐらいの速さで近づいているか)
 				Resolve							 //衝突方向
 			);	

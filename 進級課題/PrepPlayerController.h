@@ -18,7 +18,6 @@ private:
 
 	Tween m_tween;
 	DemoState m_state;
-	Node* m_rootNode;	
 	Player* m_player;	//プレイヤーへのポインタ
 
 	float m_InterpolatedValue;
@@ -35,7 +34,6 @@ public:
 
 
 	virtual void Update() override;
-	virtual void Draw() override;
 
 	Player* GetPlayer() const { return m_player; }
 

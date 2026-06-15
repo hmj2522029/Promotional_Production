@@ -36,6 +36,33 @@ protected:
 		int maxOffset = 0;    // 最大補正
 	};
 
+	//敵の初期化に必要なデータをまとめた構造体
+	struct EnemyInitData
+	{
+		EnemyData base;
+		StatusIncreaseValue growth;
+		EnemyLevelParam levelParam ;
+		int distance;
+		int levelPerDistance;
+
+		EnemyInitData(
+			EnemyData base = EnemyData(),
+			StatusIncreaseValue growth = StatusIncreaseValue(),
+			EnemyLevelParam levelParam = EnemyLevelParam(),
+			int distance = 0,
+			int levelPerDistance = 10
+		) :
+			base(base),
+			growth(growth),
+			levelParam(levelParam),
+			distance(distance),
+			levelPerDistance(levelPerDistance)
+		{
+		}
+
+
+	};
+
 	int m_expReward;		//倒したときの経験値(現在)
 	int m_defenseSE;		//防御のSE
 	int m_escapeSE;			//逃走のSE
@@ -61,16 +88,12 @@ public:
 		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
-		EnemyData enemyData = EnemyData(),
-		StatusIncreaseValue statusIncreaseValue = StatusIncreaseValue(),
-		EnemyLevelParam enemyLevelParam = EnemyLevelParam(),
-		const int distance = 0,
-		const int levelPerDistance = 10
+		EnemyInitData data = EnemyInitData()
 	) :
 		Character(anime, gridSize, pos, drawOrder, tag, type)
 	{
 
-		Init(enemyData, statusIncreaseValue, enemyLevelParam, distance, levelPerDistance);
+		Init(data);
 	
 	}
 	Enemy( //画像
@@ -80,15 +103,11 @@ public:
 		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
-		EnemyData enemyData = EnemyData(),
-		StatusIncreaseValue statusIncreaseValue = StatusIncreaseValue(),
-		EnemyLevelParam enemyLevelParam = EnemyLevelParam(),
-		const int distance = 0,
-		const int levelPerDistance = 10
+		EnemyInitData data = EnemyInitData()
 	) :
 		Character(image, gridSize, pos, drawOrder, tag, type)
 	{
-		Init(enemyData, statusIncreaseValue, enemyLevelParam, distance, levelPerDistance);
+		Init(data);
 
 	}
 	Enemy(
@@ -97,27 +116,19 @@ public:
 		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
-		EnemyData enemyData = EnemyData(),
-		StatusIncreaseValue statusIncreaseValue = StatusIncreaseValue(),
-		EnemyLevelParam enemyLevelParam = EnemyLevelParam(),
-		const int distance = 0,
-		const int levelPerDistance = 10
+		EnemyInitData data = EnemyInitData()
 	) :
 		Character(textureName, pos, drawOrder, tag, type)
 	{
 
-		Init(enemyData, statusIncreaseValue, enemyLevelParam, distance, levelPerDistance);
+		Init(data);
 
 	}
 	Enemy(
 		const int drawOrder = 0,
 		Tag tag = Tag::Enemy,
 		Rigidbody2D::Type type = Rigidbody2D::Type::Dynamic,
-		EnemyData enemyData= EnemyData(),
-		StatusIncreaseValue statusIncreaseValue = StatusIncreaseValue(),
-		EnemyLevelParam enemyLevelParam = EnemyLevelParam(),
-		const int distance = 0,
-		const int levelPerDistance = 10
+		EnemyInitData data = EnemyInitData()
 	) :
 		Enemy(
 			nullptr,
@@ -125,11 +136,7 @@ public:
 			drawOrder,
 			tag,
 			type,
-			enemyData,
-			statusIncreaseValue,
-			enemyLevelParam,
-			distance,
-			levelPerDistance
+			data
 		)
 	{
 	}
@@ -140,6 +147,6 @@ public:
 	void PlayEscapeSE() { PlaySoundMem(m_escapeSE, DX_PLAYTYPE_BACK); }
 
 	//初期化をまとめる関数
-	void Init(const EnemyData enemy, const StatusIncreaseValue increaseValue, const EnemyLevelParam enemyLevelParam, const int distance, const int levelPerDistance);
+	void Init(const EnemyInitData data);
 
 };

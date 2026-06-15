@@ -4,13 +4,15 @@
 Slime::Slime(const TileContext& tile) :
 	Enemy(
 		DrawLayer::EnemyLayer,
-		Tag::Enemy, 
-		Rigidbody2D::Type::Dynamic, 
-		Convert(LoadKeyValueFile("Data/Enemy/Slime/Status.txt")),
-		StatusIncreaseValue{ UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin, UpExpReward },
-		EnemyLevelParam{ Multiplier, MinOffset, MaxOffset },
-		static_cast<int>(tile.pos.x / tile.tileSize),	//距離(メートル)
-		LevelPerDistance
+		Tag::Enemy,
+		Rigidbody2D::Type::Dynamic,
+		EnemyInitData(
+			Convert(LoadKeyValueFile("Data/Enemy/Slime/Status.txt")),
+			StatusIncreaseValue{ UpHpMax, UpHpMin, UpAttackMax, UpAttackMin, UpDefenseMax, UpDefenseMin, UpExpReward },
+			EnemyLevelParam{ Multiplier, MinOffset, MaxOffset },
+			static_cast<int>(tile.pos.x / tile.tileSize),	//距離(メートル)
+			LevelPerDistance
+		)
 		),
 	m_tileContext(tile),
 	m_size(0, 0),

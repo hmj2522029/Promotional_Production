@@ -7,7 +7,7 @@ char Keyboard::m_keyPreviousState[Keyboard::AllKeysState] = {};
 
 void Keyboard::Update()
 {
-	//コピー
+	
 	std::memcpy(
 		m_keyPreviousState,			//コピー先
 		m_KeyCurrentState,			//コピー元
@@ -20,7 +20,7 @@ void Keyboard::Update()
 
 bool Keyboard::isAnyPress()
 {
-	//検索
+	
 	return std::memchr(
 		m_KeyCurrentState,			//検索元
 		1,							//探す値(押されているやつを探すから1)

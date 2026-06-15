@@ -68,7 +68,7 @@ void SceneClear::Update()
 
 		if (m_step >= m_timings.size())
 		{
-			m_step = m_timings.size();
+			m_step = static_cast<int>(m_timings.size());
 		}
 
 	}

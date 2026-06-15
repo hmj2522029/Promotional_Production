@@ -4,7 +4,6 @@
 #include "TileContext.h"
 #include <vector>
 #include <memory>	
-//#include <random>エラーになる
 
 class StageData;
 class Camera;
@@ -25,14 +24,11 @@ public:
 
 private:
 
-
-
-
-
-	static constexpr int UiHeight = 195;	//UIを表示するためのyの範囲
-	static constexpr int PlayerY = 500;	//置きたいプレイヤーの位置
-	static constexpr int GroundY = 544;	//置きたいブロックの位置
-	static constexpr int TileSize = 80;		//タイルのサイズ
+	static constexpr int GenerateAhead = 20;	//プレイヤーの前にどれだけステージを生成するか(タイルの数)
+	static constexpr int UiHeight = 195;		//UIを表示するためのyの範囲
+	static constexpr int PlayerY = 500;			//置きたいプレイヤーの位置
+	static constexpr int GroundY = 544;			//置きたいブロックの位置
+	static constexpr int TileSize = 80;			//タイルのサイズ
 
 	static constexpr int MaxScreenStage = 16;	//画面に表示される最大のステージ数(画面の幅 / タイルのサイズ)
 
@@ -43,7 +39,7 @@ private:
 	int m_prevStageIndex;	//前のステージのインデックス(連続して同じステージを出さないため)
 	int m_worldColumn;		//生成した列の数(生成する列の位置を計算するため)
 	int m_localColumn;		//現在のステージの列の位置(現在のステージの最後まで生成したかどうかを判断するため)
-	int m_screenStage;		//現在画面に表示されているステージの数
+	int m_stageLoopIndex;	//ステージのループのインデックス
 
 	//マップデータ
 	std::vector<StageData::StageMap> m_mapEarlyStageData;	//序盤のマップデータ

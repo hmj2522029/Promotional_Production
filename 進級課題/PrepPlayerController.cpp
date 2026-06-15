@@ -3,7 +3,6 @@
 
 PrepPlayerController::PrepPlayerController() :
 	m_tween(),
-	m_rootNode(nullptr),
 	m_state(),	
 	m_player(nullptr),
 	m_InterpolatedValue(0),
@@ -75,11 +74,6 @@ void PrepPlayerController::Update()
 
 		break;
 	}
-
-}
-
-void PrepPlayerController::Draw()
-{
 
 }
 
