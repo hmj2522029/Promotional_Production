@@ -48,6 +48,8 @@ void Button::Update(const Vector2 pos)
 
 void Button::Draw(const Vector2 pos)
 {
+#ifdef _DEBUG
+
 	// ƒ{ƒ^ƒ“‚Ì˜g‚ð•`‰æ
 	DrawBoxAA(
 		pos.x - m_size.x / 2,
@@ -57,4 +59,6 @@ void Button::Draw(const Vector2 pos)
 		GetColor(0, 0, 255),
 		false
 	);
+
+#endif
 }
